@@ -10,4 +10,3 @@ all the communication is through Issues (see above)
 
 ## No worries, just ask if something is not working
 
-## i am going to work with PyCharm

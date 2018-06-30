@@ -10,3 +10,6 @@ all the communication is through Issues (see above)
 
 ## No worries, just ask if something is not working
 
+## Try Git 
+http://try.github.com/
+

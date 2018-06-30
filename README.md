@@ -7,3 +7,5 @@ something similar (not the same look, but first the same functionality) https://
 
 ## How do we organize the project? 
 all the communication is through Issues (see above)
+
+## No worries, just ask if something is not working

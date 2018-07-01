@@ -7,9 +7,9 @@ something similar (not the same look, but first the same functionality) https://
 
 ## How do we organize the project? 
 all the communication is through Issues (see above)
+https://github.com/alexliberzonlab/openpiv_gui/issues/1
 
 ## No worries, just ask if something is not working
 
-## Try Git 
-http://try.github.com/
+
 

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>989</width>
-    <height>623</height>
+    <width>1023</width>
+    <height>534</height>
    </rect>
   </property>
   <property name="mouseTracking">
@@ -27,10 +27,30 @@
     <bool>false</bool>
    </property>
   </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1023</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="mouseTracking">
+    <bool>false</bool>
+   </property>
+   <widget class="QMenu" name="menufile">
+    <property name="title">
+     <string>file</string>
+    </property>
+    <addaction name="actiontest"/>
+   </widget>
+   <addaction name="menufile"/>
+  </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="actiontest">
    <property name="text">
-    <string>add</string>
+    <string>test</string>
    </property>
   </action>
  </widget>

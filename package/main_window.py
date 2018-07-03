@@ -20,12 +20,10 @@ class Ui_MainWindow(object):
         self.central_widget.setObjectName("central_widget")
         MainWindow.setCentralWidget(self.central_widget)
 
-        
+
         # writing all the titles/texts
         MainWindow.setWindowTitle(QtWidgets.QApplication.translate("MainWindow", "OpenPIV", None, -1))
-        self.menu_file.setTitle(QtWidgets.QApplication.translate("MainWindow", "file", None, -1))
-        self.action_test.setText(QtWidgets.QApplication.translate("MainWindow", "test", None, -1))
-
+    
         # connecting everything to the widget
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 

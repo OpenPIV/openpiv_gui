@@ -17,7 +17,9 @@ class FileWindowClass(object):
         self.file_window.setMinimumSize(QtCore.QSize(320, 240))
         self.file_window.setMaximumSize(QtCore.QSize(320, 240))
 
+        # set that you could drag, drop and select images in the file list
         self.file_list.setSelectionMode(QtWidgets.QAbstractItemView.ExtendedSelection)
+        self.file_list.setDragDropMode(QtWidgets.QAbstractItemView.InternalMove)
 
         self.gridLayout.addWidget(self.add_button, 0, 0, 1, 1)
         self.gridLayout.addWidget(self.remove_button, 0, 1, 1, 1)
@@ -30,19 +32,23 @@ class FileWindowClass(object):
         QtCore.QObject.connect(self.remove_button, QtCore.SIGNAL("clicked()"), self.remove_item)
         QtCore.QMetaObject.connectSlotsByName(self.file_window)
 
+    # function that sets up all the titles and texts in the window
     def text_setup(self):
         self.file_window.setWindowTitle(QtWidgets.QApplication.translate("file_window", "OpenPIV file", None, -1))
         self.add_button.setText(QtWidgets.QApplication.translate("file_window", "Add", None, -1))
         self.remove_button.setText(QtWidgets.QApplication.translate("file_window", "Remove", None, -1))
         self.close_button.setText(QtWidgets.QApplication.translate("file_window", "Close", None, -1))
 
+    # the function that add the files when the add button is clicked
     def add_file(self):
         self.file_list.addItem(str(
             (QtWidgets.QFileDialog.getOpenFileName(self.file_list, path=QtCore.QDir, filter=('(*.png)')))[0]))
 
+    # the function that remove selected files when the remove button is clicked
     def remove_item(self):
         for selected_item in self.file_list.selectedItems():
             self.file_list.takeItem(self.file_list.row(selected_item))
+
 
 if __name__ == "__main__":
     import sys

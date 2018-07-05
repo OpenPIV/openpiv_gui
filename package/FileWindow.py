@@ -17,7 +17,7 @@ class FileWindowClass(object):
         self.file_window.setMinimumSize(QtCore.QSize(320, 240))
         self.file_window.setMaximumSize(QtCore.QSize(320, 240))
 
-        self.remove_button.setEnabled(False)
+        self.file_list.setSelectionMode(QtWidgets.QAbstractItemView.ExtendedSelection)
 
         self.gridLayout.addWidget(self.add_button, 0, 0, 1, 1)
         self.gridLayout.addWidget(self.remove_button, 0, 1, 1, 1)
@@ -27,7 +27,7 @@ class FileWindowClass(object):
         self.text_setup()
         QtCore.QObject.connect(self.add_button, QtCore.SIGNAL("clicked()"), self.add_file)
         QtCore.QObject.connect(self.close_button, QtCore.SIGNAL("clicked()"), file_window.close)
-        QtCore.QObject.connect(self.file_list, QtCore.SIGNAL("itemPressed()"), self.remove_button.setEnabled)
+        QtCore.QObject.connect(self.remove_button, QtCore.SIGNAL("clicked()"), self.remove_item)
         QtCore.QMetaObject.connectSlotsByName(self.file_window)
 
     def text_setup(self):
@@ -39,6 +39,10 @@ class FileWindowClass(object):
     def add_file(self):
         self.file_list.addItem(str(
             (QtWidgets.QFileDialog.getOpenFileName(self.file_list, path=QtCore.QDir, filter=('(*.png)')))[0]))
+
+    def remove_item(self):
+        for selected_item in self.file_list.selectedItems():
+            self.file_list.takeItem(self.file_list.row(selected_item))
 
 if __name__ == "__main__":
     import sys

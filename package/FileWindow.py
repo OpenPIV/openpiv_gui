@@ -26,7 +26,7 @@ class FileWindowClass(object):
 
         self.text_setup()
         QtCore.QObject.connect(self.add_button, QtCore.SIGNAL("clicked()"), self.add_file)
-        QtCore.QObject.connect(self.close_button, QtCore.SIGNAL("clicked()"), file_window.close)
+        QtCore.QObject.connect(self.close_button, QtCore.SIGNAL("clicked()"), self.file_window.close)
         QtCore.QObject.connect(self.remove_button, QtCore.SIGNAL("clicked()"), self.remove_item)
         QtCore.QMetaObject.connectSlotsByName(self.file_window)
 

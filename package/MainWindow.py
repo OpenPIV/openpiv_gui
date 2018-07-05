@@ -1,5 +1,4 @@
 from PySide2 import QtCore, QtGui, QtWidgets
-import sys
 
 FONT = QtGui.QFont()
 FONT.setFamily("Gill Sans MT")
@@ -71,8 +70,9 @@ class MainWindowClass(object):
         self.start_stop_frame = QtWidgets.QFrame(self.setting_box)
         self.start_stop_frame_layout = QtWidgets.QGridLayout(self.start_stop_frame)
         # ***
-        self.menuBar = QtWidgets.QMenuBar(MainWindow)
+        self.menuBar = QtWidgets.QMenuBar(self.main_window)
         self.menu_bar_file = QtWidgets.QMenu(self.menuBar)
+        self.file_action = QtWidgets.QAction(self.menu_bar_file)
 
     def setting_dock_widget_setup(self):
         self.settings_dock_widget.setFeatures(
@@ -256,16 +256,15 @@ class MainWindowClass(object):
         self.start_stop_frame_layout.addWidget(self.stop_button, 1, 0, 1, 1)
         self.settings_box_layout.addWidget(self.start_stop_frame, 6, 3, 1, 1)
 
-
     def main_window_setup(self):
         self.main_window.resize(866, 683)
         self.main_window.setObjectName("main_window")
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap("images/openpiv_logo.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon.addPixmap(QtGui.QPixmap("package/images/openpiv_logo.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
 
         self.main_window.setWindowIcon(icon)
 
-        self.default_image.setPixmap(QtGui.QPixmap("images/openpiv_logo.png"))
+        self.default_image.setPixmap(QtGui.QPixmap("package/images/openpiv_logo.png"))
         self.default_image.setAlignment(QtCore.Qt.AlignCenter)
 
         self.image_pages_layout.addWidget(self.default_image, 0, 0, 1, 1)
@@ -273,10 +272,13 @@ class MainWindowClass(object):
         self.main_widget_layout.addWidget(self.image_pages, 1, 2, 1, 1)
 
         self.menuBar.setGeometry(QtCore.QRect(0, 0, 866, 21))
-
-        MainWindow.setMenuBar(self.menuBar)
-
+        self.main_window.setMenuBar(self.menuBar)
         self.menuBar.addAction(self.menu_bar_file.menuAction())
+
+        self.file_action.setShortcut('Ctrl+F')
+        self.file_action.setStatusTip('mange files')
+
+        self.menu_bar_file.addAction(self.file_action)
 
         self.main_window.setCentralWidget(self.main_widget)
 
@@ -304,16 +306,20 @@ class MainWindowClass(object):
         set_text(self.height_label, "Height")
         set_text(self.width_label, "Width")
         set_text(self.interrogation_winsize_label, "Interrogation window size")
+        set_text(self.file_action, "file")
 
         self.setting_box.setTitle(QtWidgets.QApplication.translate("MainWindow", "Setting", None, -1))
+        self.menu_bar_file.setTitle(QtWidgets.QApplication.translate("MainWindow", "file", None, -1))
 
 
 if __name__ == "__main__":
     # run the application
+    import sys
     app = QtWidgets.QApplication(sys.argv)
     MainWindow = QtWidgets.QMainWindow()
     main_window_class = MainWindowClass(MainWindow)
     main_window_class.setting_dock_widget_setup()
     main_window_class.main_window_setup()
+    main_window_class.default_image.setPixmap(QtGui.QPixmap("images/openpiv_logo.png"))
     MainWindow.show()
     sys.exit(app.exec_())

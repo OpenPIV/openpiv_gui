@@ -1,5 +1,6 @@
 from PySide2 import QtCore, QtGui, QtWidgets
 import sys
+
 FONT = QtGui.QFont()
 FONT.setFamily("Gill Sans MT")
 FONT.setPointSize(21)
@@ -7,20 +8,17 @@ FONT.setWeight(75)
 FONT.setItalic(True)
 FONT.setBold(True)
 
+
 class MainWindowClass(object):
     def __init__(self, main_window):
         self.main_window = main_window
 
         self.main_widget = QtWidgets.QWidget(self.main_window)
         self.main_widget_layout = QtWidgets.QGridLayout(self.main_widget)
-        self.tab_widget = QtWidgets.QTabWidget(self.main_widget)
         self.stop_button = QtWidgets.QPushButton(self.main_widget)
         self.start_button = QtWidgets.QPushButton(self.main_widget)
-        self.piv_tab = QtWidgets.QWidget()
-        self.piv_layout = QtWidgets.QVBoxLayout(self.piv_tab)
 
         # The images_widget is a stack widget (when you add another picture you can move between the pictures)
-        self.images_widget = QtWidgets.QStackedWidget(self.piv_tab)
         self.image_pages = QtWidgets.QWidget()
         self.image_pages_layout = QtWidgets.QGridLayout(self.image_pages)
 
@@ -56,10 +54,10 @@ class MainWindowClass(object):
         self.type_label = QtWidgets.QLabel(self.type_value_frame)
         self.value_label = QtWidgets.QLabel(self.type_value_frame)
         self.spacing_frame = QtWidgets.QFrame(self.setting_box)
-        self.type_spin_box = QtWidgets.QDoubleSpinBox(self.type_value_frame)
+        self.type_combo_box = QtWidgets.QComboBox(self.type_value_frame)
         self.spacing_frame_layout = QtWidgets.QGridLayout(self.spacing_frame)
-        self.horizontal_spin_box = QtWidgets.QDoubleSpinBox(self.spacing_frame)
-        self.vertical_spin_box = QtWidgets.QDoubleSpinBox(self.spacing_frame)
+        self.horizontal_combo_box = QtWidgets.QComboBox(self.spacing_frame)
+        self.vertical_combo_box = QtWidgets.QComboBox(self.spacing_frame)
         self.vertical_label = QtWidgets.QLabel(self.spacing_frame)
         self.horizontal_label = QtWidgets.QLabel(self.spacing_frame)
         self.spacing_label = QtWidgets.QLabel(self.spacing_frame)
@@ -67,10 +65,14 @@ class MainWindowClass(object):
         self.interrogation_winsize_frame_layout = QtWidgets.QGridLayout(self.interrogation_winsize_frame)
         self.height_label = QtWidgets.QLabel(self.interrogation_winsize_frame)
         self.width_label = QtWidgets.QLabel(self.interrogation_winsize_frame)
-        self.width_spin_box = QtWidgets.QDoubleSpinBox(self.interrogation_winsize_frame)
-        self.height_spin_box = QtWidgets.QDoubleSpinBox(self.interrogation_winsize_frame)
+        self.width_combo_box = QtWidgets.QComboBox(self.interrogation_winsize_frame)
+        self.height_combo_box = QtWidgets.QComboBox(self.interrogation_winsize_frame)
         self.interrogation_winsize_label = QtWidgets.QLabel(self.interrogation_winsize_frame)
+        self.start_stop_frame = QtWidgets.QFrame(self.setting_box)
+        self.start_stop_frame_layout = QtWidgets.QGridLayout(self.start_stop_frame)
         # ***
+        self.menuBar = QtWidgets.QMenuBar(MainWindow)
+        self.menu_bar_file = QtWidgets.QMenu(self.menuBar)
 
     def setting_dock_widget_setup(self):
         self.settings_dock_widget.setFeatures(
@@ -146,11 +148,12 @@ class MainWindowClass(object):
 
         self.type_value_frame_layout.addWidget(self.value_label, 2, 0, 1, 1)
 
-        self.type_spin_box.setAccelerated(True)
-        self.type_spin_box.setMaximum(100.0)
-        self.type_spin_box.setSingleStep(0.1)
+        self.type_combo_box.addItem('0')
+        self.type_combo_box.addItem('1')
+        self.type_combo_box.addItem('2')
+        self.type_combo_box.addItem('3')
 
-        self.type_value_frame_layout.addWidget(self.type_spin_box, 0, 1, 1, 1)
+        self.type_value_frame_layout.addWidget(self.type_combo_box, 0, 1, 1, 1)
 
         self.settings_box_layout.addWidget(self.type_value_frame, 3, 3, 1, 1)
 
@@ -158,19 +161,27 @@ class MainWindowClass(object):
         self.spacing_frame.setFrameShape(QtWidgets.QFrame.Box)
         self.spacing_frame.setFrameShadow(QtWidgets.QFrame.Sunken)
 
-        self.horizontal_spin_box.setAccelerated(True)
-        self.horizontal_spin_box.setMaximum(100.0)
-        self.horizontal_spin_box.setSingleStep(1.0)
+        self.horizontal_combo_box.addItem('8')
+        self.horizontal_combo_box.addItem('16')
+        self.horizontal_combo_box.addItem('32')
+        self.horizontal_combo_box.addItem('64')
+        self.horizontal_combo_box.addItem('128')
+        self.horizontal_combo_box.addItem('256')
+        self.horizontal_combo_box.addItem('512')
 
-        self.spacing_frame_layout.addWidget(self.horizontal_spin_box, 2, 1, 1, 1)
+        self.spacing_frame_layout.addWidget(self.horizontal_combo_box, 2, 1, 1, 1)
         self.spacing_frame_layout.addItem(
             QtWidgets.QSpacerItem(10, 20, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Minimum), 2, 2, 1, 1)
 
-        self.vertical_spin_box.setAccelerated(True)
-        self.vertical_spin_box.setMaximum(100.0)
-        self.vertical_spin_box.setSingleStep(1.0)
+        self.vertical_combo_box.addItem('8')
+        self.vertical_combo_box.addItem('16')
+        self.vertical_combo_box.addItem('32')
+        self.vertical_combo_box.addItem('64')
+        self.vertical_combo_box.addItem('128')
+        self.vertical_combo_box.addItem('256')
+        self.vertical_combo_box.addItem('512')
 
-        self.spacing_frame_layout.addWidget(self.vertical_spin_box, 2, 3, 1, 1)
+        self.spacing_frame_layout.addWidget(self.vertical_combo_box, 2, 3, 1, 1)
 
         self.vertical_label.setFont(FONT)
         self.vertical_label.setAlignment(QtCore.Qt.AlignCenter)
@@ -198,13 +209,21 @@ class MainWindowClass(object):
         self.width_label.setFont(FONT)
         self.width_label.setAlignment(QtCore.Qt.AlignCenter)
 
-        self.width_spin_box.setAccelerated(True)
-        self.width_spin_box.setMaximum(100.0)
-        self.width_spin_box.setSingleStep(1.0)
+        self.width_combo_box.addItem('8')
+        self.width_combo_box.addItem('16')
+        self.width_combo_box.addItem('32')
+        self.width_combo_box.addItem('64')
+        self.width_combo_box.addItem('128')
+        self.width_combo_box.addItem('256')
+        self.width_combo_box.addItem('512')
 
-        self.height_spin_box.setAccelerated(True)
-        self.height_spin_box.setMaximum(100.0)
-        self.height_spin_box.setSingleStep(1.0)
+        self.height_combo_box.addItem('8')
+        self.height_combo_box.addItem('16')
+        self.height_combo_box.addItem('32')
+        self.height_combo_box.addItem('64')
+        self.height_combo_box.addItem('128')
+        self.height_combo_box.addItem('256')
+        self.height_combo_box.addItem('512')
 
         FONT.setPointSize(11)
 
@@ -214,8 +233,8 @@ class MainWindowClass(object):
         self.interrogation_winsize_frame_layout.addWidget(self.interrogation_winsize_label, 0, 0, 1, 3)
         self.interrogation_winsize_frame_layout.addWidget(self.height_label, 1, 2, 1, 1)
         self.interrogation_winsize_frame_layout.addWidget(self.width_label, 1, 0, 1, 1)
-        self.interrogation_winsize_frame_layout.addWidget(self.width_spin_box, 3, 0, 1, 1)
-        self.interrogation_winsize_frame_layout.addWidget(self.height_spin_box, 3, 2, 1, 1)
+        self.interrogation_winsize_frame_layout.addWidget(self.width_combo_box, 3, 0, 1, 1)
+        self.interrogation_winsize_frame_layout.addWidget(self.height_combo_box, 3, 2, 1, 1)
         self.interrogation_winsize_frame_layout.addItem(
             QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Minimum), 2, 1, 1, 1)
 
@@ -226,6 +245,18 @@ class MainWindowClass(object):
         self.settings_dock_widget.setWidget(self.settings_widget)
         self.main_window.addDockWidget(QtCore.Qt.DockWidgetArea(2), self.settings_dock_widget)
 
+        self.start_stop_frame.setFrameShape(QtWidgets.QFrame.Box)
+        self.start_stop_frame.setFrameShadow(QtWidgets.QFrame.Sunken)
+
+        self.start_button.setFont(FONT)
+        self.start_button.setCursor(QtCore.Qt.PointingHandCursor)
+        self.stop_button.setFont(FONT)
+        self.stop_button.setCursor(QtCore.Qt.PointingHandCursor)
+        self.start_stop_frame_layout.addWidget(self.start_button, 0, 0, 1, 1)
+        self.start_stop_frame_layout.addWidget(self.stop_button, 1, 0, 1, 1)
+        self.settings_box_layout.addWidget(self.start_stop_frame, 6, 3, 1, 1)
+
+
     def main_window_setup(self):
         self.main_window.resize(866, 683)
         self.main_window.setObjectName("main_window")
@@ -234,43 +265,29 @@ class MainWindowClass(object):
 
         self.main_window.setWindowIcon(icon)
 
-        self.stop_button.setFont(FONT)
-        self.stop_button.setCursor(QtCore.Qt.PointingHandCursor)
-
-        self.start_button.setFont(FONT)
-        self.start_button.setCursor(QtCore.Qt.PointingHandCursor)
-
-        self.tab_widget.setStyleSheet("background-color: rgb(240, 240, 240);")
-
         self.default_image.setPixmap(QtGui.QPixmap("images/openpiv_logo.png"))
         self.default_image.setAlignment(QtCore.Qt.AlignCenter)
 
         self.image_pages_layout.addWidget(self.default_image, 0, 0, 1, 1)
 
-        self.images_widget.setLineWidth(2)
-        self.images_widget.addWidget(self.image_pages)
+        self.main_widget_layout.addWidget(self.image_pages, 1, 2, 1, 1)
 
-        self.piv_layout.addWidget(self.images_widget)
+        self.menuBar.setGeometry(QtCore.QRect(0, 0, 866, 21))
 
-        self.tab_widget.addTab(self.piv_tab, "")
-        self.tab_widget.addTab(self.file_tab, "")
+        MainWindow.setMenuBar(self.menuBar)
 
-        self.main_widget_layout.addItem(
-            QtWidgets.QSpacerItem(1900, 20, QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Minimum), 1, 1, 1, 1)
-        self.main_widget_layout.addWidget(self.start_button, 1, 0, 1, 1)
-        self.main_widget_layout.addWidget(self.stop_button, 1, 2, 1, 1)
-        self.main_widget_layout.addWidget(self.tab_widget, 0, 0, 1, 3)
+        self.menuBar.addAction(self.menu_bar_file.menuAction())
 
         self.main_window.setCentralWidget(self.main_widget)
 
-        self.text_setup(self.main_window)
+        self.text_setup()
 
         QtCore.QMetaObject.connectSlotsByName(self.main_window)
 
-    def text_setup(self, main_window):
+    def text_setup(self):
         set_text = lambda x, text: x.setText(QtWidgets.QApplication.translate("MainWindow", text, None, -1))
 
-        main_window.setWindowTitle(QtWidgets.QApplication.translate("MainWindow", "OpenPIV", None, -1))
+        self.main_window.setWindowTitle(QtWidgets.QApplication.translate("MainWindow", "OpenPIV", None, -1))
 
         set_text(self.stop_button, "STOP")
         set_text(self.start_button, "START")
@@ -288,11 +305,6 @@ class MainWindowClass(object):
         set_text(self.width_label, "Width")
         set_text(self.interrogation_winsize_label, "Interrogation window size")
 
-        self.tab_widget.setTabText(self.tab_widget.indexOf(self.piv_tab),
-                                   QtWidgets.QApplication.translate("MainWindow", "PIV", None,
-                                                                    -1))
-        self.tab_widget.setTabText(self.tab_widget.indexOf(self.file_tab),
-                                   QtWidgets.QApplication.translate("MainWindow", "Files", None, -1))
         self.setting_box.setTitle(QtWidgets.QApplication.translate("MainWindow", "Setting", None, -1))
 
 

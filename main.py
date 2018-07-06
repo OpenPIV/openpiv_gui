@@ -1,6 +1,3 @@
-import sip
-
-sip.setapi('QListWidgetItem', 2)
 from package.MainWindow import MainWindowClass
 from package.FileWindow import FileWindowClass
 from PySide2 import QtCore, QtGui, QtWidgets
@@ -39,6 +36,7 @@ def run_main_window():
 
 
 def windows_setup():
+
     if FILE_WINDOW_CLASS.file_list.count() > 0:
         MAIN_WINDOW_CLASS.default_image.setPixmap(QtGui.QPixmap(FILE_WINDOW_CLASS.file_list.item(0).text()))
         if FILE_WINDOW_CLASS.file_list.count() > 1:

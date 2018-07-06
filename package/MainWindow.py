@@ -14,18 +14,16 @@ class MainWindowClass(object):
 
         self.main_widget = QtWidgets.QWidget(self.main_window)
         self.main_widget_layout = QtWidgets.QGridLayout(self.main_widget)
-        self.stop_button = QtWidgets.QPushButton(self.main_widget)
-        self.start_button = QtWidgets.QPushButton(self.main_widget)
 
-        # The images_widget is a stack widget (when you add another picture you can move between the pictures)
-        self.image_pages = QtWidgets.QWidget()
-        self.image_pages_layout = QtWidgets.QGridLayout(self.image_pages)
+        self.image_pages = QtWidgets.QStackedWidget(self.main_widget)
+        self.default_image_widget = QtWidgets.QWidget()
+        self.default_image_widget_layout = QtWidgets.QGridLayout(self.default_image_widget)
+        self.right_button = QtWidgets.QPushButton(self.main_widget)
+        self.left_button = QtWidgets.QPushButton(self.main_widget)
+        self.current_image_number = QtWidgets.QLabel(self.main_widget)
 
         # The default_image is just that there will be something shown in the image frame all the time
-        self.default_image = QtWidgets.QLabel(self.image_pages)
-
-        self.file_tab = QtWidgets.QWidget()
-        self.file_tab_layout = QtWidgets.QGridLayout(self.file_tab)
+        self.default_image = QtWidgets.QLabel(self.default_image_widget)
 
         # I putted the settings in a dock widget so you could take the settings out so that it will give you more space
         # and you can dock the setting in the left and right sides of the window
@@ -69,6 +67,8 @@ class MainWindowClass(object):
         self.interrogation_winsize_label = QtWidgets.QLabel(self.interrogation_winsize_frame)
         self.start_stop_frame = QtWidgets.QFrame(self.setting_box)
         self.start_stop_frame_layout = QtWidgets.QGridLayout(self.start_stop_frame)
+        self.stop_button = QtWidgets.QPushButton(self.start_stop_frame)
+        self.start_button = QtWidgets.QPushButton(self.start_stop_frame)
         # ***
         self.menuBar = QtWidgets.QMenuBar(self.main_window)
         self.menu_bar_file = QtWidgets.QMenu(self.menuBar)
@@ -240,7 +240,7 @@ class MainWindowClass(object):
 
         self.settings_box_layout.addWidget(self.interrogation_winsize_frame, 0, 3, 1, 1)
 
-        self.settings_widget_layout.addWidget(self.setting_box, 0, 0, 1, 1)
+        self.settings_widget_layout.addWidget(self.setting_box, 0, 1, 1, 1)
 
         self.settings_dock_widget.setWidget(self.settings_widget)
         self.main_window.addDockWidget(QtCore.Qt.DockWidgetArea(2), self.settings_dock_widget)
@@ -260,29 +260,50 @@ class MainWindowClass(object):
         self.main_window.resize(866, 683)
         self.main_window.setObjectName("main_window")
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap("package/images/openpiv_logo.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon.addPixmap(QtGui.QPixmap(r"package/images/openpiv_logo.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
 
         self.main_window.setWindowIcon(icon)
 
-        self.default_image.setPixmap(QtGui.QPixmap("package/images/openpiv_logo.png"))
+        self.default_image.setPixmap(QtGui.QPixmap(r"package/images/openpiv_logo.png"))
         self.default_image.setAlignment(QtCore.Qt.AlignCenter)
 
-        self.image_pages_layout.addWidget(self.default_image, 0, 0, 1, 1)
+        self.image_pages.addWidget(self.default_image_widget)
 
-        self.main_widget_layout.addWidget(self.image_pages, 1, 2, 1, 1)
+        left_right_buttons_spacer = QtWidgets.QSpacerItem(2000, 20, QtWidgets.QSizePolicy.Expanding,
+                                                          QtWidgets.QSizePolicy.Minimum)
+
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
+
+        self.main_widget.setSizePolicy(sizePolicy)
+
+        self.image_pages.setSizePolicy(sizePolicy)
+
+        self.default_image.setSizePolicy(sizePolicy)
+
+        self.default_image_widget_layout.addWidget(self.default_image, 0, 0, 1, 1)
+
+        self.main_widget_layout.addWidget(self.image_pages, 1, 0, 1, 4)
+        self.main_widget_layout.addWidget(self.right_button, 2, 3, 1, 1)
+        self.main_widget_layout.addWidget(self.left_button, 2, 1, 1, 1)
+        self.main_widget_layout.addWidget(self.current_image_number, 2, 2, 1, 1)
+        self.main_widget_layout.addItem(left_right_buttons_spacer, 2, 0, 1, 1)
 
         self.menuBar.setGeometry(QtCore.QRect(0, 0, 866, 21))
         self.main_window.setMenuBar(self.menuBar)
         self.menuBar.addAction(self.menu_bar_file.menuAction())
 
         self.file_action.setShortcut('Ctrl+F')
-        self.file_action.setStatusTip('mange files')
+        self.file_action.setStatusTip('manage files')
 
         self.menu_bar_file.addAction(self.file_action)
 
         self.main_window.setCentralWidget(self.main_widget)
 
         self.text_setup()
+
+        self.left_button.clicked.connect(self.change_image_number_left)
+
+        self.right_button.clicked.connect(self.change_image_number_right)
 
         QtCore.QMetaObject.connectSlotsByName(self.main_window)
 
@@ -307,14 +328,45 @@ class MainWindowClass(object):
         set_text(self.width_label, "Width")
         set_text(self.interrogation_winsize_label, "Interrogation window size")
         set_text(self.file_action, "file")
+        set_text(self.left_button, "<")
+        set_text(self.right_button, ">")
+        set_text(self.current_image_number, "0")
 
         self.setting_box.setTitle(QtWidgets.QApplication.translate("MainWindow", "Setting", None, -1))
         self.menu_bar_file.setTitle(QtWidgets.QApplication.translate("MainWindow", "file", None, -1))
+
+    # function that changes the max and min of jump
+    def change_jump_max_min(self):
+        self.jump_spin_box.setMaximum(self.image_pages.count() - 1)
+        self.jump_spin_box.setMinimum((-1) * (self.image_pages.count() - 1))
+
+    # function that moves to the next left image
+    def change_image_number_left(self):
+        if int(self.current_image_number.text()) == 0:
+            self.current_image_number.setText(
+                QtWidgets.QApplication.translate("MainWindow", str(self.image_pages.count() - 1), None, -1))
+            self.image_pages.setCurrentIndex(self.image_pages.count() - 1)
+        else:
+            self.current_image_number.setText(
+                QtWidgets.QApplication.translate("MainWindow", str(self.image_pages.currentIndex() - 1), None, -1))
+            self.image_pages.setCurrentIndex(self.image_pages.currentIndex() - 1)
+
+    # function that moves to the next right image
+    def change_image_number_right(self):
+        if self.image_pages.currentIndex() == self.image_pages.count() - 1:
+            self.current_image_number.setText(
+                QtWidgets.QApplication.translate("MainWindow", "0", None, -1))
+            self.image_pages.setCurrentIndex(0)
+        else:
+            self.current_image_number.setText(
+                QtWidgets.QApplication.translate("MainWindow", str(self.image_pages.currentIndex() + 1), None, -1))
+            self.image_pages.setCurrentIndex(self.image_pages.currentIndex() + 1)
 
 
 if __name__ == "__main__":
     # run the application
     import sys
+
     app = QtWidgets.QApplication(sys.argv)
     MainWindow = QtWidgets.QMainWindow()
     main_window_class = MainWindowClass(MainWindow)

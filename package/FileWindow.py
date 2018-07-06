@@ -1,4 +1,4 @@
-from PySide2 import QtCore, QtGui, QtWidgets
+from PySide2 import QtCore, QtWidgets
 
 
 class FileWindowClass(object):
@@ -42,7 +42,8 @@ class FileWindowClass(object):
     # the function that add the files when the add button is clicked
     def add_file(self):
         self.file_list.addItem(str(
-            (QtWidgets.QFileDialog.getOpenFileName(self.file_list, path=QtCore.QDir, filter=('(*.png)')))[0]))
+            (QtWidgets.QFileDialog.getOpenFileName(self.file_list, path=QtCore.QDir,
+                                                   filter=('images(*.png *.jpg *.jpeg *.bmp)')))[0]))
 
     # the function that remove selected files when the remove button is clicked
     def remove_item(self):

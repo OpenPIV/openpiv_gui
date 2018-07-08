@@ -31,26 +31,24 @@ class MainWindowClass(object):
         self.settings_dock_widget = QtWidgets.QDockWidget(self.main_window)
         self.settings_widget = QtWidgets.QWidget()
         self.settings_widget_layout = QtWidgets.QGridLayout(self.settings_widget)
-        self.setting_box = QtWidgets.QGroupBox(self.settings_widget)
-        self.settings_box_layout = QtWidgets.QGridLayout(self.setting_box)
-        self.scale_filter_jump_frame = QtWidgets.QFrame(self.setting_box)
+        self.scale_filter_jump_frame = QtWidgets.QFrame(self.settings_dock_widget)
         self.scale_filter_jump_frame_layout = QtWidgets.QGridLayout(self.scale_filter_jump_frame)
         self.scale_label = QtWidgets.QLabel(self.scale_filter_jump_frame)
         self.outer_filter_label = QtWidgets.QLabel(self.scale_filter_jump_frame)
         self.outer_filter_spin_box = QtWidgets.QDoubleSpinBox(self.scale_filter_jump_frame)
         self.jump_label = QtWidgets.QLabel(self.scale_filter_jump_frame)
         self.jump_spin_box = QtWidgets.QSpinBox(self.scale_filter_jump_frame)
-        self.scale_spin_box = QtWidgets.QSpinBox(self.scale_filter_jump_frame)
-        self.roi_frame = QtWidgets.QFrame(self.setting_box)
+        self.scale_spin_box = QtWidgets.QDoubleSpinBox(self.scale_filter_jump_frame)
+        self.roi_frame = QtWidgets.QFrame(self.settings_dock_widget)
         self.roi_frame_layout = QtWidgets.QGridLayout(self.roi_frame)
         self.reset_roi_button = QtWidgets.QPushButton(self.roi_frame)
         self.select_roi_button = QtWidgets.QPushButton(self.roi_frame)
-        self.type_value_frame = QtWidgets.QFrame(self.setting_box)
+        self.type_value_frame = QtWidgets.QFrame(self.settings_dock_widget)
         self.type_value_frame_layout = QtWidgets.QGridLayout(self.type_value_frame)
         self.value_spin_box = QtWidgets.QDoubleSpinBox(self.type_value_frame)
         self.type_label = QtWidgets.QLabel(self.type_value_frame)
         self.value_label = QtWidgets.QLabel(self.type_value_frame)
-        self.spacing_frame = QtWidgets.QFrame(self.setting_box)
+        self.spacing_frame = QtWidgets.QFrame(self.settings_dock_widget)
         self.type_combo_box = QtWidgets.QComboBox(self.type_value_frame)
         self.spacing_frame_layout = QtWidgets.QGridLayout(self.spacing_frame)
         self.horizontal_combo_box = QtWidgets.QComboBox(self.spacing_frame)
@@ -58,14 +56,14 @@ class MainWindowClass(object):
         self.vertical_label = QtWidgets.QLabel(self.spacing_frame)
         self.horizontal_label = QtWidgets.QLabel(self.spacing_frame)
         self.spacing_label = QtWidgets.QLabel(self.spacing_frame)
-        self.interrogation_winsize_frame = QtWidgets.QFrame(self.setting_box)
+        self.interrogation_winsize_frame = QtWidgets.QFrame(self.settings_dock_widget)
         self.interrogation_winsize_frame_layout = QtWidgets.QGridLayout(self.interrogation_winsize_frame)
         self.height_label = QtWidgets.QLabel(self.interrogation_winsize_frame)
         self.width_label = QtWidgets.QLabel(self.interrogation_winsize_frame)
         self.width_combo_box = QtWidgets.QComboBox(self.interrogation_winsize_frame)
         self.height_combo_box = QtWidgets.QComboBox(self.interrogation_winsize_frame)
         self.interrogation_winsize_label = QtWidgets.QLabel(self.interrogation_winsize_frame)
-        self.start_stop_frame = QtWidgets.QFrame(self.setting_box)
+        self.start_stop_frame = QtWidgets.QFrame(self.settings_dock_widget)
         self.start_stop_frame_layout = QtWidgets.QGridLayout(self.start_stop_frame)
         self.stop_button = QtWidgets.QPushButton(self.start_stop_frame)
         self.start_button = QtWidgets.QPushButton(self.start_stop_frame)
@@ -99,7 +97,8 @@ class MainWindowClass(object):
 
         self.jump_spin_box.setMaximum(0)
 
-        self.scale_spin_box.setProperty("value", 1)
+        self.scale_spin_box.setProperty("value", 1.00)
+        self.scale_spin_box.setSingleStep(0.1)
 
         self.scale_filter_jump_frame_layout.addWidget(self.scale_label, 0, 0, 1, 1)
         self.scale_filter_jump_frame_layout.addWidget(self.outer_filter_label, 1, 0, 1, 1)
@@ -108,7 +107,7 @@ class MainWindowClass(object):
         self.scale_filter_jump_frame_layout.addWidget(self.jump_spin_box, 2, 1, 1, 1)
         self.scale_filter_jump_frame_layout.addWidget(self.scale_spin_box, 0, 1, 1, 1)
 
-        self.settings_box_layout.addWidget(self.scale_filter_jump_frame, 4, 3, 1, 1)
+        self.settings_widget_layout.addWidget(self.scale_filter_jump_frame, 4, 3, 1, 1)
 
         self.roi_frame.setFrameShape(QtWidgets.QFrame.Box)
         self.roi_frame.setFrameShadow(QtWidgets.QFrame.Sunken)
@@ -124,7 +123,7 @@ class MainWindowClass(object):
 
         self.roi_frame_layout.addWidget(self.select_roi_button, 0, 0, 1, 1)
 
-        self.settings_box_layout.addWidget(self.roi_frame, 5, 3, 1, 1)
+        self.settings_widget_layout.addWidget(self.roi_frame, 5, 3, 1, 1)
 
         self.type_value_frame.setEnabled(True)
         self.type_value_frame.setFrameShape(QtWidgets.QFrame.Box)
@@ -155,7 +154,7 @@ class MainWindowClass(object):
 
         self.type_value_frame_layout.addWidget(self.type_combo_box, 0, 1, 1, 1)
 
-        self.settings_box_layout.addWidget(self.type_value_frame, 3, 3, 1, 1)
+        self.settings_widget_layout.addWidget(self.type_value_frame, 3, 3, 1, 1)
 
         self.spacing_frame.setCursor(QtCore.Qt.PointingHandCursor)
         self.spacing_frame.setFrameShape(QtWidgets.QFrame.Box)
@@ -198,7 +197,7 @@ class MainWindowClass(object):
 
         self.spacing_frame_layout.addWidget(self.spacing_label, 0, 1, 1, 3)
 
-        self.settings_box_layout.addWidget(self.spacing_frame, 1, 3, 1, 1)
+        self.settings_widget_layout.addWidget(self.spacing_frame, 1, 3, 1, 1)
 
         self.interrogation_winsize_frame.setFrameShape(QtWidgets.QFrame.Box)
         self.interrogation_winsize_frame.setFrameShadow(QtWidgets.QFrame.Sunken)
@@ -238,9 +237,7 @@ class MainWindowClass(object):
         self.interrogation_winsize_frame_layout.addItem(
             QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Minimum), 2, 1, 1, 1)
 
-        self.settings_box_layout.addWidget(self.interrogation_winsize_frame, 0, 3, 1, 1)
-
-        self.settings_widget_layout.addWidget(self.setting_box, 0, 1, 1, 1)
+        self.settings_widget_layout.addWidget(self.interrogation_winsize_frame, 0, 3, 1, 1)
 
         self.settings_dock_widget.setWidget(self.settings_widget)
         self.main_window.addDockWidget(QtCore.Qt.DockWidgetArea(2), self.settings_dock_widget)
@@ -254,7 +251,7 @@ class MainWindowClass(object):
         self.stop_button.setCursor(QtCore.Qt.PointingHandCursor)
         self.start_stop_frame_layout.addWidget(self.start_button, 0, 0, 1, 1)
         self.start_stop_frame_layout.addWidget(self.stop_button, 1, 0, 1, 1)
-        self.settings_box_layout.addWidget(self.start_stop_frame, 6, 3, 1, 1)
+        self.settings_widget_layout.addWidget(self.start_stop_frame, 6, 3, 1, 1)
 
     def main_window_setup(self):
         self.main_window.resize(866, 683)
@@ -265,6 +262,7 @@ class MainWindowClass(object):
         self.main_window.setWindowIcon(icon)
 
         self.default_image.setPixmap(QtGui.QPixmap(r"package/images/openpiv_logo.png"))
+
         self.default_image.setAlignment(QtCore.Qt.AlignCenter)
 
         self.image_pages.addWidget(self.default_image_widget)
@@ -272,7 +270,7 @@ class MainWindowClass(object):
         left_right_buttons_spacer = QtWidgets.QSpacerItem(2000, 20, QtWidgets.QSizePolicy.Expanding,
                                                           QtWidgets.QSizePolicy.Minimum)
 
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
 
         self.main_widget.setSizePolicy(sizePolicy)
 
@@ -332,7 +330,6 @@ class MainWindowClass(object):
         set_text(self.right_button, ">")
         set_text(self.current_image_number, "0")
 
-        self.setting_box.setTitle(QtWidgets.QApplication.translate("MainWindow", "Setting", None, -1))
         self.menu_bar_file.setTitle(QtWidgets.QApplication.translate("MainWindow", "file", None, -1))
 
     # function that changes the max and min of jump

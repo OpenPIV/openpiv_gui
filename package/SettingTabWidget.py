@@ -8,29 +8,13 @@ FONT.setItalic(True)
 FONT.setBold(True)
 
 
-class MainWindowClass(object):
-    def __init__(self, main_window):
-        self.main_window = main_window
-
-        self.main_widget = QtWidgets.QWidget(self.main_window)
-        self.main_widget_layout = QtWidgets.QGridLayout(self.main_widget)
-
-        self.image_pages = QtWidgets.QStackedWidget(self.main_widget)
-        self.default_image_widget = QtWidgets.QWidget()
-        self.default_image_widget_layout = QtWidgets.QGridLayout(self.default_image_widget)
-        self.right_button = QtWidgets.QPushButton(self.main_widget)
-        self.left_button = QtWidgets.QPushButton(self.main_widget)
-        self.current_image_number = QtWidgets.QLabel(self.main_widget)
-
-        # The default_image is just that there will be something shown in the image frame all the time
-        self.default_image = QtWidgets.QLabel(self.default_image_widget)
-
-        # i didn't delete the settings widget in here just in case the settings widget in his own class wouldn't work
-        """"
-        self.settings_dock_widget = QtWidgets.QDockWidget(self.main_window)
-        self.settings_widget = QtWidgets.QWidget()
-        self.settings_widget_layout = QtWidgets.QGridLayout(self.settings_widget)
-        self.scale_filter_jump_frame = QtWidgets.QFrame(self.settings_dock_widget)
+class SettingsTabWidgetClass(object):
+    def __init__(self):
+        self.settings_tab_widget = QtWidgets.QTabWidget()
+        self.settings_tab_widget_layout = QtWidgets.QGridLayout(self.settings_tab_widget)
+        self.tab_1 = QtWidgets.QWidget()
+        self.settings_widget_layout = QtWidgets.QGridLayout(self.tab_1)
+        self.scale_filter_jump_frame = QtWidgets.QFrame(self.settings_tab_widget)
         self.scale_filter_jump_frame_layout = QtWidgets.QGridLayout(self.scale_filter_jump_frame)
         self.scale_label = QtWidgets.QLabel(self.scale_filter_jump_frame)
         self.outer_filter_label = QtWidgets.QLabel(self.scale_filter_jump_frame)
@@ -38,16 +22,16 @@ class MainWindowClass(object):
         self.jump_label = QtWidgets.QLabel(self.scale_filter_jump_frame)
         self.jump_spin_box = QtWidgets.QSpinBox(self.scale_filter_jump_frame)
         self.scale_spin_box = QtWidgets.QDoubleSpinBox(self.scale_filter_jump_frame)
-        self.roi_frame = QtWidgets.QFrame(self.settings_dock_widget)
+        self.roi_frame = QtWidgets.QFrame(self.settings_tab_widget)
         self.roi_frame_layout = QtWidgets.QGridLayout(self.roi_frame)
         self.reset_roi_button = QtWidgets.QPushButton(self.roi_frame)
         self.select_roi_button = QtWidgets.QPushButton(self.roi_frame)
-        self.type_value_frame = QtWidgets.QFrame(self.settings_dock_widget)
+        self.type_value_frame = QtWidgets.QFrame(self.settings_tab_widget)
         self.type_value_frame_layout = QtWidgets.QGridLayout(self.type_value_frame)
         self.value_spin_box = QtWidgets.QDoubleSpinBox(self.type_value_frame)
         self.type_label = QtWidgets.QLabel(self.type_value_frame)
         self.value_label = QtWidgets.QLabel(self.type_value_frame)
-        self.spacing_frame = QtWidgets.QFrame(self.settings_dock_widget)
+        self.spacing_frame = QtWidgets.QFrame(self.settings_tab_widget)
         self.type_combo_box = QtWidgets.QComboBox(self.type_value_frame)
         self.spacing_frame_layout = QtWidgets.QGridLayout(self.spacing_frame)
         self.horizontal_combo_box = QtWidgets.QComboBox(self.spacing_frame)
@@ -55,28 +39,20 @@ class MainWindowClass(object):
         self.vertical_label = QtWidgets.QLabel(self.spacing_frame)
         self.horizontal_label = QtWidgets.QLabel(self.spacing_frame)
         self.spacing_label = QtWidgets.QLabel(self.spacing_frame)
-        self.interrogation_winsize_frame = QtWidgets.QFrame(self.settings_dock_widget)
+        self.interrogation_winsize_frame = QtWidgets.QFrame(self.settings_tab_widget)
         self.interrogation_winsize_frame_layout = QtWidgets.QGridLayout(self.interrogation_winsize_frame)
         self.height_label = QtWidgets.QLabel(self.interrogation_winsize_frame)
         self.width_label = QtWidgets.QLabel(self.interrogation_winsize_frame)
         self.width_combo_box = QtWidgets.QComboBox(self.interrogation_winsize_frame)
         self.height_combo_box = QtWidgets.QComboBox(self.interrogation_winsize_frame)
         self.interrogation_winsize_label = QtWidgets.QLabel(self.interrogation_winsize_frame)
-        self.start_stop_frame = QtWidgets.QFrame(self.settings_dock_widget)
+        self.start_stop_frame = QtWidgets.QFrame(self.settings_tab_widget)
         self.start_stop_frame_layout = QtWidgets.QGridLayout(self.start_stop_frame)
         self.stop_button = QtWidgets.QPushButton(self.start_stop_frame)
         self.start_button = QtWidgets.QPushButton(self.start_stop_frame)
-        """
-        self.menuBar = QtWidgets.QMenuBar(self.main_window)
-        self.menu_bar_file = QtWidgets.QMenu(self.menuBar)
-        self.file_action = QtWidgets.QAction(self.menu_bar_file)
 
-    """
-    def setting_dock_widget_setup(self):
-        self.settings_dock_widget.setFeatures(
-            QtWidgets.QDockWidget.DockWidgetFloatable | QtWidgets.QDockWidget.DockWidgetMovable)
-        self.settings_dock_widget.setAllowedAreas(QtCore.Qt.LeftDockWidgetArea | QtCore.Qt.RightDockWidgetArea)
-        self.settings_dock_widget.setWindowTitle("Settings")
+    def setting_widget_setup(self):
+        self.settings_tab_widget.setTabPosition(QtWidgets.QTabWidget.East)
 
         self.scale_filter_jump_frame.setFrameShape(QtWidgets.QFrame.Box)
         self.scale_filter_jump_frame.setFrameShadow(QtWidgets.QFrame.Sunken)
@@ -239,9 +215,6 @@ class MainWindowClass(object):
 
         self.settings_widget_layout.addWidget(self.interrogation_winsize_frame, 0, 3, 1, 1)
 
-        self.settings_dock_widget.setWidget(self.settings_widget)
-        self.main_window.addDockWidget(QtCore.Qt.DockWidgetArea(2), self.settings_dock_widget)
-
         self.start_stop_frame.setFrameShape(QtWidgets.QFrame.Box)
         self.start_stop_frame.setFrameShadow(QtWidgets.QFrame.Sunken)
 
@@ -253,66 +226,19 @@ class MainWindowClass(object):
         self.start_stop_frame_layout.addWidget(self.stop_button, 1, 0, 1, 1)
         self.settings_widget_layout.addWidget(self.start_stop_frame, 6, 3, 1, 1)
 
-    """
-
-    def main_window_setup(self):
-        self.main_window.resize(866, 683)
-        self.main_window.setObjectName("main_window")
-        icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap(r"package/images/openpiv_logo.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-
-        self.main_window.setWindowIcon(icon)
-
-        self.default_image.setPixmap(QtGui.QPixmap(r"package/images/openpiv_logo.png"))
-
-        self.default_image.setAlignment(QtCore.Qt.AlignCenter)
-
-        self.image_pages.addWidget(self.default_image_widget)
-
-        left_right_buttons_spacer = QtWidgets.QSpacerItem(2000, 20, QtWidgets.QSizePolicy.Expanding,
-                                                          QtWidgets.QSizePolicy.Minimum)
-
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
-
-        self.main_widget.setSizePolicy(sizePolicy)
-
-        self.image_pages.setSizePolicy(sizePolicy)
-
-        self.default_image.setSizePolicy(sizePolicy)
-
-        self.default_image_widget_layout.addWidget(self.default_image, 0, 0, 1, 1)
-
-        self.main_widget_layout.addWidget(self.image_pages, 0, 0, 1, 4)
-        self.main_widget_layout.addWidget(self.right_button, 1, 3, 1, 1)
-        self.main_widget_layout.addWidget(self.left_button, 1, 1, 1, 1)
-        self.main_widget_layout.addWidget(self.current_image_number, 1, 2, 1, 1)
-        self.main_widget_layout.addItem(left_right_buttons_spacer, 1, 0, 1, 1)
-
-        self.menuBar.setGeometry(QtCore.QRect(0, 0, 866, 21))
-        self.main_window.setMenuBar(self.menuBar)
-        self.menuBar.addAction(self.menu_bar_file.menuAction())
-
-        self.file_action.setShortcut('Ctrl+F')
-        self.file_action.setStatusTip('manage files')
-
-        self.menu_bar_file.addAction(self.file_action)
-
-        self.main_window.setCentralWidget(self.main_widget)
+        self.settings_tab_widget.addTab(self.tab_1, "tab 1")
+        self.settings_tab_widget_layout.addWidget(self.settings_tab_widget, 0, 0, 1, 1)
+        self.settings_tab_widget.setStyleSheet("background-color: rgb(240, 240, 240);")
 
         self.text_setup()
 
-        self.left_button.clicked.connect(self.change_image_number_left)
-
-        self.right_button.clicked.connect(self.change_image_number_right)
-
-        QtCore.QMetaObject.connectSlotsByName(self.main_window)
+        QtCore.QMetaObject.connectSlotsByName(self.settings_tab_widget)
 
     def text_setup(self):
         set_text = lambda x, text: x.setText(text)
 
-        self.main_window.setWindowTitle("OpenPIV")
+        self.settings_tab_widget.setWindowTitle("OpenPIV")
 
-        """
         set_text(self.stop_button, "STOP")
         set_text(self.start_button, "START")
         set_text(self.scale_label, "Scale:")
@@ -328,51 +254,13 @@ class MainWindowClass(object):
         set_text(self.height_label, "Height")
         set_text(self.width_label, "Width")
         set_text(self.interrogation_winsize_label, "Interrogation window size")
-        """
-        set_text(self.file_action, "manage file")
-        set_text(self.left_button, "<")
-        set_text(self.right_button, ">")
-        set_text(self.current_image_number, "0")
-
-        self.menu_bar_file.setTitle("file")
-
-    """
-    # function that changes the max and min of jump
-    def change_jump_max_min(self):
-        self.jump_spin_box.setMaximum(self.image_pages.count() - 1)
-        self.jump_spin_box.setMinimum((-1) * (self.image_pages.count() - 1))
-    """
-
-    # function that moves to the next left image
-    def change_image_number_left(self):
-        if int(self.current_image_number.text()) == 0:
-            self.current_image_number.setText(
-                QtWidgets.QApplication.translate("MainWindow", str(self.image_pages.count() - 1), None, -1))
-            self.image_pages.setCurrentIndex(self.image_pages.count() - 1)
-        else:
-            self.current_image_number.setText(
-                QtWidgets.QApplication.translate("MainWindow", str(self.image_pages.currentIndex() - 1), None, -1))
-            self.image_pages.setCurrentIndex(self.image_pages.currentIndex() - 1)
-
-    # function that moves to the next right image
-    def change_image_number_right(self):
-        if self.image_pages.currentIndex() == self.image_pages.count() - 1:
-            self.current_image_number.setText(
-                QtWidgets.QApplication.translate("MainWindow", "0", None, -1))
-            self.image_pages.setCurrentIndex(0)
-        else:
-            self.current_image_number.setText(str(self.image_pages.currentIndex() + 1))
-            self.image_pages.setCurrentIndex(self.image_pages.currentIndex() + 1)
-
 
 if __name__ == "__main__":
     # run the application
     import sys
 
     app = QtWidgets.QApplication(sys.argv)
-    MainWindow = QtWidgets.QMainWindow()
-    main_window_class = MainWindowClass(MainWindow)
-    main_window_class.main_window_setup()
-    main_window_class.default_image.setPixmap(QtGui.QPixmap("images/openpiv_logo.png"))
-    MainWindow.show()
+    main_window_class = SettingsTabWidgetClass()
+    main_window_class.setting_widget_setup()
+    main_window_class.settings_tab_widget.show()
     sys.exit(app.exec_())

@@ -3,25 +3,21 @@ from openpiv import tools
 
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
-from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
 from matplotlib.figure import Figure
 
 
-# i needed to call QWidget and super to add the tool bar of matplotlib
 class PIVPlot(QtWidgets.QWidget):
     def __init__(self, parent=None):
         super(PIVPlot, self).__init__(parent)
         self.figure = Figure()
         # the canves is where the grath and the tool bar is
         self.piv_canves = FigureCanvas(self.figure)
-        self.piv_tool_bar = NavigationToolbar(self.piv_canves, self)
 
         # the piv_images_list is where the images are saved
         self.piv_images_list = []
         self.ax = self.figure.add_subplot(111)
 
         self.canvas_layout = QtWidgets.QGridLayout(parent)
-        self.canvas_layout.addWidget(self.piv_tool_bar)
         self.canvas_layout.addWidget(self.piv_canves)
 
     # function that showes the choosen image

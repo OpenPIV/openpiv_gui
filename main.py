@@ -1,20 +1,26 @@
 from package.MainWindow import MainWindowClass
 from package.FileWindow import FileWindowClass
 from package.SettingTabWidget import SettingsTabWidgetClass
-from PySide2 import QtCore, QtGui, QtWidgets
+from package.PIVPlot import PIVPlot
+from PySide2 import QtWidgets
 import sys
 
 MAIN_WINDOW_CLASS = None
 FILE_WINDOW_CLASS = None
 SETTINGS_TAB_WIDGET_CLASS = None
+PIV_PLOT_CLASS = None
 
 
 def run_main_window():
-    global MAIN_WINDOW_CLASS, FILE_WINDOW_CLASS, SETTINGS_TAB_WIDGET_CLASS
+    global MAIN_WINDOW_CLASS, FILE_WINDOW_CLASS, SETTINGS_TAB_WIDGET_CLASS, PIV_PLOT_CLASS
     app = QtWidgets.QApplication(sys.argv)
 
     SETTINGS_TAB_WIDGET_CLASS = SettingsTabWidgetClass()
     SETTINGS_TAB_WIDGET_CLASS.setting_widget_setup()
+
+    # create the widget that will hold the plot
+    piv_plot_widget = QtWidgets.QWidget()
+    PIV_PLOT_CLASS = PIVPlot(piv_plot_widget)
 
     # create the widget of the main window
     main_window_widget = QtWidgets.QMainWindow()
@@ -22,6 +28,7 @@ def run_main_window():
     MAIN_WINDOW_CLASS = MainWindowClass(main_window_widget)
     MAIN_WINDOW_CLASS.main_widget_layout.addWidget(SETTINGS_TAB_WIDGET_CLASS.settings_tab_widget, 0, 5, 3, 1)
     MAIN_WINDOW_CLASS.main_window_setup()
+    MAIN_WINDOW_CLASS.image_pages.addWidget(piv_plot_widget)
 
     # show the widget of the main window
     main_window_widget.show()
@@ -36,63 +43,90 @@ def run_main_window():
     MAIN_WINDOW_CLASS.file_action.triggered.connect(file_window.show)
 
     (FILE_WINDOW_CLASS.file_list.model()).rowsInserted.connect(file_added)
-
     (FILE_WINDOW_CLASS.file_list.model()).rowsRemoved.connect(file_removed)
+
+    MAIN_WINDOW_CLASS.left_button.clicked.connect(change_image_number_left)
+    MAIN_WINDOW_CLASS.right_button.clicked.connect(change_image_number_right)
 
     sys.exit(app.exec_())
 
 
 def file_removed():
     if FILE_WINDOW_CLASS.file_list.count() == 0:
-        MAIN_WINDOW_CLASS.image_pages.removeWidget(MAIN_WINDOW_CLASS.image_pages.currentWidget())
-        MAIN_WINDOW_CLASS.default_image.setPixmap(r"package/images/openpiv_logo.png")
-        MAIN_WINDOW_CLASS.image_pages.addWidget(MAIN_WINDOW_CLASS.default_image_widget)
+        del (PIV_PLOT_CLASS.piv_images_list[0])
+        MAIN_WINDOW_CLASS.image_pages.setCurrentIndex(0)
         return 0
-    j = 0
-    for i in range(MAIN_WINDOW_CLASS.image_pages.count() - 1):
-        if i + j == MAIN_WINDOW_CLASS.image_pages.count():
+
+    for i in range(0, FILE_WINDOW_CLASS.file_list.count()):
+        if PIV_PLOT_CLASS.piv_images_list[i] != FILE_WINDOW_CLASS.file_list.item(i).text():
+            del (PIV_PLOT_CLASS.piv_images_list[i])
+            PIV_PLOT_CLASS.show_plot(0)
+            MAIN_WINDOW_CLASS.current_image_number.setText("0")
+            # change the jump range when the images number changes
+            change_jump_max_min()
             return 0
-        while (MAIN_WINDOW_CLASS.image_pages.widget(i + j).findChild(
-                QtWidgets.QLabel).pixmap().cacheKey() != QtGui.QPixmap(
-            FILE_WINDOW_CLASS.file_list.item(i).text()).cacheKey()):
-            MAIN_WINDOW_CLASS.image_pages.removeWidget(MAIN_WINDOW_CLASS.image_pages.widget(i + j))
-            j += 1
-            print(j + i)
-            if i + j == MAIN_WINDOW_CLASS.image_pages.count():
-                return 0
-    if MAIN_WINDOW_CLASS.image_pages.count() - FILE_WINDOW_CLASS.file_list.count():
-        for i in range(MAIN_WINDOW_CLASS.image_pages.count() - FILE_WINDOW_CLASS.file_list.count()):
-            MAIN_WINDOW_CLASS.image_pages.removeWidget(
-                MAIN_WINDOW_CLASS.image_pages.widget(MAIN_WINDOW_CLASS.image_pages.count() - i - 1))
 
+    if len(PIV_PLOT_CLASS.piv_images_list) - FILE_WINDOW_CLASS.file_list.count() > 0:
+        del (PIV_PLOT_CLASS.piv_images_list[-1])
 
-# function that add the image that was added to the main widget
-def file_added():
-    if FILE_WINDOW_CLASS.file_list.item(FILE_WINDOW_CLASS.file_list.count() - 1).text() == '':
-        return 0
-    if FILE_WINDOW_CLASS.file_list.count() > 0:
-        MAIN_WINDOW_CLASS.default_image.setPixmap(QtGui.QPixmap(FILE_WINDOW_CLASS.file_list.item(0).text()))
-        if FILE_WINDOW_CLASS.file_list.count() > 1:
-            MAIN_WINDOW_CLASS.image_pages.addWidget(
-                create_label_pixmap(FILE_WINDOW_CLASS.file_list.item(FILE_WINDOW_CLASS.file_list.count() - 1).text()))
+    PIV_PLOT_CLASS.show_plot(0)
+    MAIN_WINDOW_CLASS.current_image_number.setText("0")
+
     # change the jump range when the images number changes
     change_jump_max_min()
 
 
-def create_label_pixmap(pixmap):
-    widget = QtWidgets.QWidget()
-    widget_layout = QtWidgets.QGridLayout(widget)
-    label = QtWidgets.QLabel()
-    widget_layout.addWidget(label, 0, 0, 1, 1)
-    label.setPixmap(QtGui.QPixmap(pixmap))
-    label.setAlignment(QtCore.Qt.AlignCenter)
-    return widget
+# function that add the image that was added to the main widget
+def file_added():
+    if not FILE_WINDOW_CLASS.file_list.item(FILE_WINDOW_CLASS.file_list.count() - 1).text():
+        FILE_WINDOW_CLASS.file_list.takeItem(FILE_WINDOW_CLASS.file_list.item(FILE_WINDOW_CLASS.file_list.count() - 1))
+        return 0
+
+    if FILE_WINDOW_CLASS.file_list.count() == 1:
+        MAIN_WINDOW_CLASS.image_pages.setCurrentIndex(1)
+        PIV_PLOT_CLASS.add_image(FILE_WINDOW_CLASS.file_list.item(0).text())
+        PIV_PLOT_CLASS.show_plot(0)
+        MAIN_WINDOW_CLASS.current_image_number.setText("0")
+
+    if FILE_WINDOW_CLASS.file_list.count() > 1:
+        PIV_PLOT_CLASS.add_image(FILE_WINDOW_CLASS.file_list.item(FILE_WINDOW_CLASS.file_list.count() - 1).text())
+        PIV_PLOT_CLASS.show_plot(FILE_WINDOW_CLASS.file_list.count() - 1)
+        MAIN_WINDOW_CLASS.current_image_number.setText(str(FILE_WINDOW_CLASS.file_list.count() - 1))
+
+    # change the jump range when the images number changes
+    change_jump_max_min()
 
 
 # function that changes the max and min of jump
 def change_jump_max_min():
-    SETTINGS_TAB_WIDGET_CLASS.jump_spin_box.setMaximum(MAIN_WINDOW_CLASS.image_pages.count() - 1)
-    SETTINGS_TAB_WIDGET_CLASS.jump_spin_box.setMinimum((-1) * (MAIN_WINDOW_CLASS.image_pages.count() - 1))
+    SETTINGS_TAB_WIDGET_CLASS.jump_spin_box.setMaximum(len(PIV_PLOT_CLASS.piv_images_list) - 1)
+    SETTINGS_TAB_WIDGET_CLASS.jump_spin_box.setMinimum((-1) * (len(PIV_PLOT_CLASS.piv_images_list) - 1))
+
+
+# function that moves to the next right image
+def change_image_number_right():
+    if len(PIV_PLOT_CLASS.piv_images_list) == 0:
+        return 0
+
+    if int(MAIN_WINDOW_CLASS.current_image_number.text()) == len(PIV_PLOT_CLASS.piv_images_list) - 1:
+        MAIN_WINDOW_CLASS.current_image_number.setText("0")
+        PIV_PLOT_CLASS.show_plot(0)
+    else:
+        PIV_PLOT_CLASS.show_plot(int(MAIN_WINDOW_CLASS.current_image_number.text()) + 1)
+        MAIN_WINDOW_CLASS.current_image_number.setText(str(int(MAIN_WINDOW_CLASS.current_image_number.text()) + 1))
+
+
+# function that moves to the next left image
+def change_image_number_left():
+    if len(PIV_PLOT_CLASS.piv_images_list) == 0:
+        return 0
+
+    if int(MAIN_WINDOW_CLASS.current_image_number.text()) == 0:
+        MAIN_WINDOW_CLASS.current_image_number.setText(str(len(PIV_PLOT_CLASS.piv_images_list) - 1))
+        PIV_PLOT_CLASS.show_plot(len(PIV_PLOT_CLASS.piv_images_list) - 1)
+    else:
+        PIV_PLOT_CLASS.show_plot(int(MAIN_WINDOW_CLASS.current_image_number.text()) - 1)
+        MAIN_WINDOW_CLASS.current_image_number.setText(str(int(MAIN_WINDOW_CLASS.current_image_number.text()) - 1))
 
 
 def main():

@@ -1,4 +1,5 @@
 from PySide2 import QtCore, QtGui, QtWidgets
+from package.HorizontalTextBar import HorizontalTextBar
 
 FONT = QtGui.QFont()
 FONT.setFamily("Gill Sans MT")
@@ -52,6 +53,8 @@ class SettingsTabWidgetClass(object):
         self.start_button = QtWidgets.QPushButton(self.start_stop_frame)
 
     def setting_widget_setup(self):
+        # the set tab bar line is to make the tab text go horizontal
+        self.settings_tab_widget.setTabBar(HorizontalTextBar())
         self.settings_tab_widget.setTabPosition(QtWidgets.QTabWidget.East)
 
         self.scale_filter_jump_frame.setFrameShape(QtWidgets.QFrame.Box)
@@ -254,6 +257,7 @@ class SettingsTabWidgetClass(object):
         set_text(self.height_label, "Height")
         set_text(self.width_label, "Width")
         set_text(self.interrogation_winsize_label, "Interrogation window size")
+
 
 if __name__ == "__main__":
     # run the application

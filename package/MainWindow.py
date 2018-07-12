@@ -43,7 +43,7 @@ class MainWindowClass(object):
 
         self.image_pages.addWidget(self.default_image_widget)
 
-        left_right_buttons_spacer = QtWidgets.QSpacerItem(2000, 20, QtWidgets.QSizePolicy.Expanding,
+        left_right_buttons_spacer = QtWidgets.QSpacerItem(4000, 20, QtWidgets.QSizePolicy.Expanding,
                                                           QtWidgets.QSizePolicy.Minimum)
 
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)

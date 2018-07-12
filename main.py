@@ -61,7 +61,7 @@ def file_removed():
         if PIV_PLOT_CLASS.piv_images_list[i] != FILE_WINDOW_CLASS.file_list.item(i).text():
             del (PIV_PLOT_CLASS.piv_images_list[i])
             PIV_PLOT_CLASS.show_plot(0)
-            MAIN_WINDOW_CLASS.current_image_number.setText("0")
+            MAIN_WINDOW_CLASS.current_image_number.setText("0") 
             # change the jump range when the images number changes
             change_jump_max_min()
             return 0

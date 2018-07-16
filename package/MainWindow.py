@@ -27,7 +27,8 @@ class MainWindowClass(object):
 
         self.menuBar = QtWidgets.QMenuBar(self.main_window)
         self.menu_bar_file = QtWidgets.QMenu(self.menuBar)
-        self.file_action = QtWidgets.QAction(self.menu_bar_file)
+        self.load_action = QtWidgets.QAction(self.menu_bar_file)
+        self.quit_action = QtWidgets.QAction(self.menu_bar_file)
 
     def main_window_setup(self):
         self.main_window.resize(866, 683)
@@ -66,10 +67,14 @@ class MainWindowClass(object):
         self.main_window.setMenuBar(self.menuBar)
         self.menuBar.addAction(self.menu_bar_file.menuAction())
 
-        self.file_action.setShortcut('Ctrl+F')
-        self.file_action.setStatusTip('manage files')
+        self.load_action.setShortcut('CTRL+A')
+        self.load_action.setStatusTip('add a file')
 
-        self.menu_bar_file.addAction(self.file_action)
+        self.quit_action.setShortcut('ALT+F4')
+        self.quit_action.setStatusTip('Quit')
+
+        self.menu_bar_file.addAction(self.load_action)
+        self.menu_bar_file.addAction(self.quit_action)
 
         self.main_window.setCentralWidget(self.main_widget)
 
@@ -82,36 +87,13 @@ class MainWindowClass(object):
 
         self.main_window.setWindowTitle("OpenPIV")
 
-        """
-        set_text(self.stop_button, "STOP")
-        set_text(self.start_button, "START")
-        set_text(self.scale_label, "Scale:")
-        set_text(self.outer_filter_label, "Outer filter:")
-        set_text(self.jump_label, "Jump:")
-        set_text(self.reset_roi_button, "Reset ROI")
-        set_text(self.select_roi_button, "Select ROI")
-        set_text(self.type_label, "S/N type:")
-        set_text(self.value_label, "S/N value:")
-        set_text(self.vertical_label, "Vertical")
-        set_text(self.horizontal_label, "Horizontal")
-        set_text(self.spacing_label, "spacing/Overlap")
-        set_text(self.height_label, "Height")
-        set_text(self.width_label, "Width")
-        set_text(self.interrogation_winsize_label, "Interrogation window size")
-        """
-        set_text(self.file_action, "manage file")
+        set_text(self.load_action, "Add")
+        set_text(self.quit_action, "Quit")
         set_text(self.left_button, "<")
         set_text(self.right_button, ">")
         set_text(self.current_image_number, "0")
 
         self.menu_bar_file.setTitle("file")
-
-    """
-    # function that changes the max and min of jump
-    def change_jump_max_min(self):
-        self.jump_spin_box.setMaximum(self.image_pages.count() - 1)
-        self.jump_spin_box.setMinimum((-1) * (self.image_pages.count() - 1))
-    """
 
 
 if __name__ == "__main__":

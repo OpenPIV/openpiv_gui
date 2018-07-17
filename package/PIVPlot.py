@@ -35,17 +35,30 @@ class PIVPlot(QtWidgets.QWidget):
     def show_plot(self, image_number):
         self.ax.clear()
 
-        self.ax.imshow(tools.imread(self.piv_images_list[image_number][0]), cmap=plt.cm.gray)
+        self.ax.imshow(self.piv_images_list[image_number][2], cmap=plt.cm.gray)
 
         self.piv_canvas.draw()
 
     # function to add an image
     def add_image(self, image_path):
-        self.piv_images_list.append([image_path, QtCore.QFileInfo(image_path).fileName()])
+        self.piv_images_list.append([image_path, QtCore.QFileInfo(image_path).fileName(), tools.imread(image_path)])
 
     # the function that does the piv itself
     def start_piv(self, width, height, horizontal, vertical, sn_type, sn_value, scale, outer_filter, jump):
         pass
+
+    @staticmethod
+    def invert(img_read, is_bmp):
+        invert_img = img_read
+        if is_bmp:
+            for i in range(len(img_read)):
+                for j in range(len(img_read[i])):
+                    invert_img[i][j] = 255 - img_read[i][j]
+        else:
+            for i in range(len(img_read)):
+                for j in range(len(img_read[i])):
+                    invert_img[i][j] = 0.255 - img_read[i][j]
+        return invert_img
 
 
 if __name__ == '__main__':

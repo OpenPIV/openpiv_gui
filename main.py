@@ -5,6 +5,7 @@ from package.FileWindow import FileWindowClass
 from package.SettingsTab import SettingsTab
 from PySide2 import QtWidgets, QtCore
 from functools import partial
+from openpiv import tools
 import sys
 
 MAIN_WINDOW_CLASS = None
@@ -51,6 +52,8 @@ def run_main_window():
             SETTINGS_TAB_CLASS.outer_filter_spin_box.value(),
             SETTINGS_TAB_CLASS.jump_spin_box.value()
         ))
+
+    SETTINGS_TAB_WIDGET_CLASS.image_processing_tab_class.invert_button.clicked.connect(invert_button)
 
     # a max and a min to the file window frame to make it look better
     file_window_frame.setMinimumSize(QtCore.QSize(198, 198))
@@ -135,9 +138,8 @@ def file_added():
 
 # function that changes the max and min of jump
 def change_jump_max_min():
-    SETTINGS_TAB_WIDGET_CLASS.settings_tab_class.jump_spin_box.setMaximum(len(PIV_PLOT_CLASS.piv_images_list) - 1)
-    SETTINGS_TAB_WIDGET_CLASS.settings_tab_class.jump_spin_box.setMinimum(
-        (-1) * (len(PIV_PLOT_CLASS.piv_images_list) - 1))
+    SETTINGS_TAB_CLASS.jump_spin_box.setMaximum(len(PIV_PLOT_CLASS.piv_images_list) - 1)
+    SETTINGS_TAB_CLASS.jump_spin_box.setMinimum((-1) * (len(PIV_PLOT_CLASS.piv_images_list) - 1))
 
 
 # function that moves to the next right image
@@ -164,6 +166,21 @@ def change_image_number_left():
     else:
         PIV_PLOT_CLASS.show_plot(int(MAIN_WINDOW_CLASS.current_image_number.text()) - 1)
         MAIN_WINDOW_CLASS.current_image_number.setText(str(int(MAIN_WINDOW_CLASS.current_image_number.text()) - 1))
+
+
+def invert_button():
+    for i in FILE_WINDOW_CLASS.file_list.selectedItems():
+        if FILE_WINDOW_CLASS.file_list.item(FILE_WINDOW_CLASS.file_list.row(i)).text().lower().endswith(
+                ('.png', '.jpg', '.jpeg')):
+            PIV_PLOT_CLASS.piv_images_list[FILE_WINDOW_CLASS.file_list.row(i)][2] = PIV_PLOT_CLASS.invert(
+                PIV_PLOT_CLASS.piv_images_list[FILE_WINDOW_CLASS.file_list.row(i)][2],
+                False)
+            PIV_PLOT_CLASS.show_plot(FILE_WINDOW_CLASS.file_list.row(i))
+        else:
+            PIV_PLOT_CLASS.piv_images_list[FILE_WINDOW_CLASS.file_list.row(i)][2] = PIV_PLOT_CLASS.invert(
+                PIV_PLOT_CLASS.piv_images_list[FILE_WINDOW_CLASS.file_list.row(i)][2],
+                True)
+            PIV_PLOT_CLASS.show_plot(FILE_WINDOW_CLASS.file_list.row(i))
 
 
 def main():

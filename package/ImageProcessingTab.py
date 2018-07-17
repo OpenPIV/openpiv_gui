@@ -1,4 +1,4 @@
-from PySide2 import QtCore, QtWidgets
+from PySide2 import QtCore, QtWidgets, QtGui
 
 
 # the image processing tab ibn the settings tab widget
@@ -28,7 +28,12 @@ class ImageProcessingTabClass(object):
         self.brightness_frame.setFrameShape(QtWidgets.QFrame.Box)
         self.brightness_frame.setFrameShadow(QtWidgets.QFrame.Sunken)
 
+        font = QtGui.QFont()
+        font.setPointSize(10)
         self.brightness_label.setAlignment(QtCore.Qt.AlignCenter)
+        self.brightness_label.setFont(font)
+        self.bit_combo_box_label.setFont(font)
+        self.invert_label.setFont(font)
 
         self.brightness_level_slider.setOrientation(QtCore.Qt.Horizontal)
 

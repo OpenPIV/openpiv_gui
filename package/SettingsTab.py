@@ -1,5 +1,4 @@
 from PySide2 import QtCore, QtGui, QtWidgets
-from package.HorizontalTextBar import HorizontalTextBar
 
 FONT = QtGui.QFont()
 FONT.setFamily("Gill Sans MT")
@@ -108,8 +107,8 @@ class SettingsTab(object):
 
         self.value_spin_box.setCursor(QtCore.Qt.PointingHandCursor)
         self.value_spin_box.setAccelerated(True)
-        self.value_spin_box.setMaximum(100.0)
-        self.value_spin_box.setSingleStep(0.1)
+        self.value_spin_box.setMaximum(100.00)
+        self.value_spin_box.setSingleStep(0.10)
 
         self.type_value_frame_layout.addWidget(self.value_spin_box, 2, 1, 1, 1)
 

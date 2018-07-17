@@ -2,6 +2,7 @@ from package.MainWindow import MainWindowClass
 from package.SettingTabWidget import SettingsTabWidgetClass
 from package.PIVPlot import PIVPlot
 from package.FileWindow import FileWindowClass
+from package.SettingsTab import SettingsTab
 from PySide2 import QtWidgets, QtCore
 from functools import partial
 import sys
@@ -10,10 +11,11 @@ MAIN_WINDOW_CLASS = None
 SETTINGS_TAB_WIDGET_CLASS = None
 PIV_PLOT_CLASS = None
 FILE_WINDOW_CLASS = None
+SETTINGS_TAB_CLASS = None
 
 
 def run_main_window():
-    global MAIN_WINDOW_CLASS, FILE_WINDOW_CLASS, SETTINGS_TAB_WIDGET_CLASS, PIV_PLOT_CLASS
+    global MAIN_WINDOW_CLASS, FILE_WINDOW_CLASS, SETTINGS_TAB_WIDGET_CLASS, PIV_PLOT_CLASS, SETTINGS_TAB_CLASS
     app = QtWidgets.QApplication(sys.argv)
 
     # setup for the file window to add for the image processing tab
@@ -21,18 +23,38 @@ def run_main_window():
     FILE_WINDOW_CLASS = FileWindowClass(file_window_frame)
     FILE_WINDOW_CLASS.window_setup()
 
+    SETTINGS_TAB_CLASS = SettingsTab()
+    SETTINGS_TAB_CLASS.setting_widget_setup()
+
     SETTINGS_TAB_WIDGET_CLASS = SettingsTabWidgetClass()
     SETTINGS_TAB_WIDGET_CLASS.settings_widget_setup()
     SETTINGS_TAB_WIDGET_CLASS.image_processing_tab_class.image_processing_tab_layout.addWidget(file_window_frame, 1, 0,
                                                                                                1, 1)
-
-    # a max and a min to the file window frame to make it look better
-    file_window_frame.setMinimumSize(QtCore.QSize(198, 198))
-    file_window_frame.setMaximumSize(QtCore.QSize(198, 198))
+    SETTINGS_TAB_WIDGET_CLASS.settings_tab_widget.insertTab(1, SETTINGS_TAB_CLASS.settings_tab, "settings")
+    SETTINGS_TAB_WIDGET_CLASS.settings_tab_widget.setStyleSheet("background-color: rgb(240, 240, 240);")
 
     # create the widget that will hold the plot
     piv_plot_widget = QtWidgets.QWidget()
     PIV_PLOT_CLASS = PIVPlot(piv_plot_widget)
+
+    # here is where the connection with the start button and piv function is
+    # (is uses lambda to get the the current values)
+    SETTINGS_TAB_CLASS.start_button.clicked.connect(
+        lambda: PIV_PLOT_CLASS.start_piv(
+            int(SETTINGS_TAB_CLASS.width_combo_box.currentText()),
+            int(SETTINGS_TAB_CLASS.height_combo_box.currentText()),
+            int(SETTINGS_TAB_CLASS.horizontal_combo_box.currentText()),
+            int(SETTINGS_TAB_CLASS.vertical_combo_box.currentText()),
+            int(SETTINGS_TAB_CLASS.type_combo_box.currentText()),
+            SETTINGS_TAB_CLASS.value_spin_box.value(),
+            SETTINGS_TAB_CLASS.scale_spin_box.value(),
+            SETTINGS_TAB_CLASS.outer_filter_spin_box.value(),
+            SETTINGS_TAB_CLASS.jump_spin_box.value()
+        ))
+
+    # a max and a min to the file window frame to make it look better
+    file_window_frame.setMinimumSize(QtCore.QSize(198, 198))
+    file_window_frame.setMaximumSize(QtCore.QSize(198, 198))
 
     # create the widget of the main window
     main_window_widget = QtWidgets.QMainWindow()

@@ -19,9 +19,6 @@ class SettingsTabWidgetClass(object):
         self.image_processing_tab_class.image_processing_tab_setup()
         self.image_processing_tab = self.image_processing_tab_class.image_processing_tab
         self.image_processing_tab_layout = QtWidgets.QGridLayout(self.image_processing_tab)
-        self.settings_tab_class = SettingsTab()
-        self.settings_tab_class.setting_widget_setup()
-        self.settings_tab = self.settings_tab_class.settings_tab
         self.post_processing_tab = QtWidgets.QWidget()
 
     def settings_widget_setup(self):
@@ -33,9 +30,6 @@ class SettingsTabWidgetClass(object):
 
         self.settings_tab_widget.addTab(self.image_processing_tab, "image processing")
         self.image_processing_tab.setStyleSheet("background-color: rgb(240, 240, 240);")
-
-        self.settings_tab_widget.addTab(self.settings_tab, "settings")
-        self.settings_tab_widget.setStyleSheet("background-color: rgb(240, 240, 240);")
 
         self.settings_tab_widget.addTab(self.post_processing_tab, "post processing")
         self.post_processing_tab.setStyleSheet("background-color: rgb(240, 240, 240);")

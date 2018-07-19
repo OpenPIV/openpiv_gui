@@ -68,6 +68,4 @@ dependencies:
   - wincertstore=0.2=py36h7fe50ca_0
   - pip:
     - dask==0.18.1
-    - graphviz
-prefix: C:\Users\Roye2004\Anaconda3\envs\openpiv_gui_env
 

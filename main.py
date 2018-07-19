@@ -1,3 +1,5 @@
+import graphviz
+
 from package.MainWindow import MainWindowClass
 from package.SettingTabWidget import SettingsTabWidgetClass
 from package.PIVPlot import PIVPlot

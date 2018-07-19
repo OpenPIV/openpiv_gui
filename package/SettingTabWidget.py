@@ -1,6 +1,5 @@
 from PySide2 import QtCore, QtGui, QtWidgets
 from package.HorizontalTextBar import HorizontalTextBar
-from package.SettingsTab import SettingsTab
 from package.ImageProcessingTab import ImageProcessingTabClass
 
 FONT = QtGui.QFont()

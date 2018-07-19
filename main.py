@@ -4,8 +4,7 @@ from package.PIVPlot import PIVPlot
 from package.FileWindow import FileWindowClass
 from package.SettingsTab import SettingsTab
 from PySide2 import QtWidgets, QtCore
-from functools import partial
-from openpiv import tools
+from _functools import partial
 import sys
 
 MAIN_WINDOW_CLASS = None
@@ -93,7 +92,7 @@ def file_removed():
         MAIN_WINDOW_CLASS.image_pages.setCurrentIndex(0)
         return 0
 
-    for i in range(0, FILE_WINDOW_CLASS.file_Window_class.file_list.count()):
+    for i in range(0, FILE_WINDOW_CLASS.file_list.count()):
         if PIV_PLOT_CLASS.piv_images_list[i][1] != FILE_WINDOW_CLASS.file_list.item(i).text():
             del (PIV_PLOT_CLASS.piv_images_list[i])
             PIV_PLOT_CLASS.show_plot(0)
@@ -181,6 +180,14 @@ def invert_button():
                 PIV_PLOT_CLASS.piv_images_list[FILE_WINDOW_CLASS.file_list.row(i)][2],
                 True)
             PIV_PLOT_CLASS.show_plot(FILE_WINDOW_CLASS.file_list.row(i))
+
+
+def file_order_changed():
+    file_list_list = []
+    for i in range(FILE_WINDOW_CLASS.file_list.count()):
+        file_list_list.append(FILE_WINDOW_CLASS.file_list.item(i).text())
+
+    PIV_PLOT_CLASS.piv_images_list.sort(key=lambda x: file_list_list.index(x[1]))
 
 
 def main():

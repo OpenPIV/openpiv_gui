@@ -44,7 +44,7 @@ class FileWindowClass(object):
     # the function that add the files when the add button is clicked
     def add_file(self):
         self.last_file = QtWidgets.QFileDialog.getOpenFileName(self.file_list, path=QtCore.QDir,
-                                                               filter=('images(*.png *.jpg *.jpeg *.bmp)'))[0]
+                                                               filter=('images(*.png *.jpg *.jpeg *.bmp *.tif *.tiff)'))[0]
         if self.last_file != '':
             self.file_list.addItem(QtCore.QFileInfo(str(self.last_file)).fileName())
 

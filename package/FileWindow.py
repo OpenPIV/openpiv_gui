@@ -9,6 +9,8 @@ class FileWindowClass(object):
         self.remove_button = QtWidgets.QPushButton(self.file_window)
         # self.close_button = QtWidgets.QPushButton(self.file_window)
         self.file_list = QtWidgets.QListWidget(self.file_window)
+        self.file_dialog = QtWidgets.QFileDialog
+        self.last_file_list = []
         self.last_file = None
 
     def window_setup(self):
@@ -43,10 +45,14 @@ class FileWindowClass(object):
 
     # the function that add the files when the add button is clicked
     def add_file(self):
-        self.last_file = QtWidgets.QFileDialog.getOpenFileName(self.file_list, path=QtCore.QDir,
-                                                               filter=('images(*.png *.jpg *.jpeg *.bmp)'))[0]
-        if self.last_file != '':
-            self.file_list.addItem(QtCore.QFileInfo(str(self.last_file)).fileName())
+        self.last_file_list = \
+            self.file_dialog.getOpenFileNames(self.file_list, path=QtCore.QDir,
+                                              filter=('images(*.png *.jpg *.jpeg *.bmp)'))[0]
+        print(self.last_file_list)
+        for i in range(len(self.last_file_list)):
+            if self.last_file_list[i] != "":
+                self.last_file = self.last_file_list[i]
+                self.file_list.addItem(QtCore.QFileInfo(str(self.last_file_list[i])).fileName())
 
     # the function that remove selected files when the remove button is clicked
     def remove_item(self):

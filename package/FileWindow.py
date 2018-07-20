@@ -48,18 +48,18 @@ class FileWindowClass(object):
         self.last_file_list = \
             self.file_dialog.getOpenFileNames(self.file_list, path=QtCore.QDir,
                                               filter=('images(*.png *.jpg *.jpeg *.bmp *.tif *.tiff)'))[0]
-        print(self.last_file_list)
         for i in range(len(self.last_file_list)):
             if self.last_file_list[i] != "":
                 self.last_file = self.last_file_list[i]
-                self.file_list.addItem(QtCore.QFileInfo(str(self.last_file_list[i])).fileName()
+                self.file_list.addItem(QtCore.QFileInfo(str(self.last_file_list[i])).fileName())
 
-#       self.last_file = QtWidgets.QFileDialog.getOpenFileName(self.file_list, path=QtCore.QDir,
-#                                                              filter=('images(*.png *.jpg *.jpeg *.bmp *.tif *.tiff)'))[0]
-#       if self.last_file != '':
-#           self.file_list.addItem(QtCore.QFileInfo(str(self.last_file)).fileName())
+            #       self.last_file = QtWidgets.QFileDialog.getOpenFileName(self.file_list, path=QtCore.QDir,
+            #                                                              filter=('images(*.png *.jpg *.jpeg *.bmp *.tif *.tiff)'))[0]
+            #       if self.last_file != '':
+            #           self.file_list.addItem(QtCore.QFileInfo(str(self.last_file)).fileName())
 
     # the function that remove selected files when the remove button is clicked
+
     def remove_item(self):
         for selected_item in self.file_list.selectedItems():
             self.file_list.takeItem(self.file_list.row(selected_item))

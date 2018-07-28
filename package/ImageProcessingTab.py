@@ -29,7 +29,7 @@ class ImageProcessingTabClass(object):
         self.brightness_frame.setFrameShadow(QtWidgets.QFrame.Sunken)
 
         font = QtGui.QFont()
-        font.setPointSize(10)
+        font.setPointSize(8)
         self.brightness_label.setAlignment(QtCore.Qt.AlignCenter)
         self.brightness_label.setFont(font)
         self.bit_combo_box_label.setFont(font)

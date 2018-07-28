@@ -39,7 +39,7 @@ class FileWindowClass(object):
     # function that sets up all the titles and texts in the window
     def text_setup(self):
         self.file_window.setWindowTitle("OpenPIV file")
-        self.add_button.setText("Add")
+        self.add_button.setText("Load")
         self.remove_button.setText("Remove")
         # self.close_button.setText(QtWidgets.QApplication.translate("file_window", "Close", None, -1))
 

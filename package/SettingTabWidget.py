@@ -3,11 +3,11 @@ from package.HorizontalTextBar import HorizontalTextBar
 from package.ImageProcessingTab import ImageProcessingTabClass
 
 FONT = QtGui.QFont()
-FONT.setFamily("Gill Sans MT")
-FONT.setPointSize(21)
-FONT.setWeight(75)
-FONT.setItalic(True)
-FONT.setBold(True)
+FONT.setFamily("MS Shell Dig 2")
+FONT.setPointSize(5)
+FONT.setWeight(8)
+FONT.setItalic(False)
+FONT.setBold(False)
 
 
 class SettingsTabWidgetClass(object):
@@ -21,11 +21,9 @@ class SettingsTabWidgetClass(object):
         self.post_processing_tab = QtWidgets.QWidget()
 
     def settings_widget_setup(self):
-
-        self.settings_tab_widget.setTabBar(HorizontalTextBar())
-        self.settings_tab_widget.setTabPosition(QtWidgets.QTabWidget.East)
-
-        self.settings_tab_widget.setMinimumSize(QtCore.QSize(350, 669))
+        self.settings_tab_widget.setMinimumSize(QtCore.QSize(260, 669))
+        self.settings_tab_widget.setUsesScrollButtons(False)
+        self.settings_tab_widget.setFont(FONT)
 
         self.settings_tab_widget.addTab(self.image_processing_tab, "image processing")
         self.image_processing_tab.setStyleSheet("background-color: rgb(240, 240, 240);")
@@ -33,7 +31,7 @@ class SettingsTabWidgetClass(object):
         self.settings_tab_widget.addTab(self.post_processing_tab, "post processing")
         self.post_processing_tab.setStyleSheet("background-color: rgb(240, 240, 240);")
 
-        self.settings_tab_widget.tabBar().setStyleSheet("font-size: 11pt;")
+        self.settings_tab_widget.tabBar().setStyleSheet("font-size: 8pt;")
 
         self.text_setup()
 

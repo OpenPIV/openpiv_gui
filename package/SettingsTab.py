@@ -2,7 +2,7 @@ from PySide2 import QtCore, QtGui, QtWidgets
 
 FONT = QtGui.QFont()
 FONT.setFamily("Gill Sans MT")
-FONT.setPointSize(21)
+FONT.setPointSize(10)
 FONT.setWeight(75)
 FONT.setItalic(True)
 FONT.setBold(True)
@@ -55,18 +55,14 @@ class SettingsTab(object):
         self.scale_filter_jump_frame.setFrameShape(QtWidgets.QFrame.Box)
         self.scale_filter_jump_frame.setFrameShadow(QtWidgets.QFrame.Sunken)
 
-        FONT.setPointSize(10)
-        self.scale_label.setFont(FONT)
         self.scale_label.setAlignment(QtCore.Qt.AlignCenter)
 
-        self.outer_filter_label.setFont(FONT)
         self.outer_filter_label.setAlignment(QtCore.Qt.AlignCenter)
 
         self.outer_filter_spin_box.setAccelerated(True)
         self.outer_filter_spin_box.setMaximum(100.0)
         self.outer_filter_spin_box.setSingleStep(0.1)
 
-        self.jump_label.setFont(FONT)
         self.jump_label.setAlignment(QtCore.Qt.AlignCenter)
 
         self.jump_spin_box.setMaximum(0)
@@ -113,12 +109,11 @@ class SettingsTab(object):
         self.type_value_frame_layout.addWidget(self.value_spin_box, 2, 1, 1, 1)
 
         FONT.setPointSize(10)
-        self.type_label.setFont(FONT)
+
         self.type_label.setAlignment(QtCore.Qt.AlignCenter)
 
         self.type_value_frame_layout.addWidget(self.type_label, 0, 0, 1, 1)
 
-        self.value_label.setFont(FONT)
         self.value_label.setAlignment(QtCore.Qt.AlignCenter)
 
         self.type_value_frame_layout.addWidget(self.value_label, 2, 0, 1, 1)
@@ -158,12 +153,10 @@ class SettingsTab(object):
 
         self.spacing_frame_layout.addWidget(self.vertical_combo_box, 2, 3, 1, 1)
 
-        self.vertical_label.setFont(FONT)
         self.vertical_label.setAlignment(QtCore.Qt.AlignCenter)
 
         self.spacing_frame_layout.addWidget(self.vertical_label, 1, 3, 1, 1)
 
-        self.horizontal_label.setFont(FONT)
         self.horizontal_label.setAlignment(QtCore.Qt.AlignCenter)
 
         self.spacing_frame_layout.addWidget(self.horizontal_label, 1, 1, 1, 1)
@@ -178,10 +171,8 @@ class SettingsTab(object):
         self.interrogation_winsize_frame.setFrameShape(QtWidgets.QFrame.Box)
         self.interrogation_winsize_frame.setFrameShadow(QtWidgets.QFrame.Sunken)
 
-        self.height_label.setFont(FONT)
         self.height_label.setAlignment(QtCore.Qt.AlignCenter)
 
-        self.width_label.setFont(FONT)
         self.width_label.setAlignment(QtCore.Qt.AlignCenter)
 
         self.width_combo_box.addItem('8')
@@ -217,6 +208,8 @@ class SettingsTab(object):
 
         self.start_stop_frame.setFrameShape(QtWidgets.QFrame.Box)
         self.start_stop_frame.setFrameShadow(QtWidgets.QFrame.Sunken)
+
+        FONT.setPointSize(13)
 
         self.start_button.setFont(FONT)
         self.start_button.setCursor(QtCore.Qt.PointingHandCursor)

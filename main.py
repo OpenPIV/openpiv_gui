@@ -55,8 +55,7 @@ def run_main_window():
     SETTINGS_TAB_WIDGET_CLASS.image_processing_tab_class.invert_button.clicked.connect(invert_button)
 
     # a max and a min to the file window frame to make it look better
-    file_window_frame.setMinimumSize(QtCore.QSize(198, 198))
-    file_window_frame.setMaximumSize(QtCore.QSize(198, 198))
+    file_window_frame.setMinimumSize(QtCore.QSize(198, 200))
 
     # create the widget of the main window
     main_window_widget = QtWidgets.QMainWindow()
@@ -96,7 +95,7 @@ def file_removed():
         if PIV_PLOT_CLASS.piv_images_list[i][1] != FILE_WINDOW_CLASS.file_list.item(i).text():
             del (PIV_PLOT_CLASS.piv_images_list[i])
             PIV_PLOT_CLASS.show_plot(0)
-            MAIN_WINDOW_CLASS.current_image_number.setText("0")
+            MAIN_WINDOW_CLASS.current_image_number.setText("1")
             # change the jump range when the images number changes
             change_jump_max_min()
             return 0
@@ -105,7 +104,7 @@ def file_removed():
         del (PIV_PLOT_CLASS.piv_images_list[-1])
 
     PIV_PLOT_CLASS.show_plot(0)
-    MAIN_WINDOW_CLASS.current_image_number.setText("0")
+    MAIN_WINDOW_CLASS.current_image_number.setText("1")
 
     # change the jump range when the images number changes
     change_jump_max_min()
@@ -123,13 +122,13 @@ def file_added():
         MAIN_WINDOW_CLASS.image_pages.setCurrentIndex(1)
         PIV_PLOT_CLASS.add_image(FILE_WINDOW_CLASS.last_file)
         PIV_PLOT_CLASS.show_plot(0)
-        MAIN_WINDOW_CLASS.current_image_number.setText("0")
+        MAIN_WINDOW_CLASS.current_image_number.setText("1")
 
     elif FILE_WINDOW_CLASS.file_list.count() > 1:
         PIV_PLOT_CLASS.add_image(FILE_WINDOW_CLASS.last_file)
         PIV_PLOT_CLASS.show_plot(FILE_WINDOW_CLASS.file_list.count() - 1)
         MAIN_WINDOW_CLASS.current_image_number.setText(
-            str(FILE_WINDOW_CLASS.file_list.count() - 1))
+            str(FILE_WINDOW_CLASS.file_list.count()))
 
     # change the jump range when the images number changes
     change_jump_max_min()
@@ -146,11 +145,11 @@ def change_image_number_right():
     if len(PIV_PLOT_CLASS.piv_images_list) == 0:
         return 0
 
-    if int(MAIN_WINDOW_CLASS.current_image_number.text()) == len(PIV_PLOT_CLASS.piv_images_list) - 1:
-        MAIN_WINDOW_CLASS.current_image_number.setText("0")
+    if int(MAIN_WINDOW_CLASS.current_image_number.text()) == len(PIV_PLOT_CLASS.piv_images_list):
+        MAIN_WINDOW_CLASS.current_image_number.setText("1")
         PIV_PLOT_CLASS.show_plot(0)
     else:
-        PIV_PLOT_CLASS.show_plot(int(MAIN_WINDOW_CLASS.current_image_number.text()) + 1)
+        PIV_PLOT_CLASS.show_plot(int(MAIN_WINDOW_CLASS.current_image_number.text()))
         MAIN_WINDOW_CLASS.current_image_number.setText(str(int(MAIN_WINDOW_CLASS.current_image_number.text()) + 1))
 
 
@@ -159,8 +158,8 @@ def change_image_number_left():
     if len(PIV_PLOT_CLASS.piv_images_list) == 0:
         return 0
 
-    if int(MAIN_WINDOW_CLASS.current_image_number.text()) == 0:
-        MAIN_WINDOW_CLASS.current_image_number.setText(str(len(PIV_PLOT_CLASS.piv_images_list) - 1))
+    if int(MAIN_WINDOW_CLASS.current_image_number.text()) == 1:
+        MAIN_WINDOW_CLASS.current_image_number.setText(str(len(PIV_PLOT_CLASS.piv_images_list)))
         PIV_PLOT_CLASS.show_plot(len(PIV_PLOT_CLASS.piv_images_list) - 1)
     else:
         PIV_PLOT_CLASS.show_plot(int(MAIN_WINDOW_CLASS.current_image_number.text()) - 1)

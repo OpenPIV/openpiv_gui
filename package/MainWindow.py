@@ -83,15 +83,13 @@ class MainWindowClass(object):
         QtCore.QMetaObject.connectSlotsByName(self.main_window)
 
     def text_setup(self):
-        set_text = lambda x, text: x.setText(text)
-
         self.main_window.setWindowTitle("OpenPIV")
 
-        set_text(self.load_action, "Add")
-        set_text(self.quit_action, "Quit")
-        set_text(self.left_button, "<")
-        set_text(self.right_button, ">")
-        set_text(self.current_image_number, "0")
+        self.load_action.setText("Add")
+        self.quit_action.setText("Quit")
+        self.left_button.setText("<")
+        self.right_button.setText(">")
+        self.current_image_number.setText("0")
 
         self.menu_bar_file.setTitle("file")
 

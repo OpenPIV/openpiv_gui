@@ -101,7 +101,6 @@ class SettingsTab(object):
         self.type_value_frame.setFrameShape(QtWidgets.QFrame.Box)
         self.type_value_frame.setFrameShadow(QtWidgets.QFrame.Sunken)
 
-        self.value_spin_box.setCursor(QtCore.Qt.PointingHandCursor)
         self.value_spin_box.setAccelerated(True)
         self.value_spin_box.setMaximum(100.00)
         self.value_spin_box.setSingleStep(0.10)
@@ -127,7 +126,6 @@ class SettingsTab(object):
 
         self.settings_widget_layout.addWidget(self.type_value_frame, 3, 3, 1, 1)
 
-        self.spacing_frame.setCursor(QtCore.Qt.PointingHandCursor)
         self.spacing_frame.setFrameShape(QtWidgets.QFrame.Box)
         self.spacing_frame.setFrameShadow(QtWidgets.QFrame.Sunken)
 
@@ -212,9 +210,10 @@ class SettingsTab(object):
         FONT.setPointSize(13)
 
         self.start_button.setFont(FONT)
-        self.start_button.setCursor(QtCore.Qt.PointingHandCursor)
         self.stop_button.setFont(FONT)
+        self.start_button.setCursor(QtCore.Qt.PointingHandCursor)
         self.stop_button.setCursor(QtCore.Qt.PointingHandCursor)
+
         self.start_stop_frame_layout.addWidget(self.start_button, 0, 0, 1, 1)
         self.start_stop_frame_layout.addWidget(self.stop_button, 1, 0, 1, 1)
         self.settings_widget_layout.addWidget(self.start_stop_frame, 6, 3, 1, 1)

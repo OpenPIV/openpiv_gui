@@ -3,6 +3,7 @@ from package.SettingTabWidget import SettingsTabWidgetClass
 from package.PIVPlot import PIVPlot
 from package.FileWindow import FileWindowClass
 from package.SettingsTab import SettingsTab
+from package.PostProcessingTab import PostProcessingTabClass
 from PySide2 import QtWidgets, QtCore
 from _functools import partial
 import sys
@@ -12,10 +13,12 @@ SETTINGS_TAB_WIDGET_CLASS = None
 PIV_PLOT_CLASS = None
 FILE_WINDOW_CLASS = None
 SETTINGS_TAB_CLASS = None
+POST_PROCESSING_TAB_CLASS = None
 
 
 def run_main_window():
-    global MAIN_WINDOW_CLASS, FILE_WINDOW_CLASS, SETTINGS_TAB_WIDGET_CLASS, PIV_PLOT_CLASS, SETTINGS_TAB_CLASS
+    global MAIN_WINDOW_CLASS, FILE_WINDOW_CLASS, SETTINGS_TAB_WIDGET_CLASS, PIV_PLOT_CLASS, SETTINGS_TAB_CLASS, \
+        POST_PROCESSING_TAB_CLASS
     app = QtWidgets.QApplication(sys.argv)
 
     # setup for the file window to add for the image processing tab
@@ -26,11 +29,16 @@ def run_main_window():
     SETTINGS_TAB_CLASS = SettingsTab()
     SETTINGS_TAB_CLASS.setting_widget_setup()
 
+    POST_PROCESSING_TAB_CLASS = PostProcessingTabClass()
+    POST_PROCESSING_TAB_CLASS.post_processing_tab_setup()
+
     SETTINGS_TAB_WIDGET_CLASS = SettingsTabWidgetClass()
     SETTINGS_TAB_WIDGET_CLASS.settings_widget_setup()
     SETTINGS_TAB_WIDGET_CLASS.image_processing_tab_class.image_processing_tab_layout.addWidget(file_window_frame, 1, 0,
                                                                                                1, 1)
     SETTINGS_TAB_WIDGET_CLASS.settings_tab_widget.insertTab(1, SETTINGS_TAB_CLASS.settings_tab, "settings")
+    SETTINGS_TAB_WIDGET_CLASS.settings_tab_widget.insertTab(2, POST_PROCESSING_TAB_CLASS.post_processing_tab,
+                                                            "post processing")
     SETTINGS_TAB_WIDGET_CLASS.settings_tab_widget.setStyleSheet("background-color: rgb(240, 240, 240);")
 
     # create the widget that will hold the plot
@@ -162,7 +170,7 @@ def change_image_number_left():
         MAIN_WINDOW_CLASS.current_image_number.setText(str(len(PIV_PLOT_CLASS.piv_images_list)))
         PIV_PLOT_CLASS.show_plot(len(PIV_PLOT_CLASS.piv_images_list) - 1)
     else:
-        PIV_PLOT_CLASS.show_plot(int(MAIN_WINDOW_CLASS.current_image_number.text()) - 1)
+        PIV_PLOT_CLASS.show_plot(int(MAIN_WINDOW_CLASS.current_image_number.text()) - 2)
         MAIN_WINDOW_CLASS.current_image_number.setText(str(int(MAIN_WINDOW_CLASS.current_image_number.text()) - 1))
 
 

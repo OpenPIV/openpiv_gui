@@ -1,10 +1,11 @@
 from PySide2 import QtWidgets, QtCore
 from openpiv import tools
+import numpy as np
 
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 # i am still not putting the navigation tool bar because of some bugs
-# from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
+from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
 from matplotlib.figure import Figure
 
 
@@ -17,7 +18,8 @@ class PIVPlot(QtWidgets.QWidget):
         # the canvas is where the graph and the tool bar is
         self.piv_canvas = FigureCanvas(self.figure)
 
-        # self.piv_tool_bar = NavigationToolbar(self.piv_canvas, self)
+        self.piv_tool_bar = NavigationToolbar(self.piv_canvas, self)
+        self.piv_tool_bar.hide()
 
         # the piv_images_list is where the images are saved
         self.piv_images_list = []
@@ -26,22 +28,19 @@ class PIVPlot(QtWidgets.QWidget):
         self.canvas_layout = QtWidgets.QGridLayout(parent)
         self.canvas_layout.addWidget(self.piv_canvas)
 
-        # self.canvas_layout.addWidget(self.piv_tool_bar)
-
-        # self.piv_tool_bar.toolitems = [t for t in NavigationToolbar.toolitems if
-        #                                t[0] in ['Home', 'Zoom', 'Save']]
-
     # function that shows the chosen image
     def show_plot(self, image_number):
         self.ax.clear()
-
-        self.ax.imshow(self.piv_images_list[image_number][2], cmap=plt.cm.gray)
+        if self.piv_images_list[image_number][3] == 8:
+            self.ax.imshow(np.uint8(self.piv_images_list[image_number][2]), cmap=plt.cm.gray)
+        else:
+            self.ax.imshow(np.uint16(self.piv_images_list[image_number][2]), cmap=plt.cm.gray)
 
         self.piv_canvas.draw()
 
     # function to add an image
     def add_image(self, image_path):
-        self.piv_images_list.append([image_path, QtCore.QFileInfo(image_path).fileName(), tools.imread(image_path)])
+        self.piv_images_list.append([image_path, QtCore.QFileInfo(image_path).fileName(), tools.imread(image_path), 8])
 
     # the function that does the piv itself
     def start_piv(self, width, height, horizontal, vertical, sn_type, sn_value, scale, outer_filter, jump):
@@ -59,6 +58,14 @@ class PIVPlot(QtWidgets.QWidget):
                 for j in range(len(img_read[i])):
                     invert_img[i][j] = 0.255 - img_read[i][j]
         return invert_img
+
+    def ROI_buttons(self, is_select):
+        if is_select:
+            self.piv_tool_bar.release_zoom(self.piv_tool_bar.zoom)
+            self.piv_tool_bar.zoom()
+        else:
+            self.piv_tool_bar.home()
+            self.piv_tool_bar.zoom()
 
 
 if __name__ == '__main__':

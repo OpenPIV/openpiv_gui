@@ -1,4 +1,11 @@
-from PySide2 import QtCore, QtGui, QtWidgets
+from PySide2 import QtGui, QtWidgets, QtCore
+
+FONT = QtGui.QFont()
+FONT.setFamily("Ari")
+FONT.setPointSize(11)
+FONT.setWeight(100)
+FONT.setItalic(False)
+FONT.setBold(False)
 
 
 class PostProcessingTabClass(object):
@@ -9,16 +16,12 @@ class PostProcessingTabClass(object):
         self.filter_group_box_layout = QtWidgets.QGridLayout(self.filter_group_box)
         self.local_filter_group_box = QtWidgets.QGroupBox(self.filter_group_box)
         self.local_filter_group_box_layout = QtWidgets.QGridLayout(self.local_filter_group_box)
-        self.local_median_spin_box = QtWidgets.QDoubleSpinBox(self.local_filter_group_box)
-        self.local_mean_spin_box = QtWidgets.QDoubleSpinBox(self.local_filter_group_box)
-        self.local_median_radio_button = QtWidgets.QRadioButton(self.local_filter_group_box)
-        self.local_mean_radio_button = QtWidgets.QRadioButton(self.local_filter_group_box)
+        self.local_mean_median_spin_box = QtWidgets.QDoubleSpinBox(self.local_filter_group_box)
+        self.local_mean_median_combo_box = QtWidgets.QComboBox(self.local_filter_group_box)
         self.smoothing_group_box = QtWidgets.QGroupBox(self.filter_group_box)
         self.smoothing_group_box_layout = QtWidgets.QGridLayout(self.smoothing_group_box)
-        self.smoothing_mean_radio_button = QtWidgets.QRadioButton(self.smoothing_group_box)
-        self.smoothing_mean_spin_box = QtWidgets.QDoubleSpinBox(self.smoothing_group_box)
-        self.smoothing_median_radio_button = QtWidgets.QRadioButton(self.smoothing_group_box)
-        self.smoothing_median_spin_box = QtWidgets.QDoubleSpinBox(self.smoothing_group_box)
+        self.smoothing_mean_median_combo_box = QtWidgets.QComboBox(self.smoothing_group_box)
+        self.smoothing_mean_median_spin_box = QtWidgets.QDoubleSpinBox(self.smoothing_group_box)
         self.global_filter_group_box = QtWidgets.QGroupBox(self.filter_group_box)
         self.global_filter_group_box_layout = QtWidgets.QGridLayout(self.global_filter_group_box)
         self.global_filter_spin_box_1 = QtWidgets.QDoubleSpinBox(self.global_filter_group_box)
@@ -37,23 +40,24 @@ class PostProcessingTabClass(object):
     def post_processing_tab_setup(self):
         self.post_processing_tab.setObjectName("post_processing_tab")
         self.post_processing_tab.resize(318, 527)
+        self.filter_group_box.setFont(FONT)
 
-        self.local_filter_group_box_layout.addWidget(self.local_median_spin_box, 1, 1, 1, 1)
+        self.local_filter_group_box_layout.addWidget(self.local_mean_median_spin_box, 0, 1, 1, 1)
 
-        self.local_filter_group_box_layout.addWidget(self.local_mean_spin_box, 0, 1, 1, 1)
+        self.local_mean_median_combo_box.addItem("mean")
+        self.local_mean_median_combo_box.addItem("median")
+        self.local_mean_median_combo_box.view().setVerticalScrollBarPolicy(
+            QtCore.Qt.ScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff))
 
-        self.local_filter_group_box_layout.addWidget(self.local_median_radio_button, 1, 0, 1, 1)
-
-        self.local_filter_group_box_layout.addWidget(self.local_mean_radio_button, 0, 0, 1, 1)
+        self.smoothing_mean_median_combo_box.addItem("mean")
+        self.smoothing_mean_median_combo_box.addItem("median")
+        self.local_filter_group_box_layout.addWidget(self.local_mean_median_combo_box, 0, 0, 1, 1)
         self.filter_group_box_layout.addWidget(self.local_filter_group_box, 2, 0, 1, 1)
 
-        self.smoothing_group_box_layout.addWidget(self.smoothing_mean_radio_button, 0, 0, 1, 1)
+        self.smoothing_group_box_layout.addWidget(self.smoothing_mean_median_combo_box, 0, 0, 1, 1)
 
-        self.smoothing_group_box_layout.addWidget(self.smoothing_mean_spin_box, 0, 1, 1, 1)
+        self.smoothing_group_box_layout.addWidget(self.smoothing_mean_median_spin_box, 0, 1, 1, 1)
 
-        self.smoothing_group_box_layout.addWidget(self.smoothing_median_radio_button, 1, 0, 1, 1)
-
-        self.smoothing_group_box_layout.addWidget(self.smoothing_median_spin_box, 1, 1, 1, 1)
         self.filter_group_box_layout.addWidget(self.smoothing_group_box, 5, 0, 1, 1)
 
         self.global_filter_group_box_layout.addWidget(self.global_filter_spin_box_1, 0, 0, 1, 1)
@@ -96,11 +100,7 @@ class PostProcessingTabClass(object):
     def text_setup(self):
         self.filter_group_box.setTitle("filters")
         self.local_filter_group_box.setTitle("local filter")
-        self.local_median_radio_button.setText("median")
-        self.local_mean_radio_button.setText("mean")
         self.smoothing_group_box.setTitle("smoothing")
-        self.smoothing_mean_radio_button.setText("mean")
-        self.smoothing_median_radio_button.setText("median")
         self.global_filter_group_box.setTitle("global filter")
         self.interpolation_group_box.setTitle("interpolation")
         self.action_label.setText("action:")

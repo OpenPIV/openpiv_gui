@@ -3,8 +3,8 @@ from package.ImageProcessingTab import ImageProcessingTabClass
 
 FONT = QtGui.QFont()
 FONT.setFamily("MS Shell Dig 2")
-FONT.setPointSize(5)
-FONT.setWeight(8)
+FONT.setPointSize(15)
+FONT.setWeight(75)
 FONT.setItalic(False)
 FONT.setBold(False)
 
@@ -20,14 +20,14 @@ class SettingsTabWidgetClass(object):
         self.post_processing_tab = QtWidgets.QWidget()
 
     def settings_widget_setup(self):
-        self.settings_tab_widget.setMinimumSize(QtCore.QSize(260, 669))
+        self.settings_tab_widget.setMinimumSize(QtCore.QSize(215, 669))
         self.settings_tab_widget.setUsesScrollButtons(False)
         self.settings_tab_widget.setDocumentMode(True)
 
-        self.settings_tab_widget.addTab(self.image_processing_tab, "image processing")
+        self.settings_tab_widget.addTab(self.image_processing_tab, "image")
         self.image_processing_tab.setStyleSheet("background-color: rgb(240, 240, 240);")
 
-        self.settings_tab_widget.tabBar().setStyleSheet("font-size: 8pt;")
+        self.settings_tab_widget.tabBar().setStyleSheet("font-size: 11pt;")
 
         self.text_setup()
 

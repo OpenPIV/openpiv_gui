@@ -31,23 +31,26 @@ class PIVPlot(QtWidgets.QWidget):
     # function that shows the chosen image
     def show_plot(self, image_number):
         self.ax.clear()
-        if self.piv_images_list[image_number][3] == 8:
-            self.ax.imshow(np.uint8(self.piv_images_list[image_number][2]), cmap=plt.cm.gray)
-        else:
-            self.ax.imshow(np.uint16(self.piv_images_list[image_number][2]), cmap=plt.cm.gray)
+
+        self.ax.imshow(np.uint8(self.piv_images_list[image_number][2]), cmap=plt.cm.gray)
 
         self.piv_canvas.draw()
 
     # function to add an image
-    def add_image(self, image_path):
-        self.piv_images_list.append([image_path, QtCore.QFileInfo(image_path).fileName(), tools.imread(image_path), 8])
+    def add_image(self, image_path, bit):
+        if bit == "8 bit":
+            self.piv_images_list.append(
+                [image_path, QtCore.QFileInfo(image_path).fileName(), np.uint8(tools.imread(image_path))])
+        else:
+            self.piv_images_list.append(
+                [image_path, QtCore.QFileInfo(image_path).fileName(), np.uint16(tools.imread(image_path))])
 
     # the function that does the piv itself
     def start_piv(self, width, height, horizontal, vertical, sn_type, sn_value, scale, outer_filter, jump):
         pass
 
     @staticmethod
-    def invert(img_read, is_bmp):
+    def invert(img_read, is_bmp, bit):
         invert_img = img_read
         if is_bmp:
             for i in range(len(img_read)):
@@ -57,7 +60,10 @@ class PIVPlot(QtWidgets.QWidget):
             for i in range(len(img_read)):
                 for j in range(len(img_read[i])):
                     invert_img[i][j] = 0.255 - img_read[i][j]
-        return invert_img
+        if bit == "8 bit":
+            return np.uint8(invert_img)
+        else:
+            return np.uint16(invert_img)
 
     def ROI_buttons(self, is_select):
         if is_select:

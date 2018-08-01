@@ -6,6 +6,7 @@ from package.SettingsTab import SettingsTab
 from package.ImagePivPostTab import PostProcessingTabClass
 from PySide2 import QtWidgets, QtCore
 from _functools import partial
+import numpy as np
 import sys
 
 MAIN_WINDOW_CLASS = None
@@ -14,11 +15,12 @@ PIV_PLOT_CLASS = None
 FILE_WINDOW_CLASS = None
 SETTINGS_TAB_CLASS = None
 POST_PROCESSING_TAB_CLASS = None
+MOUSE_RELEASED_EVENT = None
 
 
 def run_main_window():
     global MAIN_WINDOW_CLASS, FILE_WINDOW_CLASS, SETTINGS_TAB_WIDGET_CLASS, PIV_PLOT_CLASS, SETTINGS_TAB_CLASS, \
-        POST_PROCESSING_TAB_CLASS
+        POST_PROCESSING_TAB_CLASS, MOUSE_RELEASED_EVENT
     app = QtWidgets.QApplication(sys.argv)
 
     # setup for the file window to add for the image processing tab
@@ -90,8 +92,6 @@ def run_main_window():
     MAIN_WINDOW_CLASS.left_button.clicked.connect(change_image_number_left)
     MAIN_WINDOW_CLASS.right_button.clicked.connect(change_image_number_right)
 
-    FILE_WINDOW_CLASS.file_list.itemEntered.connect(file_order_changed)
-
     # activating the ROI buttons to work when called
     SETTINGS_TAB_CLASS.select_roi_button.clicked.connect(partial(PIV_PLOT_CLASS.ROI_buttons, True))
     SETTINGS_TAB_CLASS.reset_roi_button.clicked.connect(partial(PIV_PLOT_CLASS.ROI_buttons, False))
@@ -137,12 +137,14 @@ def file_added():
 
     if FILE_WINDOW_CLASS.file_list.count() == 1:
         MAIN_WINDOW_CLASS.image_pages.setCurrentIndex(1)
-        PIV_PLOT_CLASS.add_image(FILE_WINDOW_CLASS.last_file)
+        PIV_PLOT_CLASS.add_image(FILE_WINDOW_CLASS.last_file,
+                                 SETTINGS_TAB_WIDGET_CLASS.image_processing_tab_class.bit_combo_box.currentText())
         PIV_PLOT_CLASS.show_plot(0)
         MAIN_WINDOW_CLASS.current_image_number.setText("1")
 
     elif FILE_WINDOW_CLASS.file_list.count() > 1:
-        PIV_PLOT_CLASS.add_image(FILE_WINDOW_CLASS.last_file)
+        PIV_PLOT_CLASS.add_image(FILE_WINDOW_CLASS.last_file,
+                                 SETTINGS_TAB_WIDGET_CLASS.image_processing_tab_class.bit_combo_box.currentText())
         PIV_PLOT_CLASS.show_plot(FILE_WINDOW_CLASS.file_list.count() - 1)
         MAIN_WINDOW_CLASS.current_image_number.setText(
             str(FILE_WINDOW_CLASS.file_list.count()))
@@ -165,17 +167,9 @@ def change_image_number_right():
     if int(MAIN_WINDOW_CLASS.current_image_number.text()) == len(PIV_PLOT_CLASS.piv_images_list):
         MAIN_WINDOW_CLASS.current_image_number.setText("1")
         PIV_PLOT_CLASS.show_plot(0)
-        if PIV_PLOT_CLASS.piv_images_list[0][3] == 8:
-            SETTINGS_TAB_WIDGET_CLASS.image_processing_tab_class.bit_combo_box.setCurrentIndex(0)
-        elif PIV_PLOT_CLASS.piv_images_list[0][3] == 16:
-            SETTINGS_TAB_WIDGET_CLASS.image_processing_tab_class.bit_combo_box.setCurrentIndex(1)
     else:
         PIV_PLOT_CLASS.show_plot(int(MAIN_WINDOW_CLASS.current_image_number.text()))
         MAIN_WINDOW_CLASS.current_image_number.setText(str(int(MAIN_WINDOW_CLASS.current_image_number.text()) + 1))
-        if PIV_PLOT_CLASS.piv_images_list[int(MAIN_WINDOW_CLASS.current_image_number.text()) - 1][3] == 8:
-            SETTINGS_TAB_WIDGET_CLASS.image_processing_tab_class.bit_combo_box.setCurrentIndex(0)
-        elif PIV_PLOT_CLASS.piv_images_list[int(MAIN_WINDOW_CLASS.current_image_number.text()) - 1][3] == 16:
-            SETTINGS_TAB_WIDGET_CLASS.image_processing_tab_class.bit_combo_box.setCurrentIndex(1)
 
 
 # function that moves to the next left image
@@ -186,36 +180,28 @@ def change_image_number_left():
     if int(MAIN_WINDOW_CLASS.current_image_number.text()) == 1:
         MAIN_WINDOW_CLASS.current_image_number.setText(str(len(PIV_PLOT_CLASS.piv_images_list)))
         PIV_PLOT_CLASS.show_plot(len(PIV_PLOT_CLASS.piv_images_list) - 1)
-        if PIV_PLOT_CLASS.piv_images_list[len(PIV_PLOT_CLASS.piv_images_list) - 1][3] == 8:
-            SETTINGS_TAB_WIDGET_CLASS.image_processing_tab_class.bit_combo_box.setCurrentIndex(0)
-        elif PIV_PLOT_CLASS.piv_images_list[len(PIV_PLOT_CLASS.piv_images_list) - 1][3] == 16:
-            SETTINGS_TAB_WIDGET_CLASS.image_processing_tab_class.bit_combo_box.setCurrentIndex(1)
-
     else:
         PIV_PLOT_CLASS.show_plot(int(MAIN_WINDOW_CLASS.current_image_number.text()) - 2)
         MAIN_WINDOW_CLASS.current_image_number.setText(str(int(MAIN_WINDOW_CLASS.current_image_number.text()) - 1))
-        if PIV_PLOT_CLASS.piv_images_list[int(MAIN_WINDOW_CLASS.current_image_number.text()) - 1][3] == 8:
-            SETTINGS_TAB_WIDGET_CLASS.image_processing_tab_class.bit_combo_box.setCurrentIndex(0)
-        elif PIV_PLOT_CLASS.piv_images_list[int(MAIN_WINDOW_CLASS.current_image_number.text()) - 1][3] == 16:
-            SETTINGS_TAB_WIDGET_CLASS.image_processing_tab_class.bit_combo_box.setCurrentIndex(1)
 
 
 def invert_button():
-    for i in FILE_WINDOW_CLASS.file_list.selectedItems():
-        if FILE_WINDOW_CLASS.file_list.item(FILE_WINDOW_CLASS.file_list.row(i)).text().lower().endswith(
-                ('.png', '.jpg', '.jpeg')):
-            PIV_PLOT_CLASS.piv_images_list[FILE_WINDOW_CLASS.file_list.row(i)][2] = PIV_PLOT_CLASS.invert(
-                PIV_PLOT_CLASS.piv_images_list[FILE_WINDOW_CLASS.file_list.row(i)][2],
-                False)
-            PIV_PLOT_CLASS.show_plot(FILE_WINDOW_CLASS.file_list.row(i))
+    for i in range(len(PIV_PLOT_CLASS.piv_images_list)):
+        if PIV_PLOT_CLASS.piv_images_list[i][1].lower().endswith(
+                ('.png', '.jpg', '.jpeg', '.tif', '.tiff')):
+            PIV_PLOT_CLASS.piv_images_list[i][2] = PIV_PLOT_CLASS.invert(
+                PIV_PLOT_CLASS.piv_images_list[i][2], False,
+                SETTINGS_TAB_WIDGET_CLASS.image_processing_tab_class.bit_combo_box.currentText())
+            PIV_PLOT_CLASS.show_plot(i)
         else:
-            PIV_PLOT_CLASS.piv_images_list[FILE_WINDOW_CLASS.file_list.row(i)][2] = PIV_PLOT_CLASS.invert(
-                PIV_PLOT_CLASS.piv_images_list[FILE_WINDOW_CLASS.file_list.row(i)][2],
-                True)
-            PIV_PLOT_CLASS.show_plot(FILE_WINDOW_CLASS.file_list.row(i))
+            PIV_PLOT_CLASS.piv_images_list[i][2] = PIV_PLOT_CLASS.invert(
+                PIV_PLOT_CLASS.piv_images_list[i][2], True,
+                SETTINGS_TAB_WIDGET_CLASS.image_processing_tab_class.bit_combo_box.currentText())
+            PIV_PLOT_CLASS.show_plot(i)
 
 
 def file_order_changed():
+    print(1)
     file_list_list = []
     for i in range(FILE_WINDOW_CLASS.file_list.count()):
         file_list_list.append(FILE_WINDOW_CLASS.file_list.item(i).text())
@@ -225,10 +211,11 @@ def file_order_changed():
 
 def change_bit(bit):
     if bit == "8 bit":
-        PIV_PLOT_CLASS.piv_images_list[int(MAIN_WINDOW_CLASS.current_image_number.text()) - 1][3] = 8
+        for i in range(len(PIV_PLOT_CLASS.piv_images_list)):
+            PIV_PLOT_CLASS.piv_images_list[i][2] = np.uint8(PIV_PLOT_CLASS.piv_images_list[i][2])
     else:
-        PIV_PLOT_CLASS.piv_images_list[int(MAIN_WINDOW_CLASS.current_image_number.text()) - 1][3] = 16
-    PIV_PLOT_CLASS.show_plot(int(MAIN_WINDOW_CLASS.current_image_number.text()) - 1)
+        for i in range(len(PIV_PLOT_CLASS.piv_images_list)):
+            PIV_PLOT_CLASS.piv_images_list[i][2] = np.uint16(PIV_PLOT_CLASS.piv_images_list[i][2])
 
 
 def main():

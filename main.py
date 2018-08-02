@@ -1,9 +1,9 @@
-from package.MainWindow import MainWindowClass
-from package.SettingTabWidget import SettingsTabWidgetClass
-from package.PIVPlot import PIVPlot
-from package.FileWindow import FileWindowClass
-from package.SettingsTab import SettingsTab
-from package.ImagePivPostTab import PostProcessingTabClass
+from package.main_window import MainWindowClass
+from package.setting_tab_widget import SettingsTabWidgetClass
+from package.piv_plot import PIVPlot
+from package.file_window import FileWindowClass
+from package.settings_tab import SettingsTab
+from package.image_piv_post_tab import PostProcessingTabClass
 from PySide2 import QtWidgets, QtCore
 from _functools import partial
 import numpy as np
@@ -39,8 +39,7 @@ def run_main_window():
     SETTINGS_TAB_WIDGET_CLASS.image_processing_tab_class.image_processing_tab_layout.addWidget(file_window_frame, 1, 0,
                                                                                                1, 1)
     SETTINGS_TAB_WIDGET_CLASS.settings_tab_widget.insertTab(1, SETTINGS_TAB_CLASS.settings_tab, "piv")
-    SETTINGS_TAB_WIDGET_CLASS.settings_tab_widget.insertTab(2, POST_PROCESSING_TAB_CLASS.post_processing_tab,
-                                                            "post")
+    SETTINGS_TAB_WIDGET_CLASS.settings_tab_widget.insertTab(2, POST_PROCESSING_TAB_CLASS.post_processing_tab, "post")
     SETTINGS_TAB_WIDGET_CLASS.settings_tab_widget.setStyleSheet("background-color: rgb(240, 240, 240);")
 
     # create the widget that will hold the plot

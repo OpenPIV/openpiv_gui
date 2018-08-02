@@ -11,7 +11,7 @@ FONT.setBold(False)
 class PostProcessingTabClass(object):
     def __init__(self):
         self.post_processing_tab = QtWidgets.QTabWidget()
-        self.gridLayout = QtWidgets.QGridLayout(self.post_processing_tab)
+        self.post_layout = QtWidgets.QGridLayout(self.post_processing_tab)
         self.filter_group_box = QtWidgets.QGroupBox(self.post_processing_tab)
         self.filter_group_box_layout = QtWidgets.QGridLayout(self.filter_group_box)
         self.local_filter_group_box = QtWidgets.QGroupBox(self.filter_group_box)
@@ -93,7 +93,7 @@ class PostProcessingTabClass(object):
 
         self.interpolation_group_box_layout.addWidget(self.activate_button, 2, 0, 1, 2)
         self.filter_group_box_layout.addWidget(self.interpolation_group_box, 7, 0, 1, 1)
-        self.gridLayout.addWidget(self.filter_group_box, 0, 0, 1, 1)
+        self.post_layout.addWidget(self.filter_group_box, 0, 0, 1, 1)
 
         self.text_setup()
 

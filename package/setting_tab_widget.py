@@ -1,5 +1,5 @@
 from PySide2 import QtCore, QtGui, QtWidgets
-from package.ImageProcessingTab import ImageProcessingTabClass
+from package.image_processing_tab import ImageProcessingTabClass
 
 FONT = QtGui.QFont()
 FONT.setFamily("MS Shell Dig 2")
@@ -16,8 +16,6 @@ class SettingsTabWidgetClass(object):
         self.image_processing_tab_class = ImageProcessingTabClass()
         self.image_processing_tab_class.image_processing_tab_setup()
         self.image_processing_tab = self.image_processing_tab_class.image_processing_tab
-        self.image_processing_tab_layout = QtWidgets.QGridLayout(self.image_processing_tab)
-        self.post_processing_tab = QtWidgets.QWidget()
 
     def settings_widget_setup(self):
         self.settings_tab_widget.setMinimumSize(QtCore.QSize(215, 669))

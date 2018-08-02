@@ -27,7 +27,7 @@ class FileWindowClass(object):
 
         self.gridLayout.addWidget(self.add_button, 0, 0, 1, 1)
         self.gridLayout.addWidget(self.remove_button, 0, 1, 1, 1)
-        # self.gridLayout.addWidget(self.close_button, 0, 2, 1, 1)
+        # self.post_layout.addWidget(self.close_button, 0, 2, 1, 1)
         self.gridLayout.addWidget(self.file_list, 1, 0, 1, 2)
 
         self.text_setup()

@@ -51,19 +51,18 @@ class PIVPlot(QtWidgets.QWidget):
 
     @staticmethod
     def invert(img_read, is_bmp, bit):
-        invert_img = img_read
         if is_bmp:
             # for i in range(len(img_read)):
             # for j in range(len(img_read[i])):
-            invert_img = 255 - img_read
+            img_read = 255 - img_read
         else:
             #for i in range(len(img_read)):
             #    for j in range(len(img_read[i])):
-            invert_img = 1.0 - img_read # it's not 0.255
+            img_read = 1.0 - img_read # it's not 0.255
         if bit == "8 bit":
-            return np.uint8(invert_img)
+            return np.uint8(img_read)
         else:
-            return np.uint16(invert_img)
+            return np.uint16(img_read)
 
     def ROI_buttons(self, is_select):
         if is_select:

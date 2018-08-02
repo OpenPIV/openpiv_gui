@@ -9,59 +9,35 @@ from _functools import partial
 import numpy as np
 import sys
 
-MAIN_WINDOW_CLASS = None
-SETTINGS_TAB_WIDGET_CLASS = None
-PIV_PLOT_CLASS = None
-FILE_WINDOW_CLASS = None
-SETTINGS_TAB_CLASS = None
-POST_PROCESSING_TAB_CLASS = None
-MOUSE_RELEASED_EVENT = None
-
 
 def run_main_window():
-    global MAIN_WINDOW_CLASS, FILE_WINDOW_CLASS, SETTINGS_TAB_WIDGET_CLASS, PIV_PLOT_CLASS, SETTINGS_TAB_CLASS, \
-        POST_PROCESSING_TAB_CLASS, MOUSE_RELEASED_EVENT
     app = QtWidgets.QApplication(sys.argv)
 
     # setup for the file window to add for the image processing tab
     file_window_frame = QtWidgets.QFrame()
-    FILE_WINDOW_CLASS = FileWindowClass(file_window_frame)
-    FILE_WINDOW_CLASS.window_setup()
+    file_window_class = FileWindowClass(file_window_frame)
+    file_window_class.window_setup()
 
-    SETTINGS_TAB_CLASS = SettingsTab()
-    SETTINGS_TAB_CLASS.setting_widget_setup()
+    settings_tab_class = SettingsTab()
+    settings_tab_class.setting_widget_setup()
 
-    POST_PROCESSING_TAB_CLASS = PostProcessingTabClass()
-    POST_PROCESSING_TAB_CLASS.post_processing_tab_setup()
+    post_processing_tab_class = PostProcessingTabClass()
+    post_processing_tab_class.post_processing_tab_setup()
 
-    SETTINGS_TAB_WIDGET_CLASS = SettingsTabWidgetClass()
-    SETTINGS_TAB_WIDGET_CLASS.settings_widget_setup()
-    SETTINGS_TAB_WIDGET_CLASS.image_processing_tab_class.image_processing_tab_layout.addWidget(file_window_frame, 1, 0,
+    settings_tab_widget_class = SettingsTabWidgetClass()
+    settings_tab_widget_class.settings_widget_setup()
+    settings_tab_widget_class.image_processing_tab_class.image_processing_tab_layout.addWidget(file_window_frame, 1, 0,
                                                                                                1, 1)
-    SETTINGS_TAB_WIDGET_CLASS.settings_tab_widget.insertTab(1, SETTINGS_TAB_CLASS.settings_tab, "piv")
-    SETTINGS_TAB_WIDGET_CLASS.settings_tab_widget.insertTab(2, POST_PROCESSING_TAB_CLASS.post_processing_tab, "post")
-    SETTINGS_TAB_WIDGET_CLASS.settings_tab_widget.setStyleSheet("background-color: rgb(240, 240, 240);")
+    settings_tab_widget_class.settings_tab_widget.insertTab(1, settings_tab_class.settings_tab, "piv")
+    settings_tab_widget_class.settings_tab_widget.insertTab(2, post_processing_tab_class.post_processing_tab, "post")
+    settings_tab_widget_class.settings_tab_widget.setStyleSheet("background-color: rgb(240, 240, 240);")
 
     # create the widget that will hold the plot
     piv_plot_widget = QtWidgets.QWidget()
-    PIV_PLOT_CLASS = PIVPlot(piv_plot_widget)
+    piv_plot_class = PIVPlot(piv_plot_widget)
 
-    # here is where the connection with the start button and piv function is
-    # (is uses lambda to get the the current values)
-    SETTINGS_TAB_CLASS.start_button.clicked.connect(
-        lambda: PIV_PLOT_CLASS.start_piv(
-            int(SETTINGS_TAB_CLASS.width_combo_box.currentText()),
-            int(SETTINGS_TAB_CLASS.height_combo_box.currentText()),
-            int(SETTINGS_TAB_CLASS.horizontal_combo_box.currentText()),
-            int(SETTINGS_TAB_CLASS.vertical_combo_box.currentText()),
-            int(SETTINGS_TAB_CLASS.type_combo_box.currentText()),
-            SETTINGS_TAB_CLASS.value_spin_box.value(),
-            SETTINGS_TAB_CLASS.scale_spin_box.value(),
-            SETTINGS_TAB_CLASS.outer_filter_spin_box.value(),
-            SETTINGS_TAB_CLASS.jump_spin_box.value()
-        ))
-
-    SETTINGS_TAB_WIDGET_CLASS.image_processing_tab_class.invert_button.clicked.connect(invert_button)
+    settings_tab_widget_class.image_processing_tab_class.invert_button.clicked.connect(
+        partial(invert_button, piv_plot_class, settings_tab_widget_class))
 
     # a max and a min to the file window frame to make it look better
     file_window_frame.setMinimumSize(QtCore.QSize(198, 200))
@@ -69,152 +45,171 @@ def run_main_window():
     # create the widget of the main window
     main_window_widget = QtWidgets.QMainWindow()
 
-    MAIN_WINDOW_CLASS = MainWindowClass(main_window_widget)
-    MAIN_WINDOW_CLASS.main_widget_layout.addWidget(SETTINGS_TAB_WIDGET_CLASS.settings_tab_widget, 0, 5, 3, 1)
-    MAIN_WINDOW_CLASS.main_window_setup()
-    MAIN_WINDOW_CLASS.image_pages.addWidget(piv_plot_widget)
+    main_window_class = MainWindowClass(main_window_widget)
+    main_window_class.main_widget_layout.addWidget(settings_tab_widget_class.settings_tab_widget, 0, 5, 3, 1)
+    main_window_class.main_window_setup()
+    main_window_class.image_pages.addWidget(piv_plot_widget)
 
     # show the widget of the main window
     main_window_widget.show()
 
     # exit the program only if you trigger the exit action
-    MAIN_WINDOW_CLASS.quit_action.triggered.connect(partial(sys.exit, partial(app.exec_)))
+    main_window_class.quit_action.triggered.connect(partial(sys.exit, partial(app.exec_)))
 
     # add a file only when the load button is triggered
-    MAIN_WINDOW_CLASS.load_action.triggered.connect(FILE_WINDOW_CLASS.add_file)
+    main_window_class.load_action.triggered.connect(file_window_class.add_file)
 
     # add/remove an image when it is added/removed from the list
-    (FILE_WINDOW_CLASS.file_list.model()).rowsInserted.connect(file_added)
-    (FILE_WINDOW_CLASS.file_list.model()).rowsRemoved.connect(file_removed)
+    (file_window_class.file_list.model()).rowsInserted.connect(
+        lambda: file_added(file_window_class, settings_tab_class, piv_plot_class, settings_tab_widget_class,
+                           main_window_class))
+    (file_window_class.file_list.model()).rowsRemoved.connect(
+        lambda: file_removed(file_window_class, piv_plot_class, main_window_class, settings_tab_class))
 
     # change the image to the left/right next image
-    MAIN_WINDOW_CLASS.left_button.clicked.connect(change_image_number_left)
-    MAIN_WINDOW_CLASS.right_button.clicked.connect(change_image_number_right)
+    main_window_class.left_button.clicked.connect(partial(change_image_number_left, piv_plot_class, main_window_class))
+    main_window_class.right_button.clicked.connect(
+        partial(change_image_number_right, piv_plot_class, main_window_class))
 
     # activating the ROI buttons to work when called
-    SETTINGS_TAB_CLASS.select_roi_button.clicked.connect(partial(PIV_PLOT_CLASS.ROI_buttons, True))
-    SETTINGS_TAB_CLASS.reset_roi_button.clicked.connect(partial(PIV_PLOT_CLASS.ROI_buttons, False))
+    settings_tab_class.select_roi_button.clicked.connect(partial(piv_plot_class.ROI_buttons, True))
+    settings_tab_class.reset_roi_button.clicked.connect(partial(piv_plot_class.ROI_buttons, False))
 
-    SETTINGS_TAB_WIDGET_CLASS.image_processing_tab_class.bit_combo_box.currentIndexChanged.connect(
-        lambda: change_bit(str(SETTINGS_TAB_WIDGET_CLASS.image_processing_tab_class.bit_combo_box.currentText())))
+    settings_tab_widget_class.image_processing_tab_class.bit_combo_box.currentIndexChanged.connect(
+        lambda: change_bit(str(settings_tab_widget_class.image_processing_tab_class.bit_combo_box.currentText()),
+                           piv_plot_class))
+
+    # here is where the connection with the start button and piv function is
+    # (is uses lambda to get the the current values)
+    settings_tab_class.start_button.clicked.connect(
+        lambda: piv_plot_class.start_piv(
+            int(settings_tab_class.width_combo_box.currentText()),
+            int(settings_tab_class.height_combo_box.currentText()),
+            int(settings_tab_class.horizontal_combo_box.currentText()),
+            int(settings_tab_class.vertical_combo_box.currentText()),
+            int(settings_tab_class.type_combo_box.currentText()),
+            settings_tab_class.value_spin_box.value(),
+            settings_tab_class.scale_spin_box.value(),
+            settings_tab_class.outer_filter_spin_box.value(),
+            settings_tab_class.jump_spin_box.value()
+        ))
 
     sys.exit(app.exec_())
 
 
-def file_removed():
-    if FILE_WINDOW_CLASS.file_list.count() == 0:
-        del (PIV_PLOT_CLASS.piv_images_list[0])
-        MAIN_WINDOW_CLASS.image_pages.setCurrentIndex(0)
+def file_removed(file_window_class, piv_plot_class, main_window_class, settings_tab_class):
+    if file_window_class.file_list.count() == 0:
+        del (piv_plot_class.piv_images_list[0])
+        main_window_class.image_pages.setCurrentIndex(0)
         return 0
 
-    for i in range(0, FILE_WINDOW_CLASS.file_list.count()):
-        if PIV_PLOT_CLASS.piv_images_list[i][1] != FILE_WINDOW_CLASS.file_list.item(i).text():
-            del (PIV_PLOT_CLASS.piv_images_list[i])
-            PIV_PLOT_CLASS.show_plot(0)
-            MAIN_WINDOW_CLASS.current_image_number.setText("1")
+    for i in range(0, file_window_class.file_list.count()):
+        if piv_plot_class.piv_images_list[i][1] != file_window_class.file_list.item(i).text():
+            del (piv_plot_class.piv_images_list[i])
+            piv_plot_class.show_plot(0)
+            main_window_class.current_image_number.setText("1")
             # change the jump range when the images number changes
-            change_jump_max_min()
+            change_jump_max_min(settings_tab_class, piv_plot_class)
             return 0
 
-    if len(PIV_PLOT_CLASS.piv_images_list) - (FILE_WINDOW_CLASS.file_list.count()) > 0:
-        del (PIV_PLOT_CLASS.piv_images_list[-1])
+    if len(piv_plot_class.piv_images_list) - (file_window_class.file_list.count()) > 0:
+        del (piv_plot_class.piv_images_list[-1])
 
-    PIV_PLOT_CLASS.show_plot(0)
-    MAIN_WINDOW_CLASS.current_image_number.setText("1")
+        piv_plot_class.show_plot(0)
+        main_window_class.current_image_number.setText("1")
 
     # change the jump range when the images number changes
-    change_jump_max_min()
+    change_jump_max_min(settings_tab_class, piv_plot_class)
 
 
 # function that add the image that was added to the main widget
-def file_added():
-    if FILE_WINDOW_CLASS.file_list.item(FILE_WINDOW_CLASS.file_list.count() - 1).text() == '':
-        FILE_WINDOW_CLASS.file_Window_class.file_list.takeItem(
-            FILE_WINDOW_CLASS.file_list.item(
-                FILE_WINDOW_CLASS.file_list.count() - 1))
+def file_added(file_window_class, settings_tab_class, piv_plot_class, settings_tab_widget_class, main_window_class):
+    if file_window_class.file_list.item(file_window_class.file_list.count() - 1).text() == '':
+        file_window_class.file_Window_class.file_list.takeItem(
+            file_window_class.file_list.item(
+                file_window_class.file_list.count() - 1))
         return 0
 
-    if FILE_WINDOW_CLASS.file_list.count() == 1:
-        MAIN_WINDOW_CLASS.image_pages.setCurrentIndex(1)
-        PIV_PLOT_CLASS.add_image(FILE_WINDOW_CLASS.last_file,
-                                 SETTINGS_TAB_WIDGET_CLASS.image_processing_tab_class.bit_combo_box.currentText())
-        PIV_PLOT_CLASS.show_plot(0)
-        MAIN_WINDOW_CLASS.current_image_number.setText("1")
+    if file_window_class.file_list.count() == 1:
+        main_window_class.image_pages.setCurrentIndex(1)
+        piv_plot_class.add_image(file_window_class.last_file,
+                                 settings_tab_widget_class.image_processing_tab_class.bit_combo_box.currentText())
+        piv_plot_class.show_plot(0)
+        main_window_class.current_image_number.setText("1")
 
-    elif FILE_WINDOW_CLASS.file_list.count() > 1:
-        PIV_PLOT_CLASS.add_image(FILE_WINDOW_CLASS.last_file,
-                                 SETTINGS_TAB_WIDGET_CLASS.image_processing_tab_class.bit_combo_box.currentText())
-        PIV_PLOT_CLASS.show_plot(FILE_WINDOW_CLASS.file_list.count() - 1)
-        MAIN_WINDOW_CLASS.current_image_number.setText(
-            str(FILE_WINDOW_CLASS.file_list.count()))
+    elif file_window_class.file_list.count() > 1:
+        piv_plot_class.add_image(file_window_class.last_file,
+                                 settings_tab_widget_class.image_processing_tab_class.bit_combo_box.currentText())
+        piv_plot_class.show_plot(file_window_class.file_list.count() - 1)
+        main_window_class.current_image_number.setText(
+            str(file_window_class.file_list.count()))
 
     # change the jump range when the images number changes
-    change_jump_max_min()
+    change_jump_max_min(settings_tab_class, piv_plot_class)
 
 
 # function that changes the max and min of jump
-def change_jump_max_min():
-    SETTINGS_TAB_CLASS.jump_spin_box.setMaximum(len(PIV_PLOT_CLASS.piv_images_list) - 1)
-    SETTINGS_TAB_CLASS.jump_spin_box.setMinimum((-1) * (len(PIV_PLOT_CLASS.piv_images_list) - 1))
+def change_jump_max_min(settings_tab_class, piv_plot_class):
+    settings_tab_class.jump_spin_box.setMaximum(len(piv_plot_class.piv_images_list) - 1)
+    settings_tab_class.jump_spin_box.setMinimum((-1) * (len(piv_plot_class.piv_images_list) - 1))
 
 
 # function that moves to the next right image
-def change_image_number_right():
-    if len(PIV_PLOT_CLASS.piv_images_list) == 0:
+def change_image_number_right(piv_plot_class, main_window_class):
+    if len(piv_plot_class.piv_images_list) == 0:
         return 0
 
-    if int(MAIN_WINDOW_CLASS.current_image_number.text()) == len(PIV_PLOT_CLASS.piv_images_list):
-        MAIN_WINDOW_CLASS.current_image_number.setText("1")
-        PIV_PLOT_CLASS.show_plot(0)
+    if int(main_window_class.current_image_number.text()) == len(piv_plot_class.piv_images_list):
+        main_window_class.current_image_number.setText("1")
+        piv_plot_class.show_plot(0)
     else:
-        PIV_PLOT_CLASS.show_plot(int(MAIN_WINDOW_CLASS.current_image_number.text()))
-        MAIN_WINDOW_CLASS.current_image_number.setText(str(int(MAIN_WINDOW_CLASS.current_image_number.text()) + 1))
+        piv_plot_class.show_plot(int(main_window_class.current_image_number.text()))
+        main_window_class.current_image_number.setText(str(int(main_window_class.current_image_number.text()) + 1))
 
 
 # function that moves to the next left image
-def change_image_number_left():
-    if len(PIV_PLOT_CLASS.piv_images_list) == 0:
+def change_image_number_left(piv_plot_class, main_window_class):
+    if len(piv_plot_class.piv_images_list) == 0:
         return 0
 
-    if int(MAIN_WINDOW_CLASS.current_image_number.text()) == 1:
-        MAIN_WINDOW_CLASS.current_image_number.setText(str(len(PIV_PLOT_CLASS.piv_images_list)))
-        PIV_PLOT_CLASS.show_plot(len(PIV_PLOT_CLASS.piv_images_list) - 1)
+    if int(main_window_class.current_image_number.text()) == 1:
+        main_window_class.current_image_number.setText(str(len(piv_plot_class.piv_images_list)))
+        piv_plot_class.show_plot(len(piv_plot_class.piv_images_list) - 1)
     else:
-        PIV_PLOT_CLASS.show_plot(int(MAIN_WINDOW_CLASS.current_image_number.text()) - 2)
-        MAIN_WINDOW_CLASS.current_image_number.setText(str(int(MAIN_WINDOW_CLASS.current_image_number.text()) - 1))
+        piv_plot_class.show_plot(int(main_window_class.current_image_number.text()) - 2)
+        main_window_class.current_image_number.setText(str(int(main_window_class.current_image_number.text()) - 1))
 
 
-def invert_button():
-    for i in range(len(PIV_PLOT_CLASS.piv_images_list)):
-        if PIV_PLOT_CLASS.piv_images_list[i][1].lower().endswith(
+def invert_button(piv_plot_class, settings_tab_widget_class):
+    for i in range(len(piv_plot_class.piv_images_list)):
+        if piv_plot_class.piv_images_list[i][1].lower().endswith(
                 ('.png', '.jpg', '.jpeg', '.tif', '.tiff')):
-            PIV_PLOT_CLASS.piv_images_list[i][2] = PIV_PLOT_CLASS.invert(
-                PIV_PLOT_CLASS.piv_images_list[i][2], False,
-                SETTINGS_TAB_WIDGET_CLASS.image_processing_tab_class.bit_combo_box.currentText())
-            PIV_PLOT_CLASS.show_plot(i)
+            piv_plot_class.piv_images_list[i][2] = piv_plot_class.invert(
+                piv_plot_class.piv_images_list[i][2], False,
+                settings_tab_widget_class.image_processing_tab_class.bit_combo_box.currentText())
+            piv_plot_class.show_plot(i)
         else:
-            PIV_PLOT_CLASS.piv_images_list[i][2] = PIV_PLOT_CLASS.invert(
-                PIV_PLOT_CLASS.piv_images_list[i][2], True,
-                SETTINGS_TAB_WIDGET_CLASS.image_processing_tab_class.bit_combo_box.currentText())
-            PIV_PLOT_CLASS.show_plot(i)
+            piv_plot_class.piv_images_list[i][2] = piv_plot_class.invert(
+                piv_plot_class.piv_images_list[i][2], True,
+                settings_tab_widget_class.image_processing_tab_class.bit_combo_box.currentText())
+            piv_plot_class.show_plot(i)
 
 
-def file_order_changed():
-    print(1)
+def file_order_changed(file_window_class, piv_plot_class):
     file_list_list = []
-    for i in range(FILE_WINDOW_CLASS.file_list.count()):
-        file_list_list.append(FILE_WINDOW_CLASS.file_list.item(i).text())
+    for i in range(file_window_class.file_list.count()):
+        file_list_list.append(file_window_class.file_list.item(i).text())
 
-    PIV_PLOT_CLASS.piv_images_list.sort(key=lambda x: file_list_list.index(x[1]))
+    piv_plot_class.piv_images_list.sort(key=lambda x: file_list_list.index(x[1]))
 
 
-def change_bit(bit):
+def change_bit(bit, piv_plot_class):
     if bit == "8 bit":
-        for i in range(len(PIV_PLOT_CLASS.piv_images_list)):
-            PIV_PLOT_CLASS.piv_images_list[i][2] = np.uint8(PIV_PLOT_CLASS.piv_images_list[i][2])
+        for i in range(len(piv_plot_class.piv_images_list)):
+            piv_plot_class.piv_images_list[i][2] = np.uint8(piv_plot_class.piv_images_list[i][2])
     else:
-        for i in range(len(PIV_PLOT_CLASS.piv_images_list)):
-            PIV_PLOT_CLASS.piv_images_list[i][2] = np.uint16(PIV_PLOT_CLASS.piv_images_list[i][2])
+        for i in range(len(piv_plot_class.piv_images_list)):
+            piv_plot_class.piv_images_list[i][2] = np.uint16(piv_plot_class.piv_images_list[i][2])
 
 
 def main():

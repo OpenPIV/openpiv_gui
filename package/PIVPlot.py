@@ -53,13 +53,13 @@ class PIVPlot(QtWidgets.QWidget):
     def invert(img_read, is_bmp, bit):
         invert_img = img_read
         if is_bmp:
-            for i in range(len(img_read)):
-                for j in range(len(img_read[i])):
-                    invert_img[i][j] = 255 - img_read[i][j]
+            # for i in range(len(img_read)):
+            # for j in range(len(img_read[i])):
+            invert_img = 255 - img_read
         else:
-            for i in range(len(img_read)):
-                for j in range(len(img_read[i])):
-                    invert_img[i][j] = 0.255 - img_read[i][j]
+            #for i in range(len(img_read)):
+            #    for j in range(len(img_read[i])):
+            invert_img = 1.0 - img_read # it's not 0.255
         if bit == "8 bit":
             return np.uint8(invert_img)
         else:

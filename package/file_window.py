@@ -8,7 +8,7 @@ class FileWindowClass(object):
         self.add_button = QtWidgets.QPushButton(self.file_window)
         self.remove_button = QtWidgets.QPushButton(self.file_window)
         # self.close_button = QtWidgets.QPushButton(self.file_window)
-        self.file_list = FileWidget()
+        self.file_list = FileWidget(self.file_window)
         self.file_dialog = QtWidgets.QFileDialog
         # self.last_file_list = []
         self.last_file = []
@@ -20,10 +20,6 @@ class FileWindowClass(object):
         #
         # self.file_window.setMinimumSize(QtCore.QSize(320, 240))
         # self.file_window.setMaximumSize(QtCore.QSize(320, 240))
-
-        # set that you could drag, drop and select images in the file list
-        self.file_list.setSelectionMode(QtWidgets.QAbstractItemView.ExtendedSelection)
-        self.file_list.setDragDropMode(QtWidgets.QListWidget.InternalMove)
 
         self.gridLayout.addWidget(self.add_button, 0, 0, 1, 1)
         self.gridLayout.addWidget(self.remove_button, 0, 1, 1, 1)
@@ -79,12 +75,16 @@ class FileWindowClass(object):
 class FileWidget(QtWidgets.QListWidget):
     drop_signal = QtCore.Signal()
 
-    def __init__(self):
-        super(FileWidget, self).__init__()
+    def __init__(self, parent=None):
+        super(FileWidget, self).__init__(parent)
+        # set that you could drag, drop and select images in the file list
+        self.setSelectionMode(self.SingleSelection)
+        self.setDragDropMode(self.InternalMove)
         self.setAcceptDrops(True)
         self.setDragEnabled(True)
 
     def dropEvent(self, QDropEvent):
+        super(FileWidget, self).dropEvent(QDropEvent)
         self.drop_signal.emit()
 
 

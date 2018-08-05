@@ -58,13 +58,27 @@ class PIVPlot(QtWidgets.QWidget):
             self.ax.axis('off')
             self.zoom_ax.imshow(np.uint16(self.piv_images_list[image_number][2]), cmap=plt.cm.gray)
             self.zoom_ax.axis('off')
-            if self.xy_zoom[0][0]:
+            if self.xy_zoom[0][0] != None:
                 self.zoom_ax.set_xlim(self.xy_zoom[0][0], self.xy_zoom[0][1])
                 self.zoom_ax.set_ylim(self.xy_zoom[1][0], self.xy_zoom[1][1])
-        if not self.xy_zoom[0][0] == None:
-            self.zoom_rectangle = Rectangle((0, 0), self.xy_zoom[0][1], self.xy_zoom[1][1], facecolor='gray', alpha=0.6,
+
+            self.ax.add_patch(self.zoom_rectangle)
+
+        if self.xy_zoom[0][0] == 0 and self.xy_zoom[0][1] == len(self.piv_images_list[0][2][0]) and self.xy_zoom[1][
+                0] == 0 and self.xy_zoom[1][1] == len(self.piv_images_list[0][2]):
+            self.zoom_rectangle = Rectangle((self.xy_zoom[0][0], self.xy_zoom[1][0]),
+                                            abs(self.xy_zoom[0][1] - self.xy_zoom[0][0]),
+                                            abs(self.xy_zoom[1][1] - self.xy_zoom[1][0]), facecolor='none', alpha=0.1,
+                                            edgecolor='none', linewidth=1, fill=False)
+
+        elif not self.xy_zoom[0][0] == None:
+            self.zoom_rectangle = Rectangle((self.xy_zoom[0][0], self.xy_zoom[1][0]),
+                                            abs(self.xy_zoom[0][1] - self.xy_zoom[0][0]),
+                                            abs(self.xy_zoom[1][1] - self.xy_zoom[1][0]), facecolor='gray', alpha=0.6,
                                             linestyle='--', edgecolor='white', linewidth=2, fill=True)
-            self.piv_canvas.draw()
+            self.ax.add_patch(self.zoom_rectangle)
+
+        self.piv_canvas.draw()
 
     # function to add an image
     def add_image(self, image_path, bit):

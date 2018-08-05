@@ -76,7 +76,7 @@ class FileWindowClass(QtWidgets.QFrame):
         for selected_item in self.file_list.selectedItems():
             self.file_list.takeItem(self.file_list.row(selected_item))
 
-    
+
 if __name__ == "__main__":
     import sys
 

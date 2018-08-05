@@ -1,15 +1,14 @@
 from PySide2 import QtCore, QtWidgets, QtGui
 
 
-class FileWindowClass(QtWidgets.QFrame):
-    def __init__(self, parent):
-        super(FileWindowClass, self).__init__(parent)
-        self.file_window = parent
+class FileWindowClass(object):
+    def __init__(self, file_window):
+        self.file_window = file_window
         self.gridLayout = QtWidgets.QGridLayout(self.file_window)
         self.add_button = QtWidgets.QPushButton(self.file_window)
         self.remove_button = QtWidgets.QPushButton(self.file_window)
         # self.close_button = QtWidgets.QPushButton(self.file_window)
-        self.file_list = QtWidgets.QListWidget(self.file_window)
+        self.file_list = FileWidget(self.file_window)
         self.file_dialog = QtWidgets.QFileDialog
         # self.last_file_list = []
         self.last_file = []
@@ -21,10 +20,6 @@ class FileWindowClass(QtWidgets.QFrame):
         #
         # self.file_window.setMinimumSize(QtCore.QSize(320, 240))
         # self.file_window.setMaximumSize(QtCore.QSize(320, 240))
-
-        # set that you could drag, drop and select images in the file list
-        self.file_list.setSelectionMode(QtWidgets.QAbstractItemView.ExtendedSelection)
-        self.file_list.setDragDropMode(QtWidgets.QAbstractItemView.InternalMove)
 
         self.gridLayout.addWidget(self.add_button, 0, 0, 1, 1)
         self.gridLayout.addWidget(self.remove_button, 0, 1, 1, 1)
@@ -75,6 +70,26 @@ class FileWindowClass(QtWidgets.QFrame):
     def remove_item(self):
         for selected_item in self.file_list.selectedItems():
             self.file_list.takeItem(self.file_list.row(selected_item))
+
+
+class FileWidget(QtWidgets.QListWidget):
+    drop_signal = QtCore.Signal()
+
+    def __init__(self, parent=None):
+        super(FileWidget, self).__init__(parent)
+        # set that you could drag, drop and select images in the file list
+        self.setSelectionMode(QtWidgets.QAbstractItemView.ExtendedSelection)
+        self.setDragDropMode(QtWidgets.QAbstractItemView.InternalMove)
+        self.setAcceptDrops(True)
+        self.setDragEnabled(True)
+
+    def dropEvent(self, QDropEvent):
+        print(self)
+        self.setSelectionMode(QtWidgets.QAbstractItemView.ExtendedSelection)
+        self.setDragDropMode(QtWidgets.QAbstractItemView.InternalMove)
+        self.setAcceptDrops(True)
+        self.setDragEnabled(True)
+        self.drop_signal.emit()
 
 
 if __name__ == "__main__":

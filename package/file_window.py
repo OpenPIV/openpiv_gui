@@ -1,9 +1,10 @@
 from PySide2 import QtCore, QtWidgets, QtGui
 
 
-class FileWindowClass(object):
-    def __init__(self, file_window):
-        self.file_window = file_window
+class FileWindowClass(QtWidgets.QFrame):
+    def __init__(self, parent):
+        super(FileWindowClass, self).__init__(parent)
+        self.file_window = parent
         self.gridLayout = QtWidgets.QGridLayout(self.file_window)
         self.add_button = QtWidgets.QPushButton(self.file_window)
         self.remove_button = QtWidgets.QPushButton(self.file_window)
@@ -75,7 +76,7 @@ class FileWindowClass(object):
         for selected_item in self.file_list.selectedItems():
             self.file_list.takeItem(self.file_list.row(selected_item))
 
-
+    
 if __name__ == "__main__":
     import sys
 

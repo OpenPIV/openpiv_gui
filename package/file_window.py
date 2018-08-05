@@ -78,17 +78,13 @@ class FileWidget(QtWidgets.QListWidget):
     def __init__(self, parent=None):
         super(FileWidget, self).__init__(parent)
         # set that you could drag, drop and select images in the file list
-        self.setSelectionMode(QtWidgets.QAbstractItemView.ExtendedSelection)
-        self.setDragDropMode(QtWidgets.QAbstractItemView.InternalMove)
+        self.setSelectionMode(self.SingleSelection)
+        self.setDragDropMode(self.InternalMove)
         self.setAcceptDrops(True)
         self.setDragEnabled(True)
 
     def dropEvent(self, QDropEvent):
-        print(self)
-        self.setSelectionMode(QtWidgets.QAbstractItemView.ExtendedSelection)
-        self.setDragDropMode(QtWidgets.QAbstractItemView.InternalMove)
-        self.setAcceptDrops(True)
-        self.setDragEnabled(True)
+        super(FileWidget, self).dropEvent(QDropEvent)
         self.drop_signal.emit()
 
 

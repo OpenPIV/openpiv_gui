@@ -77,6 +77,8 @@ def run_main_window():
     settings_tab_class.select_roi_button.clicked.connect(partial(piv_plot_class.ROI_buttons, True))
     settings_tab_class.reset_roi_button.clicked.connect(partial(piv_plot_class.ROI_buttons, False))
 
+    file_window_class.file_list.drop_signal.connect(partial(file_order_changed, file_window_class, piv_plot_class))
+
     settings_tab_widget_class.image_processing_tab_class.bit_combo_box.currentIndexChanged.connect(
         lambda: change_bit(str(settings_tab_widget_class.image_processing_tab_class.bit_combo_box.currentText()),
                            piv_plot_class))

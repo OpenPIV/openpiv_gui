@@ -26,8 +26,6 @@ class PIVPlot(QtWidgets.QWidget):
         self.piv_images_list = []
         self.ax = self.figure.add_subplot(111)
 
-        self.zoom_ax = self.figure.add_subplot(221)
-        self.zoom_ax.axis('off')
         self.xy_zoom = [[None, None], [None, None]]
 
         self.zoom_rectangle = None
@@ -47,22 +45,9 @@ class PIVPlot(QtWidgets.QWidget):
         if self.bit == "8 bit":
             self.ax.imshow(np.uint8(self.piv_images_list[image_number][2]), cmap=plt.cm.gray)
             self.ax.axis('off')
-
-            self.zoom_ax.imshow(np.uint8(self.piv_images_list[image_number][2]), cmap=plt.cm.gray)
-            self.zoom_ax.axis('off')
-            if self.xy_zoom[0][0] != None:
-                self.zoom_ax.set_xlim(self.xy_zoom[0][0], self.xy_zoom[0][1])
-                self.zoom_ax.set_ylim(self.xy_zoom[1][0], self.xy_zoom[1][1])
         else:
             self.ax.imshow(np.uint16(self.piv_images_list[image_number][2]), cmap=plt.cm.gray)
             self.ax.axis('off')
-            self.zoom_ax.imshow(np.uint16(self.piv_images_list[image_number][2]), cmap=plt.cm.gray)
-            self.zoom_ax.axis('off')
-            if self.xy_zoom[0][0] != None:
-                self.zoom_ax.set_xlim(self.xy_zoom[0][0], self.xy_zoom[0][1])
-                self.zoom_ax.set_ylim(self.xy_zoom[1][0], self.xy_zoom[1][1])
-
-            self.ax.add_patch(self.zoom_rectangle)
 
         if self.xy_zoom[0][0] == 0 and self.xy_zoom[0][1] == len(self.piv_images_list[0][2][0]) and self.xy_zoom[1][
                 0] == 0 and self.xy_zoom[1][1] == len(self.piv_images_list[0][2]):

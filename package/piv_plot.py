@@ -65,7 +65,7 @@ class PIVPlot(QtWidgets.QWidget):
             self.ax.add_patch(self.zoom_rectangle)
 
         if self.xy_zoom[0][0] == 0 and self.xy_zoom[0][1] == len(self.piv_images_list[0][2][0]) and self.xy_zoom[1][
-                0] == 0 and self.xy_zoom[1][1] == len(self.piv_images_list[0][2]):
+            0] == 0 and self.xy_zoom[1][1] == len(self.piv_images_list[0][2]):
             self.zoom_rectangle = Rectangle((self.xy_zoom[0][0], self.xy_zoom[1][0]),
                                             abs(self.xy_zoom[0][1] - self.xy_zoom[0][0]),
                                             abs(self.xy_zoom[1][1] - self.xy_zoom[1][0]), facecolor='none', alpha=0.1,
@@ -89,10 +89,6 @@ class PIVPlot(QtWidgets.QWidget):
         else:
             self.piv_images_list.append(
                 [image_path, QtCore.QFileInfo(image_path).fileName(), np.uint16(tools.imread(image_path))])
-
-    # the function that does the piv itself
-    def start_piv(self, width, height, horizontal, vertical, sn_type, sn_value, scale, outer_filter, jump):
-        pass
 
     @staticmethod
     def invert(img_read, is_bmp, bit):
@@ -132,6 +128,11 @@ class PIVPlot(QtWidgets.QWidget):
         self.xy_zoom[1][1] = y2
         self.rs = None
         self.show_plot(self.current_image, self.bit)
+
+    # the function that does the piv itself
+    def start_piv(self, width_a, height_a, width_b, height_b, horizontal, vertical, sn_type, sn_value, scale,
+                  outer_filter, jump):
+        pass
 
 
 if __name__ == '__main__':

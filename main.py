@@ -87,8 +87,10 @@ def run_main_window():
     # (is uses lambda to get the the current values)
     settings_tab_class.start_button.clicked.connect(
         lambda: piv_plot_class.start_piv(
-            int(settings_tab_class.width_combo_box.currentText()),
-            int(settings_tab_class.height_combo_box.currentText()),
+            int(settings_tab_class.width_combo_box_a.currentText()),
+            int(settings_tab_class.height_combo_box_a.currentText()),
+            int(settings_tab_class.width_combo_box_b.currentText()),
+            int(settings_tab_class.height_combo_box_b.currentText()),
             int(settings_tab_class.horizontal_combo_box.currentText()),
             int(settings_tab_class.vertical_combo_box.currentText()),
             int(settings_tab_class.type_combo_box.currentText()),

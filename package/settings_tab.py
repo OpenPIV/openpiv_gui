@@ -42,6 +42,8 @@ class SettingsTab(object):
         self.interrogation_winsize_frame_layout = QtWidgets.QGridLayout(self.interrogation_winsize_frame)
         self.height_label = QtWidgets.QLabel(self.interrogation_winsize_frame)
         self.width_label = QtWidgets.QLabel(self.interrogation_winsize_frame)
+        self.width_label_A = QtWidgets.QLabel(self.interrogation_winsize_frame)
+        self.width_label_B = QtWidgets.QLabel(self.interrogation_winsize_frame)
         self.width_combo_box_a = QtWidgets.QComboBox(self.interrogation_winsize_frame)
         self.height_combo_box_a = QtWidgets.QComboBox(self.interrogation_winsize_frame)
         self.width_combo_box_b = QtWidgets.QComboBox(self.interrogation_winsize_frame)
@@ -218,10 +220,12 @@ class SettingsTab(object):
 
         self.interrogation_winsize_frame_layout.addWidget(self.interrogation_winsize_label, 0, 0, 1, 3)
         self.interrogation_winsize_frame_layout.addWidget(self.height_label, 1, 2, 1, 1)
-        self.interrogation_winsize_frame_layout.addWidget(self.width_label, 1, 0, 1, 1)
-        self.interrogation_winsize_frame_layout.addWidget(self.width_combo_box_a, 2, 0, 1, 1)
+        self.interrogation_winsize_frame_layout.addWidget(self.width_label, 1, 1, 1, 1)
+        self.interrogation_winsize_frame_layout.addWidget(self.width_label_A, 2, 0, 1, 1)
+        self.interrogation_winsize_frame_layout.addWidget(self.width_label_B, 3, 0, 1, 1)
+        self.interrogation_winsize_frame_layout.addWidget(self.width_combo_box_a, 2, 1, 1, 1)
         self.interrogation_winsize_frame_layout.addWidget(self.height_combo_box_a, 2, 2, 1, 1)
-        self.interrogation_winsize_frame_layout.addWidget(self.width_combo_box_b, 3, 0, 1, 1)
+        self.interrogation_winsize_frame_layout.addWidget(self.width_combo_box_b, 3, 1, 1, 1)
         self.interrogation_winsize_frame_layout.addWidget(self.height_combo_box_b, 3, 2, 1, 1)
         self.interrogation_winsize_frame_layout.addItem(
             QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Minimum), 2, 1, 1, 1)
@@ -265,6 +269,8 @@ class SettingsTab(object):
         set_text(self.spacing_label, "spacing/Overlap")
         set_text(self.height_label, "Height")
         set_text(self.width_label, "Width")
+        set_text(self.width_label_A, "A")
+        set_text(self.width_label_B, "B")
         set_text(self.interrogation_winsize_label, "Interrogation window size")
 
 

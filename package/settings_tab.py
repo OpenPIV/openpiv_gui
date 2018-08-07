@@ -16,6 +16,7 @@ class SettingsTab(object):
         self.scale_filter_jump_frame_layout = QtWidgets.QGridLayout(self.scale_filter_jump_frame)
         self.scale_label = QtWidgets.QLabel(self.scale_filter_jump_frame)
         self.outer_filter_label = QtWidgets.QLabel(self.scale_filter_jump_frame)
+        self.interactive_check_box = QtWidgets.QCheckBox(self.scale_filter_jump_frame)
         self.outer_filter_spin_box = QtWidgets.QDoubleSpinBox(self.scale_filter_jump_frame)
         self.jump_label = QtWidgets.QLabel(self.scale_filter_jump_frame)
         self.jump_spin_box = QtWidgets.QSpinBox(self.scale_filter_jump_frame)
@@ -74,12 +75,15 @@ class SettingsTab(object):
         self.scale_spin_box.setSingleStep(0.010)
         self.scale_spin_box.setAccelerated(True)
 
+        self.interactive_check_box.setText("Interactive")
+
         self.scale_filter_jump_frame_layout.addWidget(self.scale_label, 0, 0, 1, 1)
         self.scale_filter_jump_frame_layout.addWidget(self.outer_filter_label, 1, 0, 1, 1)
         self.scale_filter_jump_frame_layout.addWidget(self.outer_filter_spin_box, 1, 1, 1, 1)
         self.scale_filter_jump_frame_layout.addWidget(self.jump_label, 2, 0, 1, 1)
         self.scale_filter_jump_frame_layout.addWidget(self.jump_spin_box, 2, 1, 1, 1)
         self.scale_filter_jump_frame_layout.addWidget(self.scale_spin_box, 0, 1, 1, 1)
+        self.scale_filter_jump_frame_layout.addWidget(self.interactive_check_box, 3, 0, 1, 1)
 
         self.settings_widget_layout.addWidget(self.scale_filter_jump_frame, 4, 3, 1, 1)
 

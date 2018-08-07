@@ -132,7 +132,9 @@ class PIVPlot(QtWidgets.QWidget):
     # the function that does the piv itself
     def start_piv(self, width_a, height_a, width_b, height_b, horizontal, vertical, sn_type, sn_value, scale,
                   outer_filter, jump):
-        pass
+        winsize = width_a * height_a
+        searchsize = width_b * height_b
+        overlap = horizontal * vertical
 
 
 if __name__ == '__main__':

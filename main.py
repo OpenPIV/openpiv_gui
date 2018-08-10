@@ -1,6 +1,6 @@
 from package.main_window import MainWindowClass
 from package.setting_tab_widget import SettingsTabWidgetClass
-from package.piv_plot import PIVPlot
+from package.piv_plot import PIVPlot, PIVStartClass
 from package.file_window import FileWindowClass
 from package.settings_tab import SettingsTab
 from package.image_piv_post_tab import PostProcessingTabClass
@@ -83,22 +83,25 @@ def run_main_window():
         lambda: change_bit(str(settings_tab_widget_class.image_processing_tab_class.bit_combo_box.currentText()),
                            piv_plot_class))
 
-    # here is where the connection with the start button and piv function is
-    # (is uses lambda to get the the current values)
+    settings_tab_class.dt_line_edit.textEdited.connect(lambda: check_dt_valid(settings_tab_class))
+
+    # the piv start class is a class(QThread) that does the piv
+    piv_start_class = PIVStartClass()
     settings_tab_class.start_button.clicked.connect(
-        lambda: piv_plot_class.start_piv(
-            int(settings_tab_class.width_combo_box_a.currentText()),
-            int(settings_tab_class.height_combo_box_a.currentText()),
-            int(settings_tab_class.width_combo_box_b.currentText()),
-            int(settings_tab_class.height_combo_box_b.currentText()),
-            int(settings_tab_class.horizontal_combo_box.currentText()),
-            int(settings_tab_class.vertical_combo_box.currentText()),
-            int(settings_tab_class.type_combo_box.currentText()),
-            settings_tab_class.value_spin_box.value(),
-            settings_tab_class.scale_spin_box.value(),
-            settings_tab_class.outer_filter_spin_box.value(),
-            settings_tab_class.jump_spin_box.value()
-        ))
+        lambda: piv_start_class.set_args_start(piv_plot_class.piv_images_list,
+                                               int(settings_tab_class.width_combo_box_a.currentText()),
+                                               int(settings_tab_class.height_combo_box_a.currentText()),
+                                               int(settings_tab_class.width_combo_box_b.currentText()),
+                                               int(settings_tab_class.height_combo_box_b.currentText()),
+                                               int(settings_tab_class.horizontal_combo_box.currentText()),
+                                               int(settings_tab_class.vertical_combo_box.currentText()),
+                                               int(settings_tab_class.type_combo_box.currentText()),
+                                               settings_tab_class.value_spin_box.value(),
+                                               settings_tab_class.scale_spin_box.value(),
+                                               settings_tab_class.outer_filter_spin_box.value(),
+                                               settings_tab_class.jump_spin_box.value(),
+                                               float(settings_tab_class.dt_line_edit.text()),
+                                               settings_tab_class.interactive_check_box.isTristate()))
 
     sys.exit(app.exec_())
 
@@ -223,6 +226,14 @@ def change_bit(bit, piv_plot_class):
     else:
         for i in range(len(piv_plot_class.piv_images_list)):
             piv_plot_class.piv_images_list[i][2] = np.uint16(piv_plot_class.piv_images_list[i][2])
+
+
+def check_dt_valid(setting_tab_class):
+    try:
+        float(setting_tab_class.dt_line_edit.text())
+    except ValueError:
+        if setting_tab_class.dt_line_edit.text() != "":
+            setting_tab_class.dt_line_edit.setText("1.00")
 
 
 def main():

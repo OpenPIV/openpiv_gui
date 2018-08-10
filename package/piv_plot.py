@@ -1,5 +1,9 @@
 from PySide2 import QtWidgets, QtCore
 from openpiv import tools
+from openpiv.process import extended_search_area_piv, get_coordinates
+from openpiv.validation import sig2noise_val
+from openpiv.filters import replace_outliers
+from openpiv.scaling import uniform
 import numpy as np
 
 import matplotlib.pyplot as plt
@@ -129,12 +133,45 @@ class PIVPlot(QtWidgets.QWidget):
         self.rs = None
         self.show_plot(self.current_image, self.bit)
 
-    # the function that does the piv itself
-    def start_piv(self, width_a, height_a, width_b, height_b, horizontal, vertical, sn_type, sn_value, scale,
-                  outer_filter, jump):
-        winsize = width_a * height_a
-        searchsize = width_b * height_b
-        overlap = horizontal * vertical
+
+# the class that does the piv itself
+class PIVStartClass(QtCore.QThread):
+    def __init__(self):
+        QtCore.QThread.__init__(self)
+        self.frame_a = None
+        self.frame_b = None
+        self.dt = None
+        self.winsize = None
+        self.overlap = None
+        self.searchsize = None
+
+    def __del__(self):
+        self.wait()
+
+    def set_args_start(self, image_list, width_a, height_a, width_b, height_b, horizontal, vertical, sn_type, sn_value,
+                       scale,
+                       outer_filter, jump, dt, is_interactive):
+        self.frame_a = image_list[0][2]
+        self.frame_b = image_list[1][2]
+        self.overlap = horizontal
+        self.winsize = width_a
+        self.searchsize = width_b
+        self.dt = dt
+        self.start()
+
+    def run(self):
+        u0, v0, sig2noise = extended_search_area_piv(self.frame_a.astype(np.int32),
+                                                     self.frame_b.astype(np.int32),
+                                                     window_size=self.winsize, overlap=self.overlap,
+                                                     dt=self.dt, search_area_size=self.searchsize,
+                                                     sig2noise_method='peak2peak')
+        x, y = get_coordinates(image_size=self.frame_a.shape, window_size=self.winsize, overlap=self.overlap)
+        u1, v1, mask = sig2noise_val(u0, v0, sig2noise, threshold=1.3)
+        u2, v2 = replace_outliers(u1, v1, method='localmean', max_iter=10, kernel_size=2)
+        x, y, u3, v3 = uniform(x, y, u2, v2, scaling_factor=96.52)
+        plt.figure(figsize=(10, 8))
+        plt.quiver(x, y, u3, v3, color='b')
+        plt.quiver(x[mask], y[mask], u3[mask], v3[mask], color='r')
 
 
 if __name__ == '__main__':

@@ -12,15 +12,17 @@ class SettingsTab(object):
     def __init__(self):
         self.settings_tab = QtWidgets.QTabBar()
         self.settings_widget_layout = QtWidgets.QGridLayout(self.settings_tab)
-        self.scale_filter_jump_frame = QtWidgets.QFrame(self.settings_tab)
-        self.scale_filter_jump_frame_layout = QtWidgets.QGridLayout(self.scale_filter_jump_frame)
-        self.scale_label = QtWidgets.QLabel(self.scale_filter_jump_frame)
-        self.outer_filter_label = QtWidgets.QLabel(self.scale_filter_jump_frame)
-        self.interactive_check_box = QtWidgets.QCheckBox(self.scale_filter_jump_frame)
-        self.outer_filter_spin_box = QtWidgets.QDoubleSpinBox(self.scale_filter_jump_frame)
-        self.jump_label = QtWidgets.QLabel(self.scale_filter_jump_frame)
-        self.jump_spin_box = QtWidgets.QSpinBox(self.scale_filter_jump_frame)
-        self.scale_spin_box = QtWidgets.QDoubleSpinBox(self.scale_filter_jump_frame)
+        self.settings_frame_4 = QtWidgets.QFrame(self.settings_tab)
+        self.settings_frame_4_layout = QtWidgets.QGridLayout(self.settings_frame_4)
+        self.dt_line_edit = QtWidgets.QLineEdit(self.settings_frame_4)
+        self.dt_line_edit_label = QtWidgets.QLabel(self.settings_frame_4)
+        self.scale_label = QtWidgets.QLabel(self.settings_frame_4)
+        self.outer_filter_label = QtWidgets.QLabel(self.settings_frame_4)
+        self.interactive_check_box = QtWidgets.QCheckBox(self.settings_frame_4)
+        self.outer_filter_spin_box = QtWidgets.QDoubleSpinBox(self.settings_frame_4)
+        self.jump_label = QtWidgets.QLabel(self.settings_frame_4)
+        self.jump_spin_box = QtWidgets.QSpinBox(self.settings_frame_4)
+        self.scale_spin_box = QtWidgets.QDoubleSpinBox(self.settings_frame_4)
         self.roi_frame = QtWidgets.QFrame(self.settings_tab)
         self.roi_frame_layout = QtWidgets.QGridLayout(self.roi_frame)
         self.reset_roi_button = QtWidgets.QPushButton(self.roi_frame)
@@ -57,8 +59,8 @@ class SettingsTab(object):
     def setting_widget_setup(self):
         # the set tab bar line is to make the tab text go horizontal
 
-        self.scale_filter_jump_frame.setFrameShape(QtWidgets.QFrame.Box)
-        self.scale_filter_jump_frame.setFrameShadow(QtWidgets.QFrame.Sunken)
+        self.settings_frame_4.setFrameShape(QtWidgets.QFrame.Box)
+        self.settings_frame_4.setFrameShadow(QtWidgets.QFrame.Sunken)
 
         self.scale_label.setAlignment(QtCore.Qt.AlignCenter)
 
@@ -79,15 +81,22 @@ class SettingsTab(object):
 
         self.interactive_check_box.setText("Interactive")
 
-        self.scale_filter_jump_frame_layout.addWidget(self.scale_label, 0, 0, 1, 1)
-        self.scale_filter_jump_frame_layout.addWidget(self.outer_filter_label, 1, 0, 1, 1)
-        self.scale_filter_jump_frame_layout.addWidget(self.outer_filter_spin_box, 1, 1, 1, 1)
-        self.scale_filter_jump_frame_layout.addWidget(self.jump_label, 2, 0, 1, 1)
-        self.scale_filter_jump_frame_layout.addWidget(self.jump_spin_box, 2, 1, 1, 1)
-        self.scale_filter_jump_frame_layout.addWidget(self.scale_spin_box, 0, 1, 1, 1)
-        self.scale_filter_jump_frame_layout.addWidget(self.interactive_check_box, 3, 0, 1, 1)
+        self.dt_line_edit.setText("1.00")
 
-        self.settings_widget_layout.addWidget(self.scale_filter_jump_frame, 4, 3, 1, 1)
+        self.dt_line_edit_label.setText("dt:")
+
+        self.settings_frame_4_layout.addWidget(self.scale_label, 0, 0, 1, 1)
+        self.settings_frame_4_layout.addWidget(self.outer_filter_label, 1, 0, 1, 1)
+        self.settings_frame_4_layout.addWidget(self.outer_filter_spin_box, 1, 1, 1, 1)
+        self.settings_frame_4_layout.addWidget(self.jump_label, 2, 0, 1, 1)
+        self.settings_frame_4_layout.addWidget(self.jump_spin_box, 2, 1, 1, 1)
+        self.settings_frame_4_layout.addWidget(self.scale_spin_box, 0, 1, 1, 1)
+        self.settings_frame_4_layout.addWidget(self.interactive_check_box, 3, 0, 1, 1)
+        self.settings_frame_4_layout.addWidget(self.dt_line_edit, 3, 1, 1, 1)
+        self.settings_frame_4_layout.addWidget(self.dt_line_edit_label, 3, 0, 1, 1)
+        self.settings_frame_4_layout.addWidget(self.interactive_check_box, 4, 0, 1, 1)
+
+        self.settings_widget_layout.addWidget(self.settings_frame_4, 4, 3, 1, 1)
 
         self.roi_frame.setFrameShape(QtWidgets.QFrame.Box)
         self.roi_frame.setFrameShadow(QtWidgets.QFrame.Sunken)

@@ -101,7 +101,8 @@ def run_main_window():
                                                settings_tab_class.outer_filter_spin_box.value(),
                                                settings_tab_class.jump_spin_box.value(),
                                                float(settings_tab_class.dt_line_edit.text()),
-                                               settings_tab_class.interactive_check_box.isTristate()))
+                                               settings_tab_class.interactive_check_box.isTristate(),
+                                               piv_plot_class))
 
     sys.exit(app.exec_())
 

@@ -59,8 +59,8 @@ class SettingsTab(object):
     def setting_widget_setup(self):
         # the set tab bar line is to make the tab text go horizontal
 
-        self.settings_frame_4.setFrameShape(QtWidgets.QFrame.Box)
         self.settings_frame_4.setFrameShadow(QtWidgets.QFrame.Sunken)
+        self.settings_frame_4.setFrameShape(QtWidgets.QFrame.Box)
 
         self.scale_label.setAlignment(QtCore.Qt.AlignCenter)
 

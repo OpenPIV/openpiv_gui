@@ -19,6 +19,7 @@ class PIVPlot(QtWidgets.QWidget):
     def __init__(self, parent=QtWidgets.QWidget):
         super(PIVPlot, self).__init__(parent)
         self.figure = Figure()
+        self.figure.patch.set_facecolor('#f0f0f0')
 
         # the canvas is where the graph and the tool bar is
         self.piv_canvas = FigureCanvas(self.figure)
@@ -30,7 +31,7 @@ class PIVPlot(QtWidgets.QWidget):
         self.piv_images_list = []
 
         # the list where the results of the piv are saved
-        self.after_piv_images_list = []
+        self.piv_results_list = []
         self.ax = self.figure.add_subplot(111)
 
         # self.zoom_ax = self.figure.add_subplot(221)
@@ -66,11 +67,14 @@ class PIVPlot(QtWidgets.QWidget):
             self.ax.imshow(np.uint8(self.piv_images_list[image_number][2]), cmap=plt.cm.gray)
             self.ax.axis('off')
 
-            # self.zoom_ax.imshow(np.uint8(self.piv_images_list[image_number][2]), cmap=plt.cm.gray)
-            # self.zoom_ax.axis('off')
-            # if self.xy_zoom[0][0] != None:
-            # self.zoom_ax.set_xlim(self.xy_zoom[0][0], self.xy_zoom[0][1])
-            # self.zoom_ax.set_ylim(self.xy_zoom[1][0], self.xy_zoom[1][1])
+            """
+            self.zoom_ax.imshow(np.uint8(self.piv_images_list[image_number][2]), cmap=plt.cm.gray)
+            self.zoom_ax.axis('off')
+            if self.xy_zoom[0][0] != None:
+            self.zoom_ax.set_xlim(self.xy_zoom[0][0], self.xy_zoom[0][1])
+            self.zoom_ax.set_ylim(self.xy_zoom[1][0], self.xy_zoom[1][1])
+            """
+
         else:
             if self.piv_images_list[image_number][3]:
                 self.ax.quiver(self.piv_images_list[image_number][3][0], self.piv_images_list[image_number][3][1],
@@ -86,14 +90,16 @@ class PIVPlot(QtWidgets.QWidget):
             self.ax.imshow(np.uint16(self.piv_images_list[image_number][2]), cmap=plt.cm.gray)
             self.ax.axis('off')
 
-            # self.zoom_ax.imshow(np.uint16(self.piv_images_list[image_number][2]), cmap=plt.cm.gray)
-            # self.zoom_ax.axis('off')
-            # if self.xy_zoom[0][0] != None:
-            # self.zoom_ax.set_xlim(self.xy_zoom[0][0], self.xy_zoom[0][1])
-            # self.zoom_ax.set_ylim(self.xy_zoom[1][0], self.xy_zoom[1][1])
+            """
+            self.zoom_ax.imshow(np.uint16(self.piv_images_list[image_number][2]), cmap=plt.cm.gray)
+            self.zoom_ax.axis('off')
+            if self.xy_zoom[0][0] != None:
+            self.zoom_ax.set_xlim(self.xy_zoom[0][0], self.xy_zoom[0][1])
+            self.zoom_ax.set_ylim(self.xy_zoom[1][0], self.xy_zoom[1][1])
+            """
 
         if self.xy_zoom[0][0] == 0 and self.xy_zoom[0][1] == len(self.piv_images_list[0][2][0]) and self.xy_zoom[1][
-                0] == 0 and self.xy_zoom[1][1] == len(self.piv_images_list[0][2]):
+            0] == 0 and self.xy_zoom[1][1] == len(self.piv_images_list[0][2]):
             self.zoom_rectangle = Rectangle((self.xy_zoom[0][0], self.xy_zoom[1][0]),
                                             abs(self.xy_zoom[0][1] - self.xy_zoom[0][0]),
                                             abs(self.xy_zoom[1][1] - self.xy_zoom[1][0]), facecolor='none', alpha=0.1,
@@ -177,33 +183,47 @@ class PIVStartClass(QtCore.QThread):
         self.v = None
         self.piv = None
         self.scale = None
+        self.jump = None
+        self.image_list = []
 
     def __del__(self):
         self.wait()
 
     def set_args_start(self, image_list, width_a, height_a, width_b, height_b, horizontal, vertical, sn_type, sn_value,
                        scale, outer_filter, jump, dt, is_interactive, piv):
-        self.frame_a = image_list[0][2]
-        self.frame_b = image_list[1][2]
+        self.image_list = image_list
         self.overlap = horizontal
         self.winsize = width_a
         self.searchsize = width_b
         self.dt = dt
         self.piv = piv
         self.scale = scale
+        self.jump = jump
         self.start()
 
     def run(self):
-        self.u, self.v, self.sig2noise = extended_search_area_piv(self.frame_a.astype(np.int32),
-                                                                  self.frame_b.astype(np.int32),
-                                                                  window_size=self.winsize, overlap=self.overlap,
-                                                                  dt=self.dt, search_area_size=self.searchsize,
-                                                                  sig2noise_method='peak2peak')
-        self.x, self.y = get_coordinates(image_size=self.frame_a.shape, window_size=self.winsize, overlap=self.overlap)
-        self.u, self.v, self.mask = sig2noise_val(self.u, self.v, self.sig2noise, threshold=1.3)
-        self.u, self.v = replace_outliers(self.u, self.v, method='localmean', max_iter=10, kernel_size=2)
-        # self.x, self.y, self.u, self.v = uniform(self.x, self.y, self.u, self.v, scaling_factor=96.52)
-        self.piv.piv_images_list[0][3] = [self.x, self.y, self.u, self.v, self.mask]
+        self.piv.piv_results_list = []
+        for i in range(0, len(self.image_list) - 1, abs(self.jump)):
+            print(i)
+            self.u, self.v, self.sig2noise = extended_search_area_piv(self.image_list[i][2].astype(np.int32),
+                                                                      self.image_list[i + 1][2].astype(
+                                                                          np.int32),
+                                                                      window_size=self.winsize, overlap=self.overlap,
+                                                                      dt=self.dt, search_area_size=self.searchsize,
+                                                                      sig2noise_method='peak2peak')
+            self.x, self.y = get_coordinates(image_size=self.image_list[i][2].shape, window_size=self.winsize,
+                                             overlap=self.overlap)
+            self.u, self.v, self.mask = sig2noise_val(self.u, self.v, self.sig2noise, threshold=1.3)
+            self.u, self.v = replace_outliers(self.u, self.v, method='localmean', max_iter=10, kernel_size=2)
+            # self.x, self.y, self.u, self.v = uniform(self.x, self.y, self.u, self.v, scaling_factor=96.52)
+            self.piv.piv_results_list.append([self.x, self.y, self.u, self.v, self.mask, i])
+
+            if i == len(self.image_list) - 2 and self.jump == 1:
+                self.piv.piv_results_list.append([self.x, self.y, self.u, self.v, self.mask, i + 1])
+
+        for i in range(0, len(self.piv.piv_images_list), abs(self.jump)):
+            self.piv.piv_images_list[i][3] = self.piv.piv_results_list[i // abs(self.jump)]
+
         self.piv_finished_signal.emit()
 
 

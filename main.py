@@ -162,8 +162,8 @@ def file_added(file_window_class, settings_tab_class, piv_plot_class, settings_t
 
 # function that changes the max and min of jump
 def change_jump_max_min(settings_tab_class, piv_plot_class):
-    settings_tab_class.jump_spin_box.setMaximum(len(piv_plot_class.piv_images_list) - 1)
-    settings_tab_class.jump_spin_box.setMinimum((-1) * (len(piv_plot_class.piv_images_list) - 1))
+    settings_tab_class.jump_spin_box.setMaximum(len(piv_plot_class.piv_images_list) // 2)
+    settings_tab_class.jump_spin_box.setMinimum((-1) * (len(piv_plot_class.piv_images_list) // 2))
 
 
 # function that moves to the next right image

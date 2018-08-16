@@ -20,12 +20,12 @@ class SettingsTabWidgetClass(object):
     def settings_widget_setup(self):
         self.settings_tab_widget.setMinimumSize(QtCore.QSize(215, 669))
         self.settings_tab_widget.setUsesScrollButtons(False)
-        self.settings_tab_widget.setDocumentMode(True)
+        self.settings_tab_widget.setDocumentMode(False)
 
         self.settings_tab_widget.addTab(self.image_processing_tab, "image")
         self.image_processing_tab.setStyleSheet("background-color: rgb(240, 240, 240);")
 
-        self.settings_tab_widget.tabBar().setStyleSheet("font-size: 11pt;")
+        self.settings_tab_widget.tabBar().setStyleSheet("font-size: 11pt; background-color: rgb(240, 240, 240);")
 
         self.text_setup()
 

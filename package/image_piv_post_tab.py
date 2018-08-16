@@ -41,6 +41,7 @@ class PostProcessingTabClass(object):
         self.post_processing_tab.setObjectName("post_processing_tab")
         self.post_processing_tab.resize(318, 527)
         self.filter_group_box.setFont(FONT)
+        self.filter_group_box.setStyleSheet("background-color: rgb(240, 240, 240);")
 
         self.local_filter_group_box_layout.addWidget(self.local_mean_median_spin_box, 0, 1, 1, 1)
 
@@ -51,16 +52,23 @@ class PostProcessingTabClass(object):
 
         self.smoothing_mean_median_combo_box.addItem("mean")
         self.smoothing_mean_median_combo_box.addItem("median")
+
+        self.local_filter_group_box.setStyleSheet("background-color: rgb(240, 240, 240);")
         self.local_filter_group_box_layout.addWidget(self.local_mean_median_combo_box, 0, 0, 1, 1)
+
         self.filter_group_box_layout.addWidget(self.local_filter_group_box, 2, 0, 1, 1)
 
         self.smoothing_group_box_layout.addWidget(self.smoothing_mean_median_combo_box, 0, 0, 1, 1)
 
         self.smoothing_group_box_layout.addWidget(self.smoothing_mean_median_spin_box, 0, 1, 1, 1)
 
+        self.smoothing_group_box.setStyleSheet("background-color: rgb(240, 240, 240);")
+
         self.filter_group_box_layout.addWidget(self.smoothing_group_box, 5, 0, 1, 1)
 
         self.global_filter_group_box_layout.addWidget(self.global_filter_spin_box_1, 0, 0, 1, 1)
+
+        self.global_filter_group_box.setStyleSheet("background-color: rgb(240, 240, 240);")
 
         self.global_filter_group_box_layout.addWidget(self.global_filter_spin_box_2, 0, 1, 1, 1)
         self.filter_group_box_layout.addWidget(self.global_filter_group_box, 0, 0, 1, 1)
@@ -81,18 +89,20 @@ class PostProcessingTabClass(object):
         self.filter_group_box_layout.addWidget(self.smoothing_interpolation_line, 6, 0, 1, 1)
 
         self.interpolation_group_box_layout.addWidget(self.times_spin_box, 1, 1, 1, 1)
-
         self.interpolation_group_box_layout.addWidget(self.action_label, 0, 0, 1, 1)
+
+        self.interpolation_group_box.setStyleSheet("background-color: rgb(240, 240, 240);")
 
         self.action_combo_box.addItem("cubic")
         self.action_combo_box.addItem("linear")
         self.action_combo_box.addItem("nearest")
+
         self.interpolation_group_box_layout.addWidget(self.action_combo_box, 0, 1, 1, 1)
-
         self.interpolation_group_box_layout.addWidget(self.times_label, 1, 0, 1, 1)
-
         self.interpolation_group_box_layout.addWidget(self.activate_button, 2, 0, 1, 2)
+
         self.filter_group_box_layout.addWidget(self.interpolation_group_box, 7, 0, 1, 1)
+
         self.post_layout.addWidget(self.filter_group_box, 0, 0, 1, 1)
 
         self.text_setup()

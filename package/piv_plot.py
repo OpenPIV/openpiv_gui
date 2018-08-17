@@ -16,7 +16,7 @@ from matplotlib.figure import Figure
 
 # i needed to call QWidget and super to add the tool bar of matplotlib
 class PIVPlot(QtWidgets.QWidget):
-    def __init__(self, parent=QtWidgets.QWidget):
+    def __init__(self, parent=QtWidgets.QWidget, main_class=None):
         super(PIVPlot, self).__init__(parent)
         self.figure = Figure()
         self.figure.patch.set_facecolor('#f0f0f0')
@@ -27,6 +27,7 @@ class PIVPlot(QtWidgets.QWidget):
         self.piv_tool_bar = NavigationToolbar(self.piv_canvas, self)
         self.piv_tool_bar.hide()
 
+        self.main_class = main_class
         # the piv_images_list is where the images are saved
         self.piv_images_list = []
 
@@ -48,7 +49,7 @@ class PIVPlot(QtWidgets.QWidget):
         self.canvas_layout.addWidget(self.piv_canvas)
 
     # function that shows the chosen image
-    def show_plot(self, image_number, bit):
+    def show_plot(self, image_number, bit, change_number=False):
         self.ax.clear()
         self.bit = bit
         self.current_image = image_number
@@ -121,7 +122,8 @@ class PIVPlot(QtWidgets.QWidget):
                                             alpha=0.6,
                                             linestyle='--', edgecolor='white', linewidth=2, fill=True)
             self.ax.add_patch(self.zoom_rectangle)
-
+        if change_number:
+            self.main_class.current_image_number.setText(str(image_number + 1))
         self.piv_canvas.draw()
 
     # function to add an image
@@ -198,8 +200,7 @@ class PIVStartClass(QtCore.QThread):
     def __del__(self):
         self.wait()
 
-    def set_args_start(self, image_list, width_a, height_a, width_b, height_b, horizontal, vertical, sn_type,
-                       sn_value,
+    def set_args_start(self, image_list, width_a, height_a, width_b, height_b, horizontal, vertical, sn_type, sn_value,
                        scale, outer_filter, jump, dt, is_interactive, piv):
         self.image_list = image_list
         self.overlap = horizontal
@@ -228,13 +229,13 @@ class PIVStartClass(QtCore.QThread):
             self.u, self.v = replace_outliers(self.u, self.v, method='localmean', max_iter=10, kernel_size=2)
             # self.x, self.y, self.u, self.v = uniform(self.x, self.y, self.u, self.v, scaling_factor=96.52)
             self.piv.piv_results_list.append([self.x, self.y, self.u, self.v, self.mask, i])
+            self.piv.piv_images_list[i][3] = self.piv.piv_results_list[i // abs(self.jump)]
+            self.piv.show_plot(i, self.piv.bit, True)
 
             if i == len(self.image_list) - 2 and self.jump == 1:
                 self.piv.piv_results_list.append([self.x, self.y, self.u, self.v, self.mask, i + 1])
-
-        for i in range(0, len(self.piv.piv_images_list), abs(self.jump)):
-            print(self.piv.piv_results_list[i // abs(self.jump)])
-            self.piv.piv_images_list[i][3] = self.piv.piv_results_list[i // abs(self.jump)]
+                self.piv.piv_images_list[i + 1][3] = self.piv.piv_results_list[i + 1]
+                self.piv.show_plot(i + 1, self.piv.bit, True)
 
         self.piv_finished_signal.emit()
 

@@ -32,13 +32,6 @@ def run_main_window():
     settings_tab_widget_class.settings_tab_widget.insertTab(2, post_processing_tab_class.post_processing_tab, "post")
     settings_tab_widget_class.settings_tab_widget.setStyleSheet("background-color: rgb(240, 240, 240);")
 
-    # create the widget that will hold the plot
-    piv_plot_widget = QtWidgets.QWidget()
-    piv_plot_class = PIVPlot(piv_plot_widget)
-
-    settings_tab_widget_class.image_processing_tab_class.invert_button.clicked.connect(
-        partial(invert_button, piv_plot_class, settings_tab_widget_class))
-
     # a max and a min to the file window frame to make it look better
     file_window_frame.setMinimumSize(QtCore.QSize(198, 200))
 
@@ -48,7 +41,15 @@ def run_main_window():
     main_window_class = MainWindowClass(main_window_widget)
     main_window_class.main_widget_layout.addWidget(settings_tab_widget_class.settings_tab_widget, 0, 5, 3, 1)
     main_window_class.main_window_setup()
+
+    # create the widget that will hold the plot
+    piv_plot_widget = QtWidgets.QWidget()
+    piv_plot_class = PIVPlot(piv_plot_widget, main_window_class)
+
     main_window_class.image_pages.addWidget(piv_plot_widget)
+
+    settings_tab_widget_class.image_processing_tab_class.invert_button.clicked.connect(
+        partial(invert_button, piv_plot_class, settings_tab_widget_class))
 
     # show the widget of the main window
     main_window_widget.show()
@@ -85,6 +86,8 @@ def run_main_window():
 
     settings_tab_class.dt_line_edit.textEdited.connect(lambda: check_dt_valid(settings_tab_class))
 
+    settings_tab_class.jump_line_edit.textEdited.connect(lambda: jump_changed(settings_tab_class))
+
     # the piv start class is a class(QThread) that does the piv
     piv_start_class = PIVStartClass()
     settings_tab_class.start_button.clicked.connect(
@@ -99,10 +102,12 @@ def run_main_window():
                                                settings_tab_class.value_spin_box.value(),
                                                settings_tab_class.scale_spin_box.value(),
                                                settings_tab_class.outer_filter_spin_box.value(),
-                                               settings_tab_class.jump_spin_box.value(),
+                                               int(settings_tab_class.jump_line_edit.text()),
                                                float(settings_tab_class.dt_line_edit.text()),
                                                settings_tab_class.interactive_check_box.isTristate(),
                                                piv_plot_class))
+
+    settings_tab_class.stop_button.clicked.connect(lambda: piv_start_class.exit())
 
     sys.exit(app.exec_())
 
@@ -162,10 +167,24 @@ def file_added(file_window_class, settings_tab_class, piv_plot_class, settings_t
 
 # function that changes the max and min of jump
 def change_jump_max_min(settings_tab_class, piv_plot_class):
-    settings_tab_class.jump_spin_box.setMaximum(len(piv_plot_class.piv_images_list) // 2)
-    settings_tab_class.jump_spin_box.setMinimum((-1) * (len(piv_plot_class.piv_images_list) // 2))
+    settings_tab_class.jump_max = len(piv_plot_class.piv_images_list) // 2
+    settings_tab_class.jump_min = (-1) * (len(piv_plot_class.piv_images_list) // 2)
     if len(piv_plot_class.piv_images_list) > 1:
-        settings_tab_class.jump_spin_box.setValue(1)
+        settings_tab_class.jump_line_edit.setText("1")
+
+
+def jump_changed(settings_tab_class):
+    if settings_tab_class.jump_line_edit.text() != "":
+        try:
+            int(settings_tab_class.jump_line_edit.text())
+            is_good = True
+        except ValueError:
+            settings_tab_class.jump_line_edit.setText("1")
+            is_good = False
+        if is_good:
+            if abs(int(settings_tab_class.jump_line_edit.text())) > settings_tab_class.jump_max or abs(
+                    int(settings_tab_class.jump_line_edit.text())) == 0:
+                settings_tab_class.jump_line_edit.setText("1")
 
 
 # function that moves to the next right image
@@ -184,7 +203,6 @@ def change_image_number_right(piv_plot_class, main_window_class, settings_tab_wi
 
 # function that moves to the next left image
 def change_image_number_left(piv_plot_class, main_window_class, settings_tab_widget_class):
-    print(len(piv_plot_class.piv_images_list))
     if len(piv_plot_class.piv_images_list) == 0:
         return 0
 

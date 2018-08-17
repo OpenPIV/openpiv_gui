@@ -164,6 +164,8 @@ def file_added(file_window_class, settings_tab_class, piv_plot_class, settings_t
 def change_jump_max_min(settings_tab_class, piv_plot_class):
     settings_tab_class.jump_spin_box.setMaximum(len(piv_plot_class.piv_images_list) // 2)
     settings_tab_class.jump_spin_box.setMinimum((-1) * (len(piv_plot_class.piv_images_list) // 2))
+    if len(piv_plot_class.piv_images_list) > 1:
+        settings_tab_class.jump_spin_box.setValue(1)
 
 
 # function that moves to the next right image
@@ -182,6 +184,7 @@ def change_image_number_right(piv_plot_class, main_window_class, settings_tab_wi
 
 # function that moves to the next left image
 def change_image_number_left(piv_plot_class, main_window_class, settings_tab_widget_class):
+    print(len(piv_plot_class.piv_images_list))
     if len(piv_plot_class.piv_images_list) == 0:
         return 0
 

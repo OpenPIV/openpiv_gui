@@ -107,7 +107,7 @@ def run_main_window():
                                                settings_tab_class.interactive_check_box.isTristate(),
                                                piv_plot_class))
 
-    settings_tab_class.stop_button.clicked.connect(lambda: piv_start_class.exit())
+    settings_tab_class.stop_button.clicked.connect(lambda: stop(piv_start_class))
 
     sys.exit(app.exec_())
 
@@ -256,6 +256,10 @@ def check_dt_valid(setting_tab_class):
     except ValueError:
         if setting_tab_class.dt_line_edit.text() != "":
             setting_tab_class.dt_line_edit.setText("1.00")
+
+
+def stop(piv_start_class):
+    piv_start_class.is_to_stop = True
 
 
 def main():

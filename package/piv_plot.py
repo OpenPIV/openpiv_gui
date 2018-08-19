@@ -177,6 +177,7 @@ class PIVPlot(QtWidgets.QWidget):
 
 class PIVStartClass(QtCore.QThread):
     piv_finished_signal = QtCore.Signal()
+    piv_stop_signal = QtCore.Signal()
 
     def __init__(self):
         QtCore.QThread.__init__(self)
@@ -196,6 +197,7 @@ class PIVStartClass(QtCore.QThread):
         self.scale = None
         self.jump = None
         self.image_list = []
+        self.is_to_stop = False
 
     def __del__(self):
         self.wait()
@@ -213,9 +215,10 @@ class PIVStartClass(QtCore.QThread):
         self.start()
 
     def run(self):
+        self.is_to_stop = False
         self.piv.piv_results_list = []
+
         for i in range(0, len(self.image_list) - 1, abs(self.jump)):
-            print(i)
             self.u, self.v, self.sig2noise = extended_search_area_piv(self.image_list[i][2].astype(np.int32),
                                                                       self.image_list[i + 1][2].astype(
                                                                           np.int32),
@@ -236,6 +239,9 @@ class PIVStartClass(QtCore.QThread):
                 self.piv.piv_results_list.append([self.x, self.y, self.u, self.v, self.mask, i + 1])
                 self.piv.piv_images_list[i + 1][3] = self.piv.piv_results_list[i + 1]
                 self.piv.show_plot(i + 1, self.piv.bit, True)
+
+            if self.is_to_stop:
+                break
 
         self.piv_finished_signal.emit()
 

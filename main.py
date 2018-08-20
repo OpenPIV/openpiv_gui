@@ -269,7 +269,6 @@ def start(piv_plot_class, settings_tab_class, piv_start_class, interactive_analy
                                    settings_tab_class.interactive_check_box.isTristate(),
                                    piv_plot_class)
 
-    print(settings_tab_class.interactive_check_box.isChecked())
     if settings_tab_class.interactive_check_box.isChecked():
         interactive_analysis_window_class.interactive_analysis_window.show()
 

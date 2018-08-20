@@ -2,8 +2,8 @@ from PySide2 import QtCore, QtGui, QtWidgets
 
 
 class InteractiveAnalysisWindow(object):
-    def __init__(self, interactive_analysis_window):
-        self.interactive_analysis_window = interactive_analysis_window
+    def __init__(self):
+        self.interactive_analysis_window = QtWidgets.QDialog()
         self.interactive_analysis_window_layout = QtWidgets.QGridLayout(self.interactive_analysis_window)
         self.piv_scroll_area = QtWidgets.QScrollArea(self.interactive_analysis_window)
         self.piv_scroll_area_widget = QtWidgets.QWidget()
@@ -11,7 +11,7 @@ class InteractiveAnalysisWindow(object):
         self.piv_image_area = QtWidgets.QLabel(self.piv_scroll_area_widget)
         self.interactive_analysis_settings_frame = QtWidgets.QFrame(self.interactive_analysis_window)
         self.interactive_analysis_settings_frame_layout = QtWidgets.QGridLayout(
-            self.interactive_analysis_settings_frame)
+        self.interactive_analysis_settings_frame)
         self.redraw_iws_check_box = QtWidgets.QCheckBox(self.interactive_analysis_settings_frame)
         self.sequential_frames_combo_box = QtWidgets.QComboBox(self.interactive_analysis_settings_frame)
         self.horizontalSlider = QtWidgets.QSlider(self.interactive_analysis_settings_frame)
@@ -139,8 +139,7 @@ if __name__ == "__main__":
     import sys
 
     app = QtWidgets.QApplication(sys.argv)
-    interactive_analysis_window = QtWidgets.QDialog()
-    ui = InteractiveAnalysisWindow(interactive_analysis_window)
+    ui = InteractiveAnalysisWindow()
     ui.interactive_analysis_window_setup()
-    interactive_analysis_window.show()
+    ui.interactive_analysis_window.show()
     sys.exit(app.exec_())

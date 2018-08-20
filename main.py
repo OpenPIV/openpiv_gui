@@ -4,6 +4,7 @@ from package.piv_plot import PIVPlot, PIVStartClass
 from package.file_window import FileWindowClass
 from package.settings_tab import SettingsTab
 from package.image_piv_post_tab import PostProcessingTabClass
+from package.interactive_analysis_window import InteractiveAnalysisWindow
 from PySide2 import QtWidgets, QtCore
 from _functools import partial
 import numpy as np
@@ -88,24 +89,13 @@ def run_main_window():
 
     settings_tab_class.jump_line_edit.textEdited.connect(lambda: jump_changed(settings_tab_class))
 
+    interactive_analysis_window_class = InteractiveAnalysisWindow()
+    interactive_analysis_window_class.interactive_analysis_window_setup()
+
     # the piv start class is a class(QThread) that does the piv
     piv_start_class = PIVStartClass()
     settings_tab_class.start_button.clicked.connect(
-        lambda: piv_start_class.set_args_start(piv_plot_class.piv_images_list,
-                                               int(settings_tab_class.width_combo_box_a.currentText()),
-                                               int(settings_tab_class.height_combo_box_a.currentText()),
-                                               int(settings_tab_class.width_combo_box_b.currentText()),
-                                               int(settings_tab_class.height_combo_box_b.currentText()),
-                                               int(settings_tab_class.horizontal_combo_box.currentText()),
-                                               int(settings_tab_class.vertical_combo_box.currentText()),
-                                               int(settings_tab_class.type_combo_box.currentText()),
-                                               settings_tab_class.value_spin_box.value(),
-                                               settings_tab_class.scale_spin_box.value(),
-                                               settings_tab_class.outer_filter_spin_box.value(),
-                                               int(settings_tab_class.jump_line_edit.text()),
-                                               float(settings_tab_class.dt_line_edit.text()),
-                                               settings_tab_class.interactive_check_box.isTristate(),
-                                               piv_plot_class))
+        lambda: start(piv_plot_class, settings_tab_class, piv_start_class, interactive_analysis_window_class))
 
     settings_tab_class.stop_button.clicked.connect(lambda: stop(piv_start_class))
 
@@ -250,16 +240,38 @@ def change_bit(bit, piv_plot_class):
             piv_plot_class.piv_images_list[i][2] = np.uint16(piv_plot_class.piv_images_list[i][2])
 
 
-def check_dt_valid(setting_tab_class):
+def check_dt_valid(settings_tab_class):
     try:
-        float(setting_tab_class.dt_line_edit.text())
+        float(settings_tab_class.dt_line_edit.text())
     except ValueError:
-        if setting_tab_class.dt_line_edit.text() != "":
-            setting_tab_class.dt_line_edit.setText("1.00")
+        if settings_tab_class.dt_line_edit.text() != "":
+            settings_tab_class.dt_line_edit.setText("1.00")
 
 
 def stop(piv_start_class):
     piv_start_class.is_to_stop = True
+
+
+def start(piv_plot_class, settings_tab_class, piv_start_class, interactive_analysis_window_class):
+    piv_start_class.set_args_start(piv_plot_class.piv_images_list,
+                                   int(settings_tab_class.width_combo_box_a.currentText()),
+                                   int(settings_tab_class.height_combo_box_a.currentText()),
+                                   int(settings_tab_class.width_combo_box_b.currentText()),
+                                   int(settings_tab_class.height_combo_box_b.currentText()),
+                                   int(settings_tab_class.horizontal_combo_box.currentText()),
+                                   int(settings_tab_class.vertical_combo_box.currentText()),
+                                   int(settings_tab_class.type_combo_box.currentText()),
+                                   settings_tab_class.value_spin_box.value(),
+                                   settings_tab_class.scale_spin_box.value(),
+                                   settings_tab_class.outer_filter_spin_box.value(),
+                                   int(settings_tab_class.jump_line_edit.text()),
+                                   float(settings_tab_class.dt_line_edit.text()),
+                                   settings_tab_class.interactive_check_box.isTristate(),
+                                   piv_plot_class)
+
+    print(settings_tab_class.interactive_check_box.isChecked())
+    if settings_tab_class.interactive_check_box.isChecked():
+        interactive_analysis_window_class.interactive_analysis_window.show()
 
 
 def main():

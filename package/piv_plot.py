@@ -198,13 +198,17 @@ class PIVStartClass(QtCore.QThread):
         self.jump = None
         self.image_list = []
         self.is_to_stop = False
+        self.error_message = None
 
     def __del__(self):
         self.wait()
 
     def set_args_start(self, image_list, width_a, height_a, width_b, height_b, horizontal, vertical, sn_type, sn_value,
-                       scale, outer_filter, jump, dt, is_interactive, piv):
+                       scale, outer_filter, jump, dt, is_interactive, error_message, piv):
         self.image_list = image_list
+        if len(self.image_list) < 2:
+            error_message.setText("you must choose at list two images to run the piv")
+            error_message.show()
         self.overlap = horizontal
         self.winsize = width_a
         self.searchsize = width_b
@@ -212,6 +216,7 @@ class PIVStartClass(QtCore.QThread):
         self.piv = piv
         self.scale = scale
         self.jump = jump
+        self.error_message = error_message
         self.start()
 
     def run(self):
@@ -219,18 +224,26 @@ class PIVStartClass(QtCore.QThread):
         self.piv.piv_results_list = []
 
         for i in range(0, len(self.image_list) - 1, abs(self.jump)):
-            self.u, self.v, self.sig2noise = extended_search_area_piv(self.image_list[i][2].astype(np.int32),
-                                                                      self.image_list[i + 1][2].astype(
-                                                                          np.int32),
-                                                                      window_size=self.winsize,
-                                                                      overlap=self.overlap,
-                                                                      dt=self.dt, search_area_size=self.searchsize,
-                                                                      sig2noise_method='peak2peak')
-            self.x, self.y = get_coordinates(image_size=self.image_list[i][2].shape, window_size=self.winsize,
-                                             overlap=self.overlap)
-            self.u, self.v, self.mask = sig2noise_val(self.u, self.v, self.sig2noise, threshold=1.3)
-            self.u, self.v = replace_outliers(self.u, self.v, method='localmean', max_iter=10, kernel_size=2)
-            # self.x, self.y, self.u, self.v = uniform(self.x, self.y, self.u, self.v, scaling_factor=96.52)
+            try:
+                self.u, self.v, self.sig2noise = extended_search_area_piv(self.image_list[i][2].astype(np.int32),
+                                                                          self.image_list[i + 1][2].astype(
+                                                                              np.int32),
+                                                                          window_size=self.winsize,
+                                                                          overlap=self.overlap,
+                                                                          dt=self.dt, search_area_size=self.searchsize,
+                                                                          sig2noise_method='peak2peak')
+                self.x, self.y = get_coordinates(image_size=self.image_list[i][2].shape, window_size=self.winsize,
+                                                 overlap=self.overlap)
+                self.u, self.v, self.mask = sig2noise_val(self.u, self.v, self.sig2noise, threshold=1.3)
+                self.u, self.v = replace_outliers(self.u, self.v, method='localmean', max_iter=10, kernel_size=2)
+                # self.x, self.y, self.u, self.v = uniform(self.x, self.y, self.u, self.v, scaling_factor=96.52)
+            except ValueError:
+                if self.searchsize < self.winsize:
+                    self.error_message.setText("the search size cannot be smaller than the window size")
+                else:
+                    self.error_message.setText("Overlap has to be smaller than the window_size")
+                self.error_message.show()
+                break
             self.piv.piv_results_list.append([self.x, self.y, self.u, self.v, self.mask, i])
             self.piv.piv_images_list[i][3] = self.piv.piv_results_list[i // abs(self.jump)]
             self.piv.show_plot(i, self.piv.bit, True)

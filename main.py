@@ -92,10 +92,16 @@ def run_main_window():
     interactive_analysis_window_class = InteractiveAnalysisWindow()
     interactive_analysis_window_class.interactive_analysis_window_setup()
 
+    error_massage = QtWidgets.QMessageBox(main_window_widget)
+    error_massage.setWindowModality(QtCore.Qt.WindowModal)
+    error_massage.setIcon(QtWidgets.QMessageBox.Warning)
+    error_massage.setStandardButtons(QtWidgets.QMessageBox.Ok)
+
     # the piv start class is a class(QThread) that does the piv
     piv_start_class = PIVStartClass()
     settings_tab_class.start_button.clicked.connect(
-        lambda: start(piv_plot_class, settings_tab_class, piv_start_class, interactive_analysis_window_class))
+        lambda: start(piv_plot_class, settings_tab_class, piv_start_class, interactive_analysis_window_class,
+                      error_massage))
 
     settings_tab_class.stop_button.clicked.connect(lambda: stop(piv_start_class))
 
@@ -164,7 +170,7 @@ def change_jump_max_min(settings_tab_class, piv_plot_class):
 
 
 def jump_changed(settings_tab_class):
-    if settings_tab_class.jump_line_edit.text() != "":
+    if settings_tab_class.jump_line_edit.text() != "" and settings_tab_class.jump_line_edit.text() != "-":
         try:
             int(settings_tab_class.jump_line_edit.text())
             is_good = True
@@ -252,23 +258,27 @@ def stop(piv_start_class):
     piv_start_class.is_to_stop = True
 
 
-def start(piv_plot_class, settings_tab_class, piv_start_class, interactive_analysis_window_class):
-    piv_start_class.set_args_start(piv_plot_class.piv_images_list,
-                                   int(settings_tab_class.width_combo_box_a.currentText()),
-                                   int(settings_tab_class.height_combo_box_a.currentText()),
-                                   int(settings_tab_class.width_combo_box_b.currentText()),
-                                   int(settings_tab_class.height_combo_box_b.currentText()),
-                                   int(settings_tab_class.horizontal_combo_box.currentText()),
-                                   int(settings_tab_class.vertical_combo_box.currentText()),
-                                   int(settings_tab_class.type_combo_box.currentText()),
-                                   settings_tab_class.value_spin_box.value(),
-                                   settings_tab_class.scale_spin_box.value(),
-                                   settings_tab_class.outer_filter_spin_box.value(),
-                                   int(settings_tab_class.jump_line_edit.text()),
-                                   float(settings_tab_class.dt_line_edit.text()),
-                                   settings_tab_class.interactive_check_box.isTristate(),
-                                   piv_plot_class)
-
+def start(piv_plot_class, settings_tab_class, piv_start_class, interactive_analysis_window_class, error_message):
+    try:
+        piv_start_class.set_args_start(piv_plot_class.piv_images_list,
+                                       int(settings_tab_class.width_combo_box_a.currentText()),
+                                       int(settings_tab_class.height_combo_box_a.currentText()),
+                                       int(settings_tab_class.width_combo_box_b.currentText()),
+                                       int(settings_tab_class.height_combo_box_b.currentText()),
+                                       int(settings_tab_class.horizontal_combo_box.currentText()),
+                                       int(settings_tab_class.vertical_combo_box.currentText()),
+                                       int(settings_tab_class.type_combo_box.currentText()),
+                                       settings_tab_class.value_spin_box.value(),
+                                       settings_tab_class.scale_spin_box.value(),
+                                       settings_tab_class.outer_filter_spin_box.value(),
+                                       int(settings_tab_class.jump_line_edit.text()),
+                                       float(settings_tab_class.dt_line_edit.text()),
+                                       settings_tab_class.interactive_check_box.isTristate(),
+                                       error_message,
+                                       piv_plot_class)
+    except ValueError:
+        error_message.setText("you must choose a jump variable")
+        error_message.show()
     if settings_tab_class.interactive_check_box.isChecked():
         interactive_analysis_window_class.interactive_analysis_window.show()
 

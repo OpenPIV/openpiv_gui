@@ -19,7 +19,7 @@ class PIVPlot(QtWidgets.QWidget):
     def __init__(self, parent=QtWidgets.QWidget, main_class=None):
         super(PIVPlot, self).__init__(parent)
         self.figure = Figure()
-        self.figure.patch.set_facecolor('#f0f0f0')
+        self.figure.patch.set_facecolor((0.94117647, 0.94117647, 0.94117647))
 
         # the canvas is where the graph and the tool bar is
         self.piv_canvas = FigureCanvas(self.figure)

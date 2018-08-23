@@ -37,13 +37,9 @@ class SettingsTab(object):
         self.spacing_frame_layout = QtWidgets.QGridLayout(self.spacing_frame)
         self.horizontal_combo_box = QtWidgets.QComboBox(self.spacing_frame)
         self.vertical_combo_box = QtWidgets.QComboBox(self.spacing_frame)
-        self.vertical_label = QtWidgets.QLabel(self.spacing_frame)
-        self.horizontal_label = QtWidgets.QLabel(self.spacing_frame)
         self.spacing_label = QtWidgets.QLabel(self.spacing_frame)
         self.interrogation_winsize_frame = QtWidgets.QFrame(self.settings_tab)
         self.interrogation_winsize_frame_layout = QtWidgets.QGridLayout(self.interrogation_winsize_frame)
-        self.height_label = QtWidgets.QLabel(self.interrogation_winsize_frame)
-        self.width_label = QtWidgets.QLabel(self.interrogation_winsize_frame)
         self.width_label_A = QtWidgets.QLabel(self.interrogation_winsize_frame)
         self.width_label_B = QtWidgets.QLabel(self.interrogation_winsize_frame)
         self.width_combo_box_a = QtWidgets.QComboBox(self.interrogation_winsize_frame)
@@ -79,11 +75,7 @@ class SettingsTab(object):
         self.scale_spin_box.setSingleStep(0.010)
         self.scale_spin_box.setAccelerated(True)
 
-        self.interactive_check_box.setText("Interactive")
-
         self.dt_line_edit.setText("1.00")
-
-        self.dt_line_edit_label.setText("dt:")
 
         self.settings_frame_4_layout.addWidget(self.scale_label, 0, 0, 1, 1)
         self.settings_frame_4_layout.addWidget(self.outer_filter_label, 1, 0, 1, 1)
@@ -95,8 +87,6 @@ class SettingsTab(object):
         self.settings_frame_4_layout.addWidget(self.dt_line_edit, 3, 1, 1, 1)
         self.settings_frame_4_layout.addWidget(self.dt_line_edit_label, 3, 0, 1, 1)
         self.settings_frame_4_layout.addWidget(self.interactive_check_box, 4, 0, 1, 1)
-
-        self.settings_widget_layout.addWidget(self.settings_frame_4, 4, 3, 1, 1)
 
         self.roi_frame.setFrameShape(QtWidgets.QFrame.Box)
         self.roi_frame.setFrameShadow(QtWidgets.QFrame.Sunken)
@@ -112,8 +102,6 @@ class SettingsTab(object):
 
         self.roi_frame_layout.addWidget(self.select_roi_button, 0, 0, 1, 1)
 
-        self.settings_widget_layout.addWidget(self.roi_frame, 5, 3, 1, 1)
-
         self.type_value_frame.setEnabled(True)
         self.type_value_frame.setFrameShape(QtWidgets.QFrame.Box)
         self.type_value_frame.setFrameShadow(QtWidgets.QFrame.Sunken)
@@ -127,6 +115,7 @@ class SettingsTab(object):
         FONT.setPointSize(10)
 
         self.type_label.setAlignment(QtCore.Qt.AlignCenter)
+        self.dt_line_edit_label.setAlignment(QtCore.Qt.AlignCenter)
 
         self.type_value_frame_layout.addWidget(self.type_label, 0, 0, 1, 1)
 
@@ -140,8 +129,6 @@ class SettingsTab(object):
         self.type_combo_box.addItem('3')
 
         self.type_value_frame_layout.addWidget(self.type_combo_box, 0, 1, 1, 1)
-
-        self.settings_widget_layout.addWidget(self.type_value_frame, 3, 3, 1, 1)
 
         self.spacing_frame.setFrameShape(QtWidgets.QFrame.Box)
         self.spacing_frame.setFrameShadow(QtWidgets.QFrame.Sunken)
@@ -168,10 +155,6 @@ class SettingsTab(object):
 
         self.spacing_frame_layout.addWidget(self.vertical_combo_box, 1, 1, 1, 1)
 
-        self.vertical_label.setAlignment(QtCore.Qt.AlignCenter)
-
-        self.horizontal_label.setAlignment(QtCore.Qt.AlignCenter)
-
         self.spacing_frame.setToolTip("Horizontal and Vertical Values")
 
         self.spacing_label.setFont(FONT)
@@ -179,14 +162,8 @@ class SettingsTab(object):
 
         self.spacing_frame_layout.addWidget(self.spacing_label, 0, 0, 1, 2)
 
-        self.settings_widget_layout.addWidget(self.spacing_frame, 1, 3, 1, 1)
-
         self.interrogation_winsize_frame.setFrameShape(QtWidgets.QFrame.Box)
         self.interrogation_winsize_frame.setFrameShadow(QtWidgets.QFrame.Sunken)
-
-        self.height_label.setAlignment(QtCore.Qt.AlignCenter)
-
-        self.width_label.setAlignment(QtCore.Qt.AlignCenter)
 
         self.width_combo_box_a.setToolTip("Image A Width")
         self.width_combo_box_a.addItem('8')
@@ -238,8 +215,6 @@ class SettingsTab(object):
         self.interrogation_winsize_frame_layout.addWidget(self.width_combo_box_b, 2, 1, 1, 2)
         self.interrogation_winsize_frame_layout.addWidget(self.height_combo_box_b, 2, 3, 1, 2)
 
-        self.settings_widget_layout.addWidget(self.interrogation_winsize_frame, 0, 3, 1, 1)
-
         self.start_stop_frame.setFrameShape(QtWidgets.QFrame.Box)
         self.start_stop_frame.setFrameShadow(QtWidgets.QFrame.Sunken)
 
@@ -252,7 +227,13 @@ class SettingsTab(object):
 
         self.start_stop_frame_layout.addWidget(self.start_button, 0, 0, 1, 1)
         self.start_stop_frame_layout.addWidget(self.stop_button, 1, 0, 1, 1)
-        self.settings_widget_layout.addWidget(self.start_stop_frame, 6, 3, 1, 1)
+
+        self.settings_widget_layout.addWidget(self.interrogation_winsize_frame, 0, 3, 1, 1)
+        self.settings_widget_layout.addWidget(self.spacing_frame, 1, 3, 1, 1)
+        self.settings_widget_layout.addWidget(self.type_value_frame, 2, 3, 1, 1)
+        self.settings_widget_layout.addWidget(self.settings_frame_4, 3, 3, 1, 1)
+        self.settings_widget_layout.addWidget(self.roi_frame, 4, 3, 1, 1)
+        self.settings_widget_layout.addWidget(self.start_stop_frame, 5, 3, 1, 1)
 
         self.text_setup()
 
@@ -272,12 +253,12 @@ class SettingsTab(object):
         set_text(self.select_roi_button, "Select ROI")
         set_text(self.type_label, "S/N type:")
         set_text(self.value_label, "S/N value:")
-        set_text(self.vertical_label, "Vertical")
-        set_text(self.horizontal_label, "Horizontal")
         set_text(self.spacing_label, "spacing/Overlap")
         set_text(self.width_label_A, "A")
         set_text(self.width_label_B, "B")
         set_text(self.interrogation_winsize_label, "Interrogation window size")
+        set_text(self.interactive_check_box, "Interactive")
+        set_text(self.dt_line_edit_label, "dt:")
 
 
 if __name__ == "__main__":

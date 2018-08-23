@@ -45,13 +45,13 @@ class ImageProcessingTabClass(object):
         self.brightness_frame_layout.addWidget(self.brightness_label, 0, 0, 1, 1)
         self.brightness_frame_layout.addWidget(self.brightness_level_slider, 1, 0, 1, 1)
 
-        self.image_processing_tab_layout.addWidget(self.bit_invert_frame, 2, 0, 1, 1)
-        self.image_processing_tab_layout.addWidget(self.brightness_frame, 3, 0, 1, 1)
+        self.image_processing_tab_layout.addWidget(self.bit_invert_frame, 1, 0, 1, 1)
+        self.image_processing_tab_layout.addWidget(self.brightness_frame, 2, 0, 1, 1)
 
         image_processing_tab_spacer = QtWidgets.QSpacerItem(20, 2000, QtWidgets.QSizePolicy.Minimum,
                                                             QtWidgets.QSizePolicy.Expanding)
 
-        self.image_processing_tab_layout.addItem(image_processing_tab_spacer, 4, 0, 1, 1)
+        self.image_processing_tab_layout.addItem(image_processing_tab_spacer, 3, 0, 1, 1)
 
         self.text_setup()
         QtCore.QMetaObject.connectSlotsByName(self.image_processing_tab)

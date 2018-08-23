@@ -11,7 +11,7 @@ class InteractiveAnalysisWindow(object):
         self.piv_image_area = QtWidgets.QLabel(self.piv_scroll_area_widget)
         self.interactive_analysis_settings_frame = QtWidgets.QFrame(self.interactive_analysis_window)
         self.interactive_analysis_settings_frame_layout = QtWidgets.QGridLayout(
-        self.interactive_analysis_settings_frame)
+            self.interactive_analysis_settings_frame)
         self.redraw_iws_check_box = QtWidgets.QCheckBox(self.interactive_analysis_settings_frame)
         self.sequential_frames_combo_box = QtWidgets.QComboBox(self.interactive_analysis_settings_frame)
         self.horizontalSlider = QtWidgets.QSlider(self.interactive_analysis_settings_frame)

@@ -40,8 +40,14 @@ class PostProcessingTabClass(object):
     def post_processing_tab_setup(self):
         self.post_processing_tab.setObjectName("post_processing_tab")
         self.post_processing_tab.resize(318, 527)
+        self.post_processing_tab.setStyleSheet(
+            "QGroupBox.title{background-color: transparent}"
+            "border: 1px rgb(240, 240, 240); border-radius: 3px; background-color:"
+            " rgb(240, 240, 240);")
         self.filter_group_box.setFont(FONT)
-        self.filter_group_box.setStyleSheet("background-color: rgb(240, 240, 240);")
+        self.filter_group_box.setStyleSheet(
+            "border: 1px solid gray; border-radius: 3px; padding: 2 13px;"
+            " background-color: rgb(240, 240, 240);")
 
         self.local_filter_group_box_layout.addWidget(self.local_mean_median_spin_box, 0, 1, 1, 1)
 
@@ -53,45 +59,38 @@ class PostProcessingTabClass(object):
         self.smoothing_mean_median_combo_box.addItem("mean")
         self.smoothing_mean_median_combo_box.addItem("median")
 
-        self.local_filter_group_box.setStyleSheet("background-color: rgb(240, 240, 240);")
+        self.local_filter_group_box.setStyleSheet(
+            "QGroupBox{border: rgb(240, 240, 240);} background-color: rgb(240, 240, 240);")
         self.local_filter_group_box_layout.addWidget(self.local_mean_median_combo_box, 0, 0, 1, 1)
-
-        self.filter_group_box_layout.addWidget(self.local_filter_group_box, 2, 0, 1, 1)
 
         self.smoothing_group_box_layout.addWidget(self.smoothing_mean_median_combo_box, 0, 0, 1, 1)
 
         self.smoothing_group_box_layout.addWidget(self.smoothing_mean_median_spin_box, 0, 1, 1, 1)
 
-        self.smoothing_group_box.setStyleSheet("background-color: rgb(240, 240, 240);")
+        self.smoothing_group_box.setStyleSheet(
+            "QGroupBox{border: rgb(240, 240, 240);} background-color: rgb(240, 240, 240);")
 
-        self.filter_group_box_layout.addWidget(self.smoothing_group_box, 5, 0, 1, 1)
+        self.global_filter_group_box_layout.addWidget(self.global_filter_spin_box_1, 0, 0, 1, 2)
 
-        self.global_filter_group_box_layout.addWidget(self.global_filter_spin_box_1, 0, 0, 1, 1)
+        self.global_filter_group_box.setStyleSheet(
+            "QGroupBox{border: rgb(240, 240, 240);} background-color: rgb(240, 240, 240);")
 
-        self.global_filter_group_box.setStyleSheet("background-color: rgb(240, 240, 240);")
-
-        self.global_filter_group_box_layout.addWidget(self.global_filter_spin_box_2, 0, 1, 1, 1)
-        self.filter_group_box_layout.addWidget(self.global_filter_group_box, 0, 0, 1, 1)
+        self.global_filter_group_box_layout.addWidget(self.global_filter_spin_box_2, 0, 1, 1, 2)
 
         self.global_filter_local_filter_line.setFrameShape(QtWidgets.QFrame.HLine)
         self.global_filter_local_filter_line.setFrameShadow(QtWidgets.QFrame.Sunken)
 
-        self.filter_group_box_layout.addWidget(self.global_filter_local_filter_line, 1, 0, 1, 1)
-
         self.local_filter_smoothing_line.setFrameShape(QtWidgets.QFrame.HLine)
         self.local_filter_smoothing_line.setFrameShadow(QtWidgets.QFrame.Sunken)
-
-        self.filter_group_box_layout.addWidget(self.local_filter_smoothing_line, 4, 0, 1, 1)
 
         self.smoothing_interpolation_line.setFrameShape(QtWidgets.QFrame.HLine)
         self.smoothing_interpolation_line.setFrameShadow(QtWidgets.QFrame.Sunken)
 
-        self.filter_group_box_layout.addWidget(self.smoothing_interpolation_line, 6, 0, 1, 1)
-
         self.interpolation_group_box_layout.addWidget(self.times_spin_box, 1, 1, 1, 1)
         self.interpolation_group_box_layout.addWidget(self.action_label, 0, 0, 1, 1)
 
-        self.interpolation_group_box.setStyleSheet("background-color: rgb(240, 240, 240);")
+        self.interpolation_group_box.setStyleSheet(
+            "QGroupBox{border: rgb(240, 240, 240);} background-color: rgb(240, 240, 240);")
 
         self.action_combo_box.addItem("cubic")
         self.action_combo_box.addItem("linear")
@@ -101,7 +100,13 @@ class PostProcessingTabClass(object):
         self.interpolation_group_box_layout.addWidget(self.times_label, 1, 0, 1, 1)
         self.interpolation_group_box_layout.addWidget(self.activate_button, 2, 0, 1, 2)
 
-        self.filter_group_box_layout.addWidget(self.interpolation_group_box, 7, 0, 1, 1)
+        self.filter_group_box_layout.addWidget(self.global_filter_group_box, 0, 0, 1, 2)
+        self.filter_group_box_layout.addWidget(self.global_filter_local_filter_line, 1, 0, 1, 2)
+        self.filter_group_box_layout.addWidget(self.local_filter_group_box, 2, 0, 1, 2)
+        self.filter_group_box_layout.addWidget(self.local_filter_smoothing_line, 3, 0, 1, 2)
+        self.filter_group_box_layout.addWidget(self.smoothing_group_box, 4, 0, 1, 2)
+        self.filter_group_box_layout.addWidget(self.smoothing_interpolation_line, 5, 0, 1, 2)
+        self.filter_group_box_layout.addWidget(self.interpolation_group_box, 6, 0, 1, 2)
 
         self.post_layout.addWidget(self.filter_group_box, 0, 0, 1, 1)
 

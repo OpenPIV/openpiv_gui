@@ -18,7 +18,7 @@ class SettingsTabWidgetClass(object):
         self.image_processing_tab = self.image_processing_tab_class.image_processing_tab
 
     def settings_widget_setup(self):
-        self.settings_tab_widget.setMinimumSize(QtCore.QSize(240, 669))
+        self.settings_tab_widget.setMinimumSize(QtCore.QSize(260, 669))
         self.settings_tab_widget.setUsesScrollButtons(False)
         self.settings_tab_widget.setDocumentMode(False)
 

@@ -17,6 +17,7 @@ class FileWindowClass(object):
         self.file_window.setObjectName("file_window")
         self.file_window.setWindowModality(QtCore.Qt.NonModal)
         self.file_window.resize(320, 240)
+        self.file_window.setStyleSheet("border: 1px solid gray; padding: 2 13px; border-radius: 3px;")
         #
         # self.file_window.setMinimumSize(QtCore.QSize(320, 240))
         # self.file_window.setMaximumSize(QtCore.QSize(320, 240))

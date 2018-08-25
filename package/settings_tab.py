@@ -55,7 +55,13 @@ class SettingsTab(object):
         self.jump_min = 0
 
     def setting_widget_setup(self):
-        # the set tab bar line is to make the tab text go horizontal
+        self.settings_tab.setStyleSheet(
+            "QDoubleSpinBox{border: 1px solid gray; padding: 2 13px; border-radius: 3px;}"
+            "QComboBox{border: 1px solid gray; padding: 2 13px; border-radius: 3px;}"
+            "QLineEdit{border: 1px solid gray; padding: 2 13px; border-radius: 3px;}"
+            "QPushButton{border: 1px solid gray; padding: 2 13px; border-radius: 3px;}"
+            "QFrame{border: 1px solid gray; padding: 2 13px; border-radius: 3px;}"
+            "QLabel{border: 1px transparent; padding: 2 13px; border-radius: 3px;}")
 
         self.settings_frame_4.setFrameShadow(QtWidgets.QFrame.Sunken)
         self.settings_frame_4.setFrameShape(QtWidgets.QFrame.Box)
@@ -123,10 +129,12 @@ class SettingsTab(object):
 
         self.type_value_frame_layout.addWidget(self.value_label, 2, 0, 1, 1)
 
-        self.type_combo_box.addItem('0')
         self.type_combo_box.addItem('1')
         self.type_combo_box.addItem('2')
         self.type_combo_box.addItem('3')
+        self.type_combo_box.setCurrentIndex(0)
+
+        self.value_spin_box.setValue(1.00)
 
         self.type_value_frame_layout.addWidget(self.type_combo_box, 0, 1, 1, 1)
 
@@ -141,6 +149,7 @@ class SettingsTab(object):
         self.horizontal_combo_box.addItem('128')
         self.horizontal_combo_box.addItem('256')
         self.horizontal_combo_box.addItem('512')
+        self.horizontal_combo_box.setCurrentIndex(1)
 
         self.spacing_frame_layout.addWidget(self.horizontal_combo_box, 1, 0, 1, 1)
 
@@ -152,6 +161,7 @@ class SettingsTab(object):
         self.vertical_combo_box.addItem('128')
         self.vertical_combo_box.addItem('256')
         self.vertical_combo_box.addItem('512')
+        self.vertical_combo_box.setCurrentIndex(1)
 
         self.spacing_frame_layout.addWidget(self.vertical_combo_box, 1, 1, 1, 1)
 
@@ -173,6 +183,7 @@ class SettingsTab(object):
         self.width_combo_box_a.addItem('128')
         self.width_combo_box_a.addItem('256')
         self.width_combo_box_a.addItem('512')
+        self.width_combo_box_a.setCurrentIndex(2)
 
         self.height_combo_box_a.setToolTip("Image A Height")
         self.height_combo_box_a.addItem('8')
@@ -182,6 +193,7 @@ class SettingsTab(object):
         self.height_combo_box_a.addItem('128')
         self.height_combo_box_a.addItem('256')
         self.height_combo_box_a.addItem('512')
+        self.height_combo_box_a.setCurrentIndex(2)
 
         self.width_combo_box_b.setToolTip("Image B Width")
         self.width_combo_box_b.addItem('8')
@@ -191,6 +203,7 @@ class SettingsTab(object):
         self.width_combo_box_b.addItem('128')
         self.width_combo_box_b.addItem('256')
         self.width_combo_box_b.addItem('512')
+        self.width_combo_box_b.setCurrentIndex(3)
 
         self.height_combo_box_b.setToolTip("Image B Height")
         self.height_combo_box_b.addItem('8')
@@ -200,6 +213,7 @@ class SettingsTab(object):
         self.height_combo_box_b.addItem('128')
         self.height_combo_box_b.addItem('256')
         self.height_combo_box_b.addItem('512')
+        self.height_combo_box_b.setCurrentIndex(3)
 
         FONT.setPointSize(11)
 

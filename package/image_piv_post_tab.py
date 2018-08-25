@@ -70,12 +70,12 @@ class PostProcessingTabClass(object):
         self.smoothing_group_box.setStyleSheet(
             "QGroupBox{border: rgb(240, 240, 240);} background-color: rgb(240, 240, 240);")
 
-        self.global_filter_group_box_layout.addWidget(self.global_filter_spin_box_1, 0, 0, 1, 2)
+        self.global_filter_group_box_layout.addWidget(self.global_filter_spin_box_1, 0, 1, 1, 2)
 
         self.global_filter_group_box.setStyleSheet(
             "QGroupBox{border: rgb(240, 240, 240);} background-color: rgb(240, 240, 240);")
 
-        self.global_filter_group_box_layout.addWidget(self.global_filter_spin_box_2, 0, 1, 1, 2)
+        self.global_filter_group_box_layout.addWidget(self.global_filter_spin_box_2, 0, 3, 1, 2)
 
         self.global_filter_local_filter_line.setFrameShape(QtWidgets.QFrame.HLine)
         self.global_filter_local_filter_line.setFrameShadow(QtWidgets.QFrame.Sunken)
@@ -100,13 +100,14 @@ class PostProcessingTabClass(object):
         self.interpolation_group_box_layout.addWidget(self.times_label, 1, 0, 1, 1)
         self.interpolation_group_box_layout.addWidget(self.activate_button, 2, 0, 1, 2)
 
-        self.filter_group_box_layout.addWidget(self.global_filter_group_box, 0, 0, 1, 2)
-        self.filter_group_box_layout.addWidget(self.global_filter_local_filter_line, 1, 0, 1, 2)
-        self.filter_group_box_layout.addWidget(self.local_filter_group_box, 2, 0, 1, 2)
-        self.filter_group_box_layout.addWidget(self.local_filter_smoothing_line, 3, 0, 1, 2)
-        self.filter_group_box_layout.addWidget(self.smoothing_group_box, 4, 0, 1, 2)
-        self.filter_group_box_layout.addWidget(self.smoothing_interpolation_line, 5, 0, 1, 2)
-        self.filter_group_box_layout.addWidget(self.interpolation_group_box, 6, 0, 1, 2)
+        self.filter_group_box_layout.addItem(QtWidgets.QSpacerItem(20, 40), 0, 0, 1, 2)
+        self.filter_group_box_layout.addWidget(self.global_filter_group_box, 1, 0, 1, 2)
+        self.filter_group_box_layout.addWidget(self.global_filter_local_filter_line, 2, 0, 1, 2)
+        self.filter_group_box_layout.addWidget(self.local_filter_group_box, 3, 0, 1, 2)
+        self.filter_group_box_layout.addWidget(self.local_filter_smoothing_line, 4, 0, 1, 2)
+        self.filter_group_box_layout.addWidget(self.smoothing_group_box, 5, 0, 1, 2)
+        self.filter_group_box_layout.addWidget(self.smoothing_interpolation_line, 6, 0, 1, 2)
+        self.filter_group_box_layout.addWidget(self.interpolation_group_box, 7, 0, 1, 2)
 
         self.post_layout.addWidget(self.filter_group_box, 0, 0, 1, 1)
 

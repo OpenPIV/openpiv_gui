@@ -15,6 +15,12 @@ from fbs_runtime.application_context import ApplicationContext
 
 import sys
 
+if hasattr(QtCore.Qt, 'AA_EnableHighDpiScaling'):
+    QtWidgets.QApplication.setAttribute(QtCore.Qt.AA_EnableHighDpiScaling, True)
+
+if hasattr(QtCore.Qt, 'AA_UseHighDpiPixmaps'):
+    QtWidgets.QApplication.setAttribute(QtCore.Qt.AA_UseHighDpiPixmaps, True)
+
 class AppContext(ApplicationContext):           # 1. Subclass ApplicationContext
     # def run(self):                              # 2. Implement run()
     #     window = QMainWindow()

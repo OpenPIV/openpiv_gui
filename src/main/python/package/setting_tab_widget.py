@@ -1,12 +1,6 @@
 from PySide2 import QtCore, QtGui, QtWidgets
 from package.image_processing_tab import ImageProcessingTabClass
-
-FONT = QtGui.QFont()
-FONT.setFamily("MS Shell Dig 2")
-FONT.setPointSize(15)
-FONT.setWeight(75)
-FONT.setItalic(False)
-FONT.setBold(False)
+from package.font import FONT
 
 
 class SettingsTabWidgetClass(object):

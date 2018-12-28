@@ -1,12 +1,5 @@
 from PySide2 import QtCore, QtGui, QtWidgets
-
-FONT = QtGui.QFont()
-FONT.setFamily("Gill Sans MT")
-FONT.setPointSize(10)
-FONT.setWeight(75)
-FONT.setItalic(True)
-FONT.setBold(True)
-
+from package.font import FONT
 
 class SettingsTab(object):
     def __init__(self):

@@ -1,12 +1,5 @@
 from PySide2 import QtGui, QtWidgets, QtCore
-
-FONT = QtGui.QFont()
-FONT.setFamily("Ari")
-FONT.setPointSize(11)
-FONT.setWeight(100)
-FONT.setItalic(False)
-FONT.setBold(False)
-
+# from package.font import FONT
 
 class PostProcessingTabClass(object):
     def __init__(self):
@@ -40,11 +33,11 @@ class PostProcessingTabClass(object):
     def post_processing_tab_setup(self):
         self.post_processing_tab.setObjectName("post_processing_tab")
         self.post_processing_tab.resize(318, 527)
-        self.post_processing_tab.setStyleSheet(
-            "QGroupBox.title{background-color: transparent}"
-            "border: 1px rgb(240, 240, 240); border-radius: 3px; background-color:"
-            " rgb(240, 240, 240);")
-        self.filter_group_box.setFont(FONT)
+        # self.post_processing_tab.setStyleSheet(
+        #     "QGroupBox.title{background-color: transparent}"
+        #     "border: 1px rgb(240, 240, 240); border-radius: 3px; background-color:"
+        #     " rgb(240, 240, 240);")
+        # self.filter_group_box.setFont(FONT)
         self.filter_group_box.setStyleSheet(
             "border: 1px solid gray; border-radius: 3px; padding: 2 13px;"
             " background-color: rgb(240, 240, 240);")

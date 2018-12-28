@@ -42,11 +42,6 @@
    <layout class="QGridLayout" name="gridLayout_3">
     <item row="0" column="4" rowspan="2">
      <widget class="QTabWidget" name="tabWidget">
-      <property name="font">
-       <font>
-        <stylestrategy>PreferDefault</stylestrategy>
-       </font>
-      </property>
       <property name="tabPosition">
        <enum>QTabWidget::North</enum>
       </property>
@@ -94,11 +89,6 @@
           <layout class="QGridLayout" name="gridLayout_2">
            <item row="2" column="0">
             <widget class="QLabel" name="label_3">
-             <property name="font">
-              <font>
-               <pointsize>10</pointsize>
-              </font>
-             </property>
              <property name="text">
               <string>bit:</string>
              </property>
@@ -123,11 +113,6 @@
            </item>
            <item row="1" column="0">
             <widget class="QLabel" name="label_2">
-             <property name="font">
-              <font>
-               <pointsize>10</pointsize>
-              </font>
-             </property>
              <property name="text">
               <string>invert:</string>
              </property>
@@ -250,18 +235,6 @@
                <verstretch>0</verstretch>
               </sizepolicy>
              </property>
-             <property name="font">
-              <font>
-               <family>Gill Sans MT</family>
-               <pointsize>13</pointsize>
-               <weight>75</weight>
-               <italic>true</italic>
-               <bold>true</bold>
-               <underline>false</underline>
-               <strikeout>false</strikeout>
-               <kerning>true</kerning>
-              </font>
-             </property>
              <property name="cursor">
               <cursorShape>PointingHandCursor</cursorShape>
              </property>
@@ -272,18 +245,6 @@
            </item>
            <item row="0" column="1">
             <widget class="QPushButton" name="start_button_3">
-             <property name="font">
-              <font>
-               <family>Gill Sans MT</family>
-               <pointsize>13</pointsize>
-               <weight>75</weight>
-               <italic>true</italic>
-               <bold>true</bold>
-               <underline>false</underline>
-               <strikeout>false</strikeout>
-               <kerning>true</kerning>
-              </font>
-             </property>
              <property name="cursor">
               <cursorShape>PointingHandCursor</cursorShape>
              </property>
@@ -330,11 +291,6 @@
            </item>
            <item row="3" column="0">
             <widget class="QLabel" name="jump_lable_3">
-             <property name="font">
-              <font>
-               <pointsize>10</pointsize>
-              </font>
-             </property>
              <property name="text">
               <string>jump:</string>
              </property>
@@ -352,11 +308,6 @@
            </item>
            <item row="2" column="0">
             <widget class="QLabel" name="outler_filter_lable_3">
-             <property name="font">
-              <font>
-               <pointsize>10</pointsize>
-              </font>
-             </property>
              <property name="text">
               <string>outler filter:</string>
              </property>
@@ -380,11 +331,6 @@
            </item>
            <item row="0" column="0">
             <widget class="QLabel" name="scale_lable_3">
-             <property name="font">
-              <font>
-               <pointsize>10</pointsize>
-              </font>
-             </property>
              <property name="text">
               <string>Scale:</string>
              </property>
@@ -450,11 +396,6 @@
            </item>
            <item row="2" column="0">
             <widget class="QLabel" name="value_label_3">
-             <property name="font">
-              <font>
-               <pointsize>10</pointsize>
-              </font>
-             </property>
              <property name="text">
               <string>S/N value:</string>
              </property>
@@ -465,11 +406,6 @@
            </item>
            <item row="0" column="0">
             <widget class="QLabel" name="type_label_3">
-             <property name="font">
-              <font>
-               <pointsize>10</pointsize>
-              </font>
-             </property>
              <property name="text">
               <string>S/N type:</string>
              </property>
@@ -517,11 +453,6 @@
           <layout class="QGridLayout" name="gridLayout_10">
            <item row="0" column="0" colspan="2">
             <widget class="QLabel" name="interrogation_winsize_label_3">
-             <property name="font">
-              <font>
-               <pointsize>11</pointsize>
-              </font>
-             </property>
              <property name="text">
               <string>Interrogation window size</string>
              </property>
@@ -709,11 +640,6 @@
           <layout class="QGridLayout" name="gridLayout_38">
            <item row="2" column="0">
             <widget class="QPushButton" name="reset_roi_button_3">
-             <property name="font">
-              <font>
-               <pointsize>13</pointsize>
-              </font>
-             </property>
              <property name="cursor">
               <cursorShape>PointingHandCursor</cursorShape>
              </property>
@@ -739,11 +665,6 @@
            </item>
            <item row="0" column="0">
             <widget class="QPushButton" name="select_roi_button_3">
-             <property name="font">
-              <font>
-               <pointsize>13</pointsize>
-              </font>
-             </property>
              <property name="cursor">
               <cursorShape>PointingHandCursor</cursorShape>
              </property>
@@ -823,11 +744,6 @@
            </item>
            <item row="1" column="1">
             <widget class="QLabel" name="horizontal_label_3">
-             <property name="font">
-              <font>
-               <pointsize>10</pointsize>
-              </font>
-             </property>
              <property name="text">
               <string>Horizontal</string>
              </property>
@@ -877,11 +793,6 @@
            </item>
            <item row="0" column="1" colspan="2">
             <widget class="QLabel" name="spacing_label_3">
-             <property name="font">
-              <font>
-               <pointsize>11</pointsize>
-              </font>
-             </property>
              <property name="text">
               <string>Spacing/Overlap</string>
              </property>
@@ -892,11 +803,6 @@
            </item>
            <item row="1" column="2">
             <widget class="QLabel" name="vertical_label_3">
-             <property name="font">
-              <font>
-               <pointsize>10</pointsize>
-              </font>
-             </property>
              <property name="text">
               <string>Vertical</string>
              </property>

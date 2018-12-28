@@ -1,4 +1,5 @@
 from PySide2 import QtCore, QtWidgets, QtGui
+from package.font import FONT
 
 
 # the image processing tab ibn the settings tab widget
@@ -28,12 +29,11 @@ class ImageProcessingTabClass(object):
         self.brightness_frame.setFrameShape(QtWidgets.QFrame.Box)
         self.brightness_frame.setFrameShadow(QtWidgets.QFrame.Sunken)
 
-        font = QtGui.QFont()
-        font.setPointSize(8)
+
         self.brightness_label.setAlignment(QtCore.Qt.AlignCenter)
-        self.brightness_label.setFont(font)
-        self.bit_combo_box_label.setFont(font)
-        self.invert_label.setFont(font)
+        self.brightness_label.setFont(FONT)
+        self.bit_combo_box_label.setFont(FONT)
+        self.invert_label.setFont(FONT)
 
         self.brightness_level_slider.setOrientation(QtCore.Qt.Horizontal)
 
@@ -65,12 +65,12 @@ class ImageProcessingTabClass(object):
         set_text(self.bit_combo_box_label, "Bit:")
 
 
-if __name__ == "__main__":
-    # run the program
-    import sys
+# if __name__ == "__main__":
+#     # run the program
+#     import sys
 
-    app = QtWidgets.QApplication(sys.argv)
-    image_processing_tab_class = ImageProcessingTabClass()
-    image_processing_tab_class.image_processing_tab_setup()
-    image_processing_tab_class.image_processing_tab.show()
-    sys.exit(app.exec_())
+#     app = QtWidgets.QApplication(sys.argv)
+#     image_processing_tab_class = ImageProcessingTabClass()
+#     image_processing_tab_class.image_processing_tab_setup()
+#     image_processing_tab_class.image_processing_tab.show()
+#     sys.exit(app.exec_())

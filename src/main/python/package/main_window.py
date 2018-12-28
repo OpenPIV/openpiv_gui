@@ -1,12 +1,5 @@
 from PySide2 import QtCore, QtGui, QtWidgets
-
-FONT = QtGui.QFont()
-FONT.setFamily("Gill Sans MT")
-FONT.setPointSize(21)
-FONT.setWeight(75)
-FONT.setItalic(True)
-FONT.setBold(True)
-
+from package.font import FONT
 
 class MainWindowClass(object):
     def __init__(self, main_window):
@@ -94,14 +87,14 @@ class MainWindowClass(object):
         self.menu_bar_file.setTitle("file")
 
 
-if __name__ == "__main__":
-    # run the application
-    import sys
+# if __name__ == "__main__":
+#     # run the application
+#     import sys
 
-    app = QtWidgets.QApplication(sys.argv)
-    MainWindow = QtWidgets.QMainWindow()
-    main_window_class = MainWindowClass(MainWindow)
-    main_window_class.main_window_setup()
-    main_window_class.default_image.setPixmap(QtGui.QPixmap("images/openpiv_logo.png"))
-    MainWindow.show()
-    sys.exit(app.exec_())
+#     app = QtWidgets.QApplication(sys.argv)
+#     MainWindow = QtWidgets.QMainWindow()
+#     main_window_class = MainWindowClass(MainWindow)
+#     main_window_class.main_window_setup()
+#     main_window_class.default_image.setPixmap(QtGui.QPixmap("images/openpiv_logo.png"))
+#     MainWindow.show() 
+#     sys.exit(app.exec_())

@@ -132,6 +132,8 @@ class PIVPlot(QtWidgets.QWidget):
         if self.bit == "8 bit":
             self.piv_images_list.append(
                 [image_path, QtCore.QFileInfo(image_path).fileName(), np.uint8(tools.imread(image_path)), None])
+            print((tools.imread(image_path) > tools.imread(image_path).mean()).shape[1])
+            t = tools.imread(image_path) > tools.imread(image_path).mean()
         else:
             self.piv_images_list.append(
                 [image_path, QtCore.QFileInfo(image_path).fileName(), np.uint16(tools.imread(image_path)), None])
@@ -237,6 +239,7 @@ class PIVStartClass(QtCore.QThread):
                 self.u, self.v, self.mask = sig2noise_val(self.u, self.v, self.sig2noise, threshold=1.3)
                 self.u, self.v = replace_outliers(self.u, self.v, method='localmean', max_iter=10, kernel_size=2)
                 # self.x, self.y, self.u, self.v = uniform(self.x, self.y, self.u, self.v, scaling_factor=96.52)
+
             except ValueError:
                 if self.searchsize < self.winsize:
                     self.error_message.setText("the search size cannot be smaller than the window size")

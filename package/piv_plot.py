@@ -53,6 +53,8 @@ class PIVPlot(QtWidgets.QWidget):
         self.ax.clear()
         self.bit = bit
         self.current_image = image_number
+
+        """
         if self.bit == "8 bit":
             if self.piv_images_list[image_number][3]:
                 self.ax.quiver(self.piv_images_list[image_number][3][0],
@@ -71,22 +73,20 @@ class PIVPlot(QtWidgets.QWidget):
 
             self.ax.imshow(np.uint8(self.piv_images_list[image_number][2]), cmap=plt.cm.gray)
             self.ax.axis('off')
-
-            """
+        
             self.zoom_ax.imshow(np.uint8(self.piv_images_list[image_number][2]), cmap=plt.cm.gray)
             self.zoom_ax.axis('off')
             if self.xy_zoom[0][0] != None:
             self.zoom_ax.set_xlim(self.xy_zoom[0][0], self.xy_zoom[0][1])
             self.zoom_ax.set_ylim(self.xy_zoom[1][0], self.xy_zoom[1][1])
             """
-
-        else:
-            if self.piv_images_list[image_number][3]:
-                self.ax.quiver(self.piv_images_list[image_number][3][0],
-                               max(self.piv_images_list[image_number][3][1].flatten()) -
-                               self.piv_images_list[image_number][3][1],
-                               self.piv_images_list[image_number][3][2], self.piv_images_list[image_number][3][3],
-                               color='b', pivot='middle')
+        if self.piv_images_list[image_number][3]:
+            self.ax.quiver(self.piv_images_list[image_number][3][0],
+                           max(self.piv_images_list[image_number][3][1].flatten()) -
+                           self.piv_images_list[image_number][3][1],
+                           self.piv_images_list[image_number][3][2], self.piv_images_list[image_number][3][3],
+                           color='b', pivot='middle')
+            try:
                 self.ax.quiver(self.piv_images_list[image_number][3][0][self.piv_images_list[image_number][3][4]],
                                max(self.piv_images_list[image_number][3][1][
                                        self.piv_images_list[image_number][3][4]].flatten()) -
@@ -95,17 +95,28 @@ class PIVPlot(QtWidgets.QWidget):
                                self.piv_images_list[image_number][3][3][self.piv_images_list[image_number][3][4]],
                                color='r',
                                pivot='middle')
+            except ValueError:
+                self.ax.quiver(self.piv_images_list[image_number][3][0][self.piv_images_list[image_number][3][4]],
+                               0 -
+                               self.piv_images_list[image_number][3][1][self.piv_images_list[image_number][3][4]],
+                               self.piv_images_list[image_number][3][2][self.piv_images_list[image_number][3][4]],
+                               self.piv_images_list[image_number][3][3][self.piv_images_list[image_number][3][4]],
+                               color='r',
+                               pivot='middle')
 
+
+        if self.bit == "8 bit":
+            self.ax.imshow(np.uint8(self.piv_images_list[image_number][2]), cmap=plt.cm.gray)
+        else:
             self.ax.imshow(np.uint16(self.piv_images_list[image_number][2]), cmap=plt.cm.gray)
-            self.ax.axis('off')
-
-            """
-            self.zoom_ax.imshow(np.uint16(self.piv_images_list[image_number][2]), cmap=plt.cm.gray)
-            self.zoom_ax.axis('off')
-            if self.xy_zoom[0][0] != None:
-            self.zoom_ax.set_xlim(self.xy_zoom[0][0], self.xy_zoom[0][1])
-            self.zoom_ax.set_ylim(self.xy_zoom[1][0], self.xy_zoom[1][1])
-            """
+        self.ax.axis('off')
+        """
+        self.zoom_ax.imshow(np.uint16(self.piv_images_list[image_number][2]), cmap=plt.cm.gray)
+        self.zoom_ax.axis('off')
+        if self.xy_zoom[0][0] != None:
+        self.zoom_ax.set_xlim(self.xy_zoom[0][0], self.xy_zoom[0][1])
+        self.zoom_ax.set_ylim(self.xy_zoom[1][0], self.xy_zoom[1][1])
+        """
 
         if self.xy_zoom[0][0] == 0 and self.xy_zoom[0][1] == len(self.piv_images_list[0][2][0]) and self.xy_zoom[1][
             0] == 0 and self.xy_zoom[1][1] == len(self.piv_images_list[0][2]):
@@ -221,6 +232,7 @@ class PIVStartClass(QtCore.QThread):
         self.error_message = error_message
         self.start()
 
+    # running the piv process
     def run(self):
         self.is_to_stop = False
         self.piv.piv_results_list = []
@@ -236,9 +248,10 @@ class PIVStartClass(QtCore.QThread):
                                                                           sig2noise_method='peak2peak')
                 self.x, self.y = get_coordinates(image_size=self.image_list[i][2].shape, window_size=self.winsize,
                                                  overlap=self.overlap)
-                self.u, self.v, self.mask = sig2noise_val(self.u, self.v, self.sig2noise, threshold=1.3)
+                self.u, self.v, self.mask = sig2noise_val(self.u, self.v, self.sig2noise, threshold=1.0)
                 self.u, self.v = replace_outliers(self.u, self.v, method='localmean', max_iter=10, kernel_size=2)
-                # self.x, self.y, self.u, self.v = uniform(self.x, self.y, self.u, self.v, scaling_factor=96.52)
+                # self.x, self.y, self.u, self.v = uniform(self.x, self.y, self.u, self.v, scaling_factor=5)
+
 
             except ValueError:
                 if self.searchsize < self.winsize:
@@ -249,6 +262,8 @@ class PIVStartClass(QtCore.QThread):
                 break
             self.piv.piv_results_list.append([self.x, self.y, self.u, self.v, self.mask, i])
             self.piv.piv_images_list[i][3] = self.piv.piv_results_list[i // abs(self.jump)]
+            print(self.piv.piv_images_list[i][3][1][
+                      self.piv.piv_images_list[i][3][4]].flatten())
             self.piv.show_plot(i, self.piv.bit, True)
 
             if i == len(self.image_list) - 2 and self.jump == 1:

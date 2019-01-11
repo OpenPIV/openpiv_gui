@@ -266,6 +266,7 @@ def stop(piv_start_class):
     piv_start_class.is_to_stop = True
 
 
+
 def start(piv_plot_class, settings_tab_class, piv_start_class, interactive_analysis_window_class, error_message):
     try:
         piv_start_class.set_args_start(piv_plot_class.piv_images_list,

@@ -168,6 +168,9 @@ def file_added(file_window_class, settings_tab_class, piv_plot_class, settings_t
     # change the jump range when the images number changes
     change_jump_max_min(settings_tab_class, piv_plot_class)
 
+    # sort files by name
+    file_order_changed(file_window_class, piv_plot_class)
+
 
 # function that changes the max and min of jump
 def change_jump_max_min(settings_tab_class, piv_plot_class):
@@ -238,11 +241,12 @@ def invert_button(piv_plot_class, settings_tab_widget_class):
 
 
 def file_order_changed(file_window_class, piv_plot_class):
-    file_list_list = []
+    file_list = []
     for i in range(file_window_class.file_list.count()):
-        file_list_list.append(file_window_class.file_list.item(i).text())
+        file_list.append(file_window_class.file_list.item(i).text())
 
-    piv_plot_class.piv_images_list.sort(key=lambda x: file_list_list.index(x[1]))
+    file_list.sort(key=lambda file: int(file.split(".")[0]))
+    piv_plot_class.piv_images_list.sort(key=lambda x: file_list.index(x[1]))
 
 
 def change_bit(bit, piv_plot_class):
@@ -264,7 +268,6 @@ def check_dt_valid(settings_tab_class):
 
 def stop(piv_start_class):
     piv_start_class.is_to_stop = True
-
 
 
 def start(piv_plot_class, settings_tab_class, piv_start_class, interactive_analysis_window_class, error_message):

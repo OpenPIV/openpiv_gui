@@ -82,7 +82,7 @@ class PIVPlot(QtWidgets.QWidget):
             self.ax.quiver(self.piv_images_list[image_number][3][0],
                            self.piv_images_list[image_number][3][1],
                            self.piv_images_list[image_number][3][2], self.piv_images_list[image_number][3][3],
-                           color='b')
+                           color='b', pivot='middle')
             try:
                 self.ax.quiver(self.piv_images_list[image_number][3][0][self.piv_images_list[image_number][3][4]],
                                max(self.piv_images_list[image_number][3][1][
@@ -259,8 +259,9 @@ class PIVStartClass(QtCore.QThread):
                 self.u, self.v = replace_outliers(self.u, self.v, method='localmean', max_iter=10, kernel_size=2)
                 # self.x, self.y, self.u, self.v = uniform(self.x, self.y, self.u, self.v, scaling_factor=5)
 
-                self.x += int(self.piv.xy_zoom[0][0])
-                self.y += int(self.piv.xy_zoom[1][0])
+                if self.piv.xy_zoom[0][0] != None:
+                    self.x += int(self.piv.xy_zoom[0][0])
+                    self.y += int(self.piv.xy_zoom[1][0])
 
             except ValueError:
                 if self.searchsize < self.winsize:

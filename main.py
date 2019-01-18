@@ -244,8 +244,11 @@ def file_order_changed(file_window_class, piv_plot_class):
     file_list = []
     for i in range(file_window_class.file_list.count()):
         file_list.append(file_window_class.file_list.item(i).text())
+    try:
+        file_list.sort(key=lambda file: int(file.split(".")[0]))
+    except ValueError:
+        file_list.sort(key=lambda file: str(file.split(".")[0]))
 
-    file_list.sort(key=lambda file: int(file.split(".")[0]))
     piv_plot_class.piv_images_list.sort(key=lambda x: file_list.index(x[1]))
 
 
@@ -290,7 +293,7 @@ def start(piv_plot_class, settings_tab_class, piv_start_class, interactive_analy
                                        piv_plot_class)
     except ValueError:
         error_message.setText("you must choose a jump variable")
-        error_message.show()
+        error_message.exec()
     if settings_tab_class.interactive_check_box.isChecked():
         interactive_analysis_window_class.interactive_analysis_window.show()
 

@@ -8,7 +8,7 @@ from matplotlib.figure import Figure
 from matplotlib.widgets import RectangleSelector, Rectangle
 from openpiv import tools
 from openpiv.filters import replace_outliers
-from openpiv.process import extended_search_area_piv, get_coordinates
+from openpiv.process import extended_search_area_piv, get_coordinates, get_field_shape
 from openpiv.validation import sig2noise_val
 
 
@@ -139,8 +139,6 @@ class PIVPlot(QtWidgets.QWidget):
         if self.bit == "8 bit":
             self.piv_images_list.append(
                 [image_path, QtCore.QFileInfo(image_path).fileName(), np.uint8(tools.imread(image_path)), None])
-            print((tools.imread(image_path) > tools.imread(image_path).mean()).shape[1])
-            t = tools.imread(image_path) > tools.imread(image_path).mean()
         else:
             self.piv_images_list.append(
                 [image_path, QtCore.QFileInfo(image_path).fileName(), np.uint16(tools.imread(image_path)), None])
@@ -171,6 +169,7 @@ class PIVPlot(QtWidgets.QWidget):
             self.xy_zoom[0][1] = len(self.piv_images_list[0][2][0])
             self.xy_zoom[1][0] = 0
             self.xy_zoom[1][1] = len(self.piv_images_list[0][2])
+            self.reset_piv()
         self.show_plot(self.current_image, self.bit)
 
     def zoom(self, click_point, release_point):
@@ -182,6 +181,10 @@ class PIVPlot(QtWidgets.QWidget):
         self.xy_zoom[1][1] = y2
         self.rs = None
         self.show_plot(self.current_image, self.bit)
+
+    def reset_piv(self):
+        for i in range(len(self.piv_images_list)):
+            self.piv_images_list[i][3] = None
 
 
 class PIVStartClass(QtCore.QThread):
@@ -205,19 +208,19 @@ class PIVStartClass(QtCore.QThread):
         self.piv = None
         self.scale = None
         self.jump = None
-        self.image_list = []
+        self.frames_list = []
         self.is_to_stop = False
         self.error_message = None
 
     def __del__(self):
         self.wait()
 
-    def set_args_start(self, image_list, width_a, height_a, width_b, height_b, horizontal, vertical, sn_type, sn_value,
+    def set_args_start(self, frames_list, width_a, height_a, width_b, height_b, horizontal, vertical, sn_type, sn_value,
                        scale, outer_filter, jump, dt, is_interactive, error_message, piv):
-        self.image_list = image_list
-        if len(self.image_list) < 2:
+        self.frames_list = frames_list
+        if len(self.frames_list) < 2:
             error_message.setText("you must choose at list two images to run the piv")
-            error_message.show()
+            error_message.exec()
         self.overlap = horizontal
         self.winsize = width_a
         self.searchsize = width_b
@@ -233,27 +236,27 @@ class PIVStartClass(QtCore.QThread):
         self.is_to_stop = False
         self.piv.piv_results_list = []
 
-        for i in range(0, len(self.image_list) - 1, abs(self.jump)):
+        for i in range(0, len(self.frames_list) - 1, abs(self.jump)):
             if self.piv.xy_zoom[0][0] != None:
-                image_read_1 = self.image_list[i][2][int(self.piv.xy_zoom[1][0]): int(self.piv.xy_zoom[1][1]),
-                               int(self.piv.xy_zoom[0][0]): int(self.piv.xy_zoom[0][1])]
+                frame_a = self.frames_list[i][2][int(self.piv.xy_zoom[1][0]): int(self.piv.xy_zoom[1][1]),
+                          int(self.piv.xy_zoom[0][0]): int(self.piv.xy_zoom[0][1])]
 
-                image_read_2 = self.image_list[i + 1][2][int(self.piv.xy_zoom[1][0]): int(self.piv.xy_zoom[1][1]),
-                               int(self.piv.xy_zoom[0][0]): int(self.piv.xy_zoom[0][1])]
+                frame_b = self.frames_list[i + 1][2][int(self.piv.xy_zoom[1][0]): int(self.piv.xy_zoom[1][1]),
+                          int(self.piv.xy_zoom[0][0]): int(self.piv.xy_zoom[0][1])]
             else:
-                image_read_1 = self.image_list[i][2]
+                frame_a = self.frames_list[i][2]
 
-                image_read_2 = self.image_list[i + 1][2]
+                frame_b = self.frames_list[i + 1][2]
 
             try:
-                self.u, self.v, self.sig2noise = extended_search_area_piv(image_read_1.astype(np.int32),
-                                                                          image_read_2.astype(
+                self.u, self.v, self.sig2noise = extended_search_area_piv(frame_a.astype(np.int32),
+                                                                          frame_b.astype(
                                                                               np.int32),
                                                                           window_size=self.winsize,
                                                                           overlap=self.overlap,
                                                                           dt=self.dt, search_area_size=self.searchsize,
                                                                           sig2noise_method='peak2peak')
-                self.x, self.y = get_coordinates(image_size=image_read_1.shape, window_size=self.winsize,
+                self.x, self.y = get_coordinates(image_size=frame_a.shape, window_size=self.winsize,
                                                  overlap=self.overlap)
                 self.u, self.v, self.mask = sig2noise_val(self.u, self.v, self.sig2noise, threshold=1.0)
                 self.u, self.v = replace_outliers(self.u, self.v, method='localmean', max_iter=10, kernel_size=2)
@@ -266,15 +269,17 @@ class PIVStartClass(QtCore.QThread):
             except ValueError:
                 if self.searchsize < self.winsize:
                     self.error_message.setText("the search size cannot be smaller than the window size")
-                else:
+                elif self.overlap > self.winsize:
                     self.error_message.setText("Overlap has to be smaller than the window_size")
-                self.error_message.show()
+                else:
+                    self.error_message.setText("ROI window to small")
+                self.error_message.exec()
                 break
             self.piv.piv_results_list.append([self.x, self.y, self.u, self.v, self.mask, i])
             self.piv.piv_images_list[i][3] = self.piv.piv_results_list[i // abs(self.jump)]
             self.piv.show_plot(i, self.piv.bit, True)
 
-            if i == len(self.image_list) - 2 and self.jump == 1:
+            if i == len(self.frames_list) - 2 and self.jump == 1:
                 self.piv.piv_results_list.append([self.x, self.y, self.u, self.v, self.mask, i + 1])
                 self.piv.piv_images_list[i + 1][3] = self.piv.piv_results_list[i + 1]
                 self.piv.show_plot(i + 1, self.piv.bit, True)

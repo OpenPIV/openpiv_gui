@@ -10,6 +10,7 @@ from openpiv import tools
 from openpiv.filters import replace_outliers
 from openpiv.process import extended_search_area_piv, get_coordinates, get_field_shape
 from openpiv.validation import sig2noise_val
+from package.openpiv_savevec import save_openpiv_vec
 
 
 # i needed to call QWidget and super to add the tool bar of matplotlib
@@ -275,12 +276,19 @@ class PIVStartClass(QtCore.QThread):
                     self.error_message.setText("ROI window to small")
                 self.error_message.exec()
                 break
-            self.piv.piv_results_list.append([self.x, self.y, self.u, self.v, self.mask, i])
+            self.piv.piv_results_list.append([self.x, self.y, self.u, self.v, self.mask])
             self.piv.piv_images_list[i][3] = self.piv.piv_results_list[i // abs(self.jump)]
+            data = np.zeros((len(np.ravel(self.u)), 5))
+            res_list = [np.ravel(self.x), np.ravel(self.y), np.ravel(self.u), np.ravel(self.v), np.ravel(self.mask)]
+            for j in range(0, 4):
+                for k in range(len(res_list[j])):
+                    data[k][j] = res_list[j][k]
+            save_openpiv_vec(self.piv.piv_images_list[i][1].split('.')[0], data, 'pix', 'dt',
+                             len(data[0]), len(data))
             self.piv.show_plot(i, self.piv.bit, True)
 
             if i == len(self.frames_list) - 2 and self.jump == 1:
-                self.piv.piv_results_list.append([self.x, self.y, self.u, self.v, self.mask, i + 1])
+                self.piv.piv_results_list.append([self.x, self.y, self.u, self.v, self.mask])
                 self.piv.piv_images_list[i + 1][3] = self.piv.piv_results_list[i + 1]
                 self.piv.show_plot(i + 1, self.piv.bit, True)
 

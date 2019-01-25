@@ -168,9 +168,9 @@ def file_added(file_window_class, settings_tab_class, piv_plot_class, settings_t
     # change the jump range when the images number changes
     change_jump_max_min(settings_tab_class, piv_plot_class)
 
+
     # sort files by name
     file_order_changed(file_window_class, piv_plot_class)
-
 
 # function that changes the max and min of jump
 def change_jump_max_min(settings_tab_class, piv_plot_class):
@@ -244,12 +244,13 @@ def file_order_changed(file_window_class, piv_plot_class):
     file_list = []
     for i in range(file_window_class.file_list.count()):
         file_list.append(file_window_class.file_list.item(i).text())
-    try:
-        file_list.sort(key=lambda file: int(file.split(".")[0]))
-    except ValueError:
-        file_list.sort(key=lambda file: str(file.split(".")[0]))
+    # try:
+    #     file_list.sort(key=lambda file: int(file.split(".")[0]))
+    # except ValueError:
+    #     file_list.sort(key=lambda file: str(file.split(".")[0]))
 
     piv_plot_class.piv_images_list.sort(key=lambda x: file_list.index(x[1]))
+
 
 
 def change_bit(bit, piv_plot_class):

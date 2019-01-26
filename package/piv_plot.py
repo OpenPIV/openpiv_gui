@@ -139,10 +139,10 @@ class PIVPlot(QtWidgets.QWidget):
         self.bit = bit
         if self.bit == "8 bit":
             self.piv_images_list.append(
-                [image_path, QtCore.QFileInfo(image_path).fileName(), np.uint8(tools.imread(image_path)), None])
+                [image_path, QtCore.QFileInfo(image_path).fileName(), np.uint8(tools.imread(image_path)), None, None])
         else:
             self.piv_images_list.append(
-                [image_path, QtCore.QFileInfo(image_path).fileName(), np.uint16(tools.imread(image_path)), None])
+                [image_path, QtCore.QFileInfo(image_path).fileName(), np.uint16(tools.imread(image_path)), None, None])
 
     @staticmethod
     def invert(img_read, is_bmp, bit):
@@ -283,8 +283,9 @@ class PIVStartClass(QtCore.QThread):
             for j in range(0, 4):
                 for k in range(len(res_list[j])):
                     data[k][j] = res_list[j][k]
-            save_openpiv_vec(self.piv.piv_images_list[i][1].split('.')[0], data, 'pix', 'dt',
-                             len(data[0]), len(data))
+            self.piv.piv_images_list[i][4] = data
+            # save_openpiv_vec(self.piv.piv_images_list[i][1].split('.')[0], data, 'pix', 'dt',
+            #                  len(data[0]), len(data))
             self.piv.show_plot(i, self.piv.bit, True)
 
             if i == len(self.frames_list) - 2 and self.jump == 1:

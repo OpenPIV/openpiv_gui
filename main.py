@@ -29,17 +29,13 @@ def run_main_window():
     settings_tab_widget_class.settings_widget_setup()
     settings_tab_widget_class.image_processing_tab_class.image_processing_tab_layout.addWidget(file_window_frame, 0, 0,
                                                                                                1, 1)
-    settings_tab_widget_class.settings_tab_widget.addTab(settings_tab_class.settings_tab, "piv")
+    settings_tab_widget_class.settings_tab_widget.addTab(settings_tab_class.scroll_area, "piv")
     settings_tab_widget_class.settings_tab_widget.addTab(post_processing_tab_class.post_processing_tab, "post")
     settings_tab_widget_class.settings_tab_widget.setStyleSheet("background-color: rgb(240, 240, 240);")
 
     # adjusting minimum to the resolution
-    screen = app.primaryScreen()
-    size = screen.size()
     settings_tab_widget_class.settings_tab_widget.setMinimumSize(
-        QtCore.QSize(499200 / size.width(), 722520 / size.height()))
-    settings_tab_widget_class.settings_tab_widget.setMinimumSize(
-        QtCore.QSize(260, 669))
+        QtCore.QSize(300, 669))
 
     # a max and a min to the file window frame to make it look better
     file_window_frame.setMinimumSize(QtCore.QSize(218, 220))

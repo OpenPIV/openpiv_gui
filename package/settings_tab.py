@@ -10,7 +10,8 @@ FONT.setBold(True)
 
 class SettingsTab(object):
     def __init__(self):
-        self.settings_tab = QtWidgets.QTabBar()
+        self.scroll_area = QtWidgets.QScrollArea()
+        self.settings_tab = QtWidgets.QWidget()
         self.settings_widget_layout = QtWidgets.QGridLayout(self.settings_tab)
         self.settings_frame_4 = QtWidgets.QFrame(self.settings_tab)
         self.settings_frame_4_layout = QtWidgets.QGridLayout(self.settings_frame_4)
@@ -55,6 +56,13 @@ class SettingsTab(object):
         self.jump_min = 0
 
     def setting_widget_setup(self):
+        self.scroll_area.setWidget(self.settings_tab)
+        self.scroll_area.setWidgetResizable(True)
+        self.scroll_area.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
+        self.scroll_area.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAsNeeded)
+        self.scroll_area.adjustSize()
+
+        self.settings_tab.setMinimumSize(QtCore.QSize(300, 669))
         self.settings_tab.setStyleSheet(
             "QDoubleSpinBox{border: 1px solid gray; padding: 2 13px; border-radius: 3px;}"
             "QComboBox{border: 1px solid gray; padding: 2 13px; border-radius: 3px;}"

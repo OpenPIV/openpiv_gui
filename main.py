@@ -35,7 +35,7 @@ def run_main_window():
 
     # adjusting minimum to the resolution
     settings_tab_widget_class.settings_tab_widget.setMinimumSize(
-        QtCore.QSize(300, 669))
+        QtCore.QSize(300, 500))
 
     # a max and a min to the file window frame to make it look better
     file_window_frame.setMinimumSize(QtCore.QSize(218, 220))

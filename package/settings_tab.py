@@ -62,7 +62,7 @@ class SettingsTab(object):
         self.scroll_area.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAsNeeded)
         self.scroll_area.adjustSize()
 
-        self.settings_tab.setMinimumSize(QtCore.QSize(300, 669))
+        self.settings_tab.setMinimumSize(QtCore.QSize(300, 800))
         self.settings_tab.setStyleSheet(
             "QDoubleSpinBox{border: 1px solid gray; padding: 2 13px; border-radius: 3px;}"
             "QComboBox{border: 1px solid gray; padding: 2 13px; border-radius: 3px;}"
@@ -101,6 +101,8 @@ class SettingsTab(object):
         self.settings_frame_4_layout.addWidget(self.dt_line_edit, 3, 1, 1, 1)
         self.settings_frame_4_layout.addWidget(self.dt_line_edit_label, 3, 0, 1, 1)
         self.settings_frame_4_layout.addWidget(self.interactive_check_box, 4, 0, 1, 1)
+
+        self.settings_frame_4.setMinimumSize(60, 100)
 
         self.roi_frame.setFrameShape(QtWidgets.QFrame.Box)
         self.roi_frame.setFrameShadow(QtWidgets.QFrame.Sunken)
@@ -253,9 +255,9 @@ class SettingsTab(object):
         self.settings_widget_layout.addWidget(self.interrogation_winsize_frame, 0, 3, 1, 1)
         self.settings_widget_layout.addWidget(self.spacing_frame, 1, 3, 1, 1)
         self.settings_widget_layout.addWidget(self.type_value_frame, 2, 3, 1, 1)
-        self.settings_widget_layout.addWidget(self.settings_frame_4, 3, 3, 1, 1)
-        self.settings_widget_layout.addWidget(self.roi_frame, 4, 3, 1, 1)
-        self.settings_widget_layout.addWidget(self.start_stop_frame, 5, 3, 1, 1)
+        self.settings_widget_layout.addWidget(self.settings_frame_4, 3, 3, 2, 1)
+        self.settings_widget_layout.addWidget(self.roi_frame, 5, 3, 1, 1)
+        self.settings_widget_layout.addWidget(self.start_stop_frame, 6, 3, 1, 1)
 
         self.text_setup()
 

@@ -46,6 +46,7 @@ class FileWindowClass(object):
                                                                 filter=(
                                                                     'images(*.png *.jpg *.jpeg *.bmp *.tif *.tiff)'))
         if len(fileNames) > 0:  # not empty
+            fileNames = sorted(fileNames,key=lambda x: x.split('.')[0])
             for f in fileNames:
                 self.last_file = str(f)
                 self.file_list.addItem(QtCore.QFileInfo(str(f)).fileName())

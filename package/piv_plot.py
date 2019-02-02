@@ -140,8 +140,7 @@ class PIVPlot(QtWidgets.QWidget):
         self.bit = bit
         if self.bit == "8 bit":
             self.piv_images_list.append(
-                [image_path, QtCore.QFileInfo(image_path).fileName(), np.uint8(tools.imread(image_path)), None, None,
-                 None])
+                [image_path, QtCore.QFileInfo(image_path).fileName(), np.uint8(tools.imread(image_path)), None, None])
         else:
             self.piv_images_list.append(
                 [image_path, QtCore.QFileInfo(image_path).fileName(), np.uint16(tools.imread(image_path)), None, None])

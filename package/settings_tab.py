@@ -62,7 +62,7 @@ class SettingsTab(object):
         self.scroll_area.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAsNeeded)
         self.scroll_area.adjustSize()
 
-        self.settings_tab.setMinimumSize(QtCore.QSize(300, 800))
+        self.settings_tab.setMinimumSize(QtCore.QSize(340, 800))
         self.settings_tab.setStyleSheet(
             "QDoubleSpinBox{border: 1px solid gray; padding: 2 13px; border-radius: 3px;}"
             "QComboBox{border: 1px solid gray; padding: 2 13px; border-radius: 3px;}"

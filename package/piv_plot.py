@@ -80,6 +80,7 @@ class PIVPlot(QtWidgets.QWidget):
             self.zoom_ax.set_ylim(self.xy_zoom[1][0], self.xy_zoom[1][1])
             """
         if self.piv_images_list[image_number][3]:
+
             self.ax.quiver(self.piv_images_list[image_number][3][0],
                            self.piv_images_list[image_number][3][1],
                            self.piv_images_list[image_number][3][2], self.piv_images_list[image_number][3][3],
@@ -103,9 +104,9 @@ class PIVPlot(QtWidgets.QWidget):
                                pivot='middle')
 
         if self.bit == "8 bit":
-            self.ax.imshow(np.uint8(self.piv_images_list[image_number][2]), cmap=plt.cm.gray)
+            self.ax.imshow(np.uint8(self.piv_images_list[image_number][2]), cmap=plt.cm.gray, origin="lower")
         else:
-            self.ax.imshow(np.uint16(self.piv_images_list[image_number][2]), cmap=plt.cm.gray)
+            self.ax.imshow(np.uint16(self.piv_images_list[image_number][2]), cmap=plt.cm.gray, origin="lower")
         self.ax.axis('off')
         """
         self.zoom_ax.imshow(np.uint16(self.piv_images_list[image_number][2]), cmap=plt.cm.gray)
@@ -139,7 +140,8 @@ class PIVPlot(QtWidgets.QWidget):
         self.bit = bit
         if self.bit == "8 bit":
             self.piv_images_list.append(
-                [image_path, QtCore.QFileInfo(image_path).fileName(), np.uint8(tools.imread(image_path)), None, None])
+                [image_path, QtCore.QFileInfo(image_path).fileName(), np.uint8(tools.imread(image_path)), None, None,
+                 None])
         else:
             self.piv_images_list.append(
                 [image_path, QtCore.QFileInfo(image_path).fileName(), np.uint16(tools.imread(image_path)), None, None])
@@ -166,10 +168,10 @@ class PIVPlot(QtWidgets.QWidget):
                                         rectprops=dict(alpha=0.6, linestyle='-', edgecolor='white',
                                                        linewidth=2))
         else:
-            self.xy_zoom[0][0] = 0
-            self.xy_zoom[0][1] = len(self.piv_images_list[0][2][0])
-            self.xy_zoom[1][0] = 0
-            self.xy_zoom[1][1] = len(self.piv_images_list[0][2])
+            self.xy_zoom[0][0] = 0  # top left / x1
+            self.xy_zoom[0][1] = len(self.piv_images_list[0][2][0])  # top right / x2
+            self.xy_zoom[1][0] = 0  # bottom left/ y1
+            self.xy_zoom[1][1] = len(self.piv_images_list[0][2])  # bottom right/ y2
             self.reset_piv()
         self.show_plot(self.current_image, self.bit)
 
@@ -263,9 +265,12 @@ class PIVStartClass(QtCore.QThread):
                 self.u, self.v = replace_outliers(self.u, self.v, method='localmean', max_iter=10, kernel_size=2)
                 # self.x, self.y, self.u, self.v = uniform(self.x, self.y, self.u, self.v, scaling_factor=5)
 
-                if self.piv.xy_zoom[0][0] != None:
+                if self.piv.xy_zoom[0][0]:
                     self.x += int(self.piv.xy_zoom[0][0])
                     self.y += int(self.piv.xy_zoom[1][0])
+
+                self.u = -self.u
+                self.v = -self.v
 
             except ValueError:
                 if self.searchsize < self.winsize:
@@ -291,6 +296,7 @@ class PIVStartClass(QtCore.QThread):
             if i == len(self.frames_list) - 2 and self.jump == 1:
                 self.piv.piv_results_list.append([self.x, self.y, self.u, self.v, self.mask])
                 self.piv.piv_images_list[i + 1][3] = self.piv.piv_results_list[i + 1]
+                self.piv.piv_images_list[i + 1][4] = data
                 self.piv.show_plot(i + 1, self.piv.bit, True)
 
             if self.is_to_stop:

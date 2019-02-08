@@ -35,6 +35,9 @@ class MainWindowClass(object):
     def main_window_setup(self):
         self.main_window.resize(866, 683)
         self.main_window.setObjectName("main_window")
+
+        self.main_widget.setMinimumSize(QtCore.QSize(580, 630))
+
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap(r"package/images/openpiv_logo.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
 

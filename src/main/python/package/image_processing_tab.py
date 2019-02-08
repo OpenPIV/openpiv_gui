@@ -20,6 +20,8 @@ class ImageProcessingTabClass(object):
         self.brightness_level_slider = QtWidgets.QSlider(self.bit_invert_frame)
 
     def image_processing_tab_setup(self):
+        self.image_processing_tab.setMinimumSize(QtCore.QSize(340, 560))
+
         self.bit_invert_frame.setFrameShape(QtWidgets.QFrame.Box)
         self.bit_invert_frame.setFrameShadow(QtWidgets.QFrame.Sunken)
 

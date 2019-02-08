@@ -20,12 +20,17 @@ class MainWindowClass(object):
 
         self.menuBar = QtWidgets.QMenuBar(self.main_window)
         self.menu_bar_file = QtWidgets.QMenu(self.menuBar)
+        # all the menu actions
         self.load_action = QtWidgets.QAction(self.menu_bar_file)
         self.quit_action = QtWidgets.QAction(self.menu_bar_file)
+        self.save_action = QtWidgets.QAction(self.menu_bar_file)
 
     def main_window_setup(self):
         self.main_window.resize(866, 683)
         self.main_window.setObjectName("main_window")
+
+        self.main_widget.setMinimumSize(QtCore.QSize(580, 630))
+
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap(r"package/images/openpiv_logo.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
 
@@ -61,13 +66,17 @@ class MainWindowClass(object):
         self.menuBar.addAction(self.menu_bar_file.menuAction())
 
         self.load_action.setShortcut('CTRL+A')
-        self.load_action.setStatusTip('add a file')
+        self.load_action.setStatusTip('Load')
 
         self.quit_action.setShortcut('ALT+F4')
         self.quit_action.setStatusTip('Quit')
 
+        self.save_action.setShortcut('ALT+S')
+        self.save_action.setStatusTip('Save')
+
         self.menu_bar_file.addAction(self.load_action)
         self.menu_bar_file.addAction(self.quit_action)
+        self.menu_bar_file.addAction(self.save_action)
 
         self.main_window.setCentralWidget(self.main_widget)
 
@@ -80,6 +89,7 @@ class MainWindowClass(object):
 
         self.load_action.setText("Add")
         self.quit_action.setText("Quit")
+        self.save_action.setText("Save")
         self.left_button.setText("<")
         self.right_button.setText(">")
         self.current_image_number.setText("0")

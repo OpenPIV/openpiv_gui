@@ -46,11 +46,13 @@ class PostProcessingTabClass(object):
 
         self.local_mean_median_combo_box.addItem("mean")
         self.local_mean_median_combo_box.addItem("median")
-        self.local_mean_median_combo_box.view().setVerticalScrollBarPolicy(
-            QtCore.Qt.ScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff))
+        self.local_mean_median_combo_box.view().setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
+        self.local_mean_median_combo_box.setFont(FONT)
 
         self.smoothing_mean_median_combo_box.addItem("mean")
         self.smoothing_mean_median_combo_box.addItem("median")
+        self.smoothing_mean_median_combo_box.view().setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
+        self.smoothing_mean_median_combo_box.setFont(FONT)
 
         self.local_filter_group_box.setStyleSheet(
             "QGroupBox{border: rgb(240, 240, 240);} background-color: rgb(240, 240, 240);")
@@ -88,6 +90,8 @@ class PostProcessingTabClass(object):
         self.action_combo_box.addItem("cubic")
         self.action_combo_box.addItem("linear")
         self.action_combo_box.addItem("nearest")
+        self.action_combo_box.view().setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
+        self.action_combo_box.setFont(FONT)
 
         self.interpolation_group_box_layout.addWidget(self.action_combo_box, 0, 1, 1, 1)
         self.interpolation_group_box_layout.addWidget(self.times_label, 1, 0, 1, 1)

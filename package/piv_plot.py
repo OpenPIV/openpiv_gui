@@ -286,8 +286,8 @@ class PIVStartClass(QtCore.QThread):
                     self.x += int(self.piv.xy_zoom[0][0])
                     self.y += int(self.piv.xy_zoom[1][0])
 
-                self.u = -self.u
-                self.v = -self.v
+                self.u *= -1.0
+                self.v *= -1.0
 
             except ValueError:
                 if self.searchsize < self.winsize:

@@ -240,11 +240,29 @@ class PIVStartClass(QtCore.QThread):
 
         for i in range(0, len(self.frames_list) - 1, abs(self.jump)):
             if self.piv.xy_zoom[0][0] != None:
-                frame_a = self.frames_list[i][2][int(self.piv.xy_zoom[1][0]): int(self.piv.xy_zoom[1][1]),
-                          int(self.piv.xy_zoom[0][0]): int(self.piv.xy_zoom[0][1])]
+                try:
+                    frame_a = self.frames_list[i][2][int(self.frames_list[i][2].shape[1] - self.piv.xy_zoom[1][1]): int(
+                        self.frames_list[i][2].shape[1] - self.piv.xy_zoom[1][0]),
+                              int(self.piv.xy_zoom[0][0]): int(
+                                  self.piv.xy_zoom[0][1])]
 
-                frame_b = self.frames_list[i + 1][2][int(self.piv.xy_zoom[1][0]): int(self.piv.xy_zoom[1][1]),
-                          int(self.piv.xy_zoom[0][0]): int(self.piv.xy_zoom[0][1])]
+                    frame_b = self.frames_list[i + 1][2][
+                              int(self.frames_list[i + 1][2].shape[1] - self.piv.xy_zoom[1][1]): int(
+                                  self.frames_list[i + 1][2].shape[1] - self.piv.xy_zoom[1][0]),
+                              int(self.piv.xy_zoom[0][0]): int(
+                                  self.piv.xy_zoom[0][1])]
+                except ValueError:
+                    frame_a = self.frames_list[i][2][int(self.frames_list[i][2].shape[1] - self.piv.xy_zoom[1][0]): int(
+                        self.frames_list[i][2].shape[1] - self.piv.xy_zoom[1][1]),
+                              int(self.piv.xy_zoom[0][0]): int(
+                                  self.piv.xy_zoom[0][1])]
+
+                    frame_b = self.frames_list[i + 1][2][
+                              int(self.frames_list[i + 1][2].shape[1] - self.piv.xy_zoom[1][0]): int(
+                                  self.frames_list[i + 1][2].shape[1] - self.piv.xy_zoom[1][1]),
+                              int(self.piv.xy_zoom[0][0]): int(
+                                  self.piv.xy_zoom[0][1])]
+
             else:
                 frame_a = self.frames_list[i][2]
 

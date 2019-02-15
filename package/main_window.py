@@ -68,6 +68,8 @@ class MainWindowClass(object):
         self.main_widget_layout.addWidget(self.current_image_number, 1, 2, 1, 1)
         self.main_widget_layout.addItem(left_right_buttons_spacer, 1, 0, 1, 1)
 
+        self.right_button.setVisible(False)
+
         self.menuBar.setGeometry(QtCore.QRect(0, 0, 866, 21))
         self.main_window.setMenuBar(self.menuBar)
         self.menuBar.addAction(self.menu_bar_file.menuAction())

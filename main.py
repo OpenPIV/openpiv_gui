@@ -164,9 +164,9 @@ def file_added(file_window_class, settings_tab_class, piv_plot_class, settings_t
     # change the jump range when the images number changes
     change_jump_max_min(settings_tab_class, piv_plot_class)
 
-
     # sort files by name
     file_order_changed(file_window_class, piv_plot_class)
+
 
 # function that changes the max and min of jump
 def change_jump_max_min(settings_tab_class, piv_plot_class):
@@ -194,29 +194,42 @@ def jump_changed(settings_tab_class):
 def change_image_number_right(piv_plot_class, main_window_class, settings_tab_widget_class):
     if len(piv_plot_class.piv_images_list) == 0:
         return 0
-
+    """
     if int(main_window_class.current_image_number.text()) == len(piv_plot_class.piv_images_list):
         main_window_class.current_image_number.setText("1")
         piv_plot_class.show_plot(0, settings_tab_widget_class.image_processing_tab_class.bit_combo_box.currentText())
-    else:
-        piv_plot_class.show_plot(int(main_window_class.current_image_number.text()),
-                                 settings_tab_widget_class.image_processing_tab_class.bit_combo_box.currentText())
-        main_window_class.current_image_number.setText(str(int(main_window_class.current_image_number.text()) + 1))
+    """
+    piv_plot_class.show_plot(int(main_window_class.current_image_number.text()),
+                             settings_tab_widget_class.image_processing_tab_class.bit_combo_box.currentText())
+    main_window_class.current_image_number.setText(str(int(main_window_class.current_image_number.text()) + 1))
+
+    if int(main_window_class.current_image_number.text()) == 2:
+        main_window_class.left_button.setVisible(True)
+
+    if int(main_window_class.current_image_number.text()) == len(piv_plot_class.piv_images_list):
+        main_window_class.right_button.setVisible(False)
 
 
 # function that moves to the next left image
 def change_image_number_left(piv_plot_class, main_window_class, settings_tab_widget_class):
     if len(piv_plot_class.piv_images_list) == 0:
         return 0
-
+    """
     if int(main_window_class.current_image_number.text()) == 1:
         main_window_class.current_image_number.setText(str(len(piv_plot_class.piv_images_list)))
         piv_plot_class.show_plot(len(piv_plot_class.piv_images_list) - 1,
                                  settings_tab_widget_class.image_processing_tab_class.bit_combo_box.currentText())
-    else:
-        piv_plot_class.show_plot(int(main_window_class.current_image_number.text()) - 2,
-                                 settings_tab_widget_class.image_processing_tab_class.bit_combo_box.currentText())
-        main_window_class.current_image_number.setText(str(int(main_window_class.current_image_number.text()) - 1))
+    """
+
+    piv_plot_class.show_plot(int(main_window_class.current_image_number.text()) - 2,
+                             settings_tab_widget_class.image_processing_tab_class.bit_combo_box.currentText())
+    main_window_class.current_image_number.setText(str(int(main_window_class.current_image_number.text()) - 1))
+
+    if int(main_window_class.current_image_number.text()) == 1:
+        main_window_class.left_button.setVisible(False)
+
+    if int(main_window_class.current_image_number.text()) == len(piv_plot_class.piv_images_list) - 1:
+        main_window_class.right_button.setVisible(True)
 
 
 def invert_button(piv_plot_class, settings_tab_widget_class):
@@ -246,7 +259,6 @@ def file_order_changed(file_window_class, piv_plot_class):
     #     file_list.sort(key=lambda file: str(file.split(".")[0]))
 
     piv_plot_class.piv_images_list.sort(key=lambda x: file_list.index(x[1]))
-
 
 
 def change_bit(bit, piv_plot_class):

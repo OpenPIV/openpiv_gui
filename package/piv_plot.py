@@ -79,35 +79,41 @@ class PIVPlot(QtWidgets.QWidget):
             self.zoom_ax.set_xlim(self.xy_zoom[0][0], self.xy_zoom[0][1])
             self.zoom_ax.set_ylim(self.xy_zoom[1][0], self.xy_zoom[1][1])
             """
+
+            # try:
+            #     self.ax.quiver(self.piv_images_list[image_number][3][0][self.piv_images_list[image_number][3][4]],
+            #                    max(self.piv_images_list[image_number][3][1][
+            #                            self.piv_images_list[image_number][3][4]].flatten()) -
+            #                    self.piv_images_list[image_number][3][1][self.piv_images_list[image_number][3][4]],
+            #                    self.piv_images_list[image_number][3][2][self.piv_images_list[image_number][3][4]],
+            #                    self.piv_images_list[image_number][3][3][self.piv_images_list[image_number][3][4]],
+            #                    color='r',
+            #                    pivot='middle')
+            # except ValueError:
+            #     self.ax.quiver(self.piv_images_list[image_number][3][0][self.piv_images_list[image_number][3][4]],
+            #                    0 -
+            #                    self.piv_images_list[image_number][3][1][self.piv_images_list[image_number][3][4]],
+            #                    self.piv_images_list[image_number][3][2][self.piv_images_list[image_number][3][4]],
+            #                    self.piv_images_list[image_number][3][3][self.piv_images_list[image_number][3][4]],
+            #                    color='r',
+            #                    pivot='middle')
+
+        if self.bit == "8 bit":
+            self.ax.imshow(np.uint8(self.piv_images_list[image_number][2]), cmap=plt.get_cmap('gray'), origin="upper")
+        else:
+            self.ax.imshow(np.uint16(self.piv_images_list[image_number][2]), cmap=plt.get_cmap('gray'), origin="upper")
+        self.ax.axis('off')
+
         if self.piv_images_list[image_number][3]:
 
             self.ax.quiver(self.piv_images_list[image_number][3][0],
                            self.piv_images_list[image_number][3][1],
-                           self.piv_images_list[image_number][3][2], self.piv_images_list[image_number][3][3],
-                           color='b', pivot='middle')
-            try:
-                self.ax.quiver(self.piv_images_list[image_number][3][0][self.piv_images_list[image_number][3][4]],
-                               max(self.piv_images_list[image_number][3][1][
-                                       self.piv_images_list[image_number][3][4]].flatten()) -
-                               self.piv_images_list[image_number][3][1][self.piv_images_list[image_number][3][4]],
-                               self.piv_images_list[image_number][3][2][self.piv_images_list[image_number][3][4]],
-                               self.piv_images_list[image_number][3][3][self.piv_images_list[image_number][3][4]],
-                               color='r',
-                               pivot='middle')
-            except ValueError:
-                self.ax.quiver(self.piv_images_list[image_number][3][0][self.piv_images_list[image_number][3][4]],
-                               0 -
-                               self.piv_images_list[image_number][3][1][self.piv_images_list[image_number][3][4]],
-                               self.piv_images_list[image_number][3][2][self.piv_images_list[image_number][3][4]],
-                               self.piv_images_list[image_number][3][3][self.piv_images_list[image_number][3][4]],
-                               color='r',
-                               pivot='middle')
+                           self.piv_images_list[image_number][3][2], 
+                           self.piv_images_list[image_number][3][3],
+                           color='y', pivot='middle')
 
-        if self.bit == "8 bit":
-            self.ax.imshow(np.uint8(self.piv_images_list[image_number][2]), cmap=plt.cm.gray, origin="upper")
-        else:
-            self.ax.imshow(np.uint16(self.piv_images_list[image_number][2]), cmap=plt.cm.gray, origin="upper")
-        self.ax.axis('off')
+
+
         """
         self.zoom_ax.imshow(np.uint16(self.piv_images_list[image_number][2]), cmap=plt.cm.gray)
         self.zoom_ax.axis('off')
@@ -286,7 +292,9 @@ class PIVStartClass(QtCore.QThread):
                     self.x += int(self.piv.xy_zoom[0][0])
                     self.y += int(self.piv.xy_zoom[1][0])
 
-                self.u *= -1.0
+                # self.u *= -1.0 # alex: this wasn't correct
+                self.y = np.max(self.y) - self.y
+                # self.v = -self.v 
 
             except ValueError:
                 if self.searchsize < self.winsize:
@@ -295,6 +303,7 @@ class PIVStartClass(QtCore.QThread):
                     self.error_message.setText("Overlap has to be smaller than the window_size")
                 else:
                     self.error_message.setText("ROI window to small")
+                
                 self.error_message.exec()
                 break
             self.piv.piv_results_list.append([self.x, self.y, self.u, self.v, self.mask])

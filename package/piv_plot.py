@@ -104,9 +104,9 @@ class PIVPlot(QtWidgets.QWidget):
                                pivot='middle')
 
         if self.bit == "8 bit":
-            self.ax.imshow(np.uint8(self.piv_images_list[image_number][2]), cmap=plt.cm.gray, origin="upper")
+            self.ax.imshow(np.uint8(self.piv_images_list[image_number][2]), cmap=plt.cm.gray, origin="lower")
         else:
-            self.ax.imshow(np.uint16(self.piv_images_list[image_number][2]), cmap=plt.cm.gray, origin="upper")
+            self.ax.imshow(np.uint16(self.piv_images_list[image_number][2]), cmap=plt.cm.gray, origin="lower")
         self.ax.axis('off')
         """
         self.zoom_ax.imshow(np.uint16(self.piv_images_list[image_number][2]), cmap=plt.cm.gray)
@@ -239,7 +239,7 @@ class PIVStartClass(QtCore.QThread):
         self.piv.piv_results_list = []
 
         for i in range(0, len(self.frames_list) - 1, abs(self.jump)):
-            if self.piv.xy_zoom[0][0] != None:
+            if self.piv.xy_zoom[0][0]:
                 try:
                     frame_a = self.frames_list[i][2][int(self.frames_list[i][2].shape[1] - self.piv.xy_zoom[1][1]): int(
                         self.frames_list[i][2].shape[1] - self.piv.xy_zoom[1][0]),
@@ -287,6 +287,7 @@ class PIVStartClass(QtCore.QThread):
                     self.y += int(self.piv.xy_zoom[1][0])
 
                 self.u *= -1.0
+                self.v *= -1.0
 
             except ValueError:
                 if self.searchsize < self.winsize:

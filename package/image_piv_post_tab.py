@@ -7,6 +7,9 @@ FONT.setWeight(100)
 FONT.setItalic(False)
 FONT.setBold(False)
 
+PALETTE = QtGui.QPalette()
+PALETTE.setColor(QtGui.QPalette.Text, QtCore.Qt.black)
+
 
 class PostProcessingTabClass(object):
     def __init__(self):
@@ -52,6 +55,7 @@ class PostProcessingTabClass(object):
             "border: 1px rgb(240, 240, 240); border-radius: 3px; background-color:"
             " rgb(240, 240, 240);")
         self.filter_group_box.setFont(FONT)
+        self.filter_group_box.setPalette(PALETTE)
         self.filter_group_box.setStyleSheet(
             "border: 1px solid gray; border-radius: 3px; padding: 2 13px;"
             " background-color: rgb(240, 240, 240);")
@@ -62,11 +66,13 @@ class PostProcessingTabClass(object):
         self.local_mean_median_combo_box.addItem("median")
         self.local_mean_median_combo_box.view().setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
         self.local_mean_median_combo_box.setFont(FONT)
+        self.local_mean_median_combo_box.setPalette(PALETTE)
 
         self.smoothing_mean_median_combo_box.addItem("mean")
         self.smoothing_mean_median_combo_box.addItem("median")
         self.smoothing_mean_median_combo_box.view().setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
         self.smoothing_mean_median_combo_box.setFont(FONT)
+        self.smoothing_mean_median_combo_box.setPalette(PALETTE)
 
         self.local_filter_group_box.setStyleSheet(
             "QGroupBox{border: rgb(240, 240, 240);} background-color: rgb(240, 240, 240);")
@@ -106,6 +112,7 @@ class PostProcessingTabClass(object):
         self.action_combo_box.addItem("nearest")
         self.action_combo_box.view().setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
         self.action_combo_box.setFont(FONT)
+        self.action_combo_box.setPalette(PALETTE)
 
         self.interpolation_group_box_layout.addWidget(self.action_combo_box, 0, 1, 1, 1)
         self.interpolation_group_box_layout.addWidget(self.times_label, 1, 0, 1, 1)

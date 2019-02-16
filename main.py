@@ -30,7 +30,7 @@ def run_main_window():
     settings_tab_widget_class.image_processing_tab_class.image_processing_tab_layout.addWidget(file_window_frame, 0, 0,
                                                                                                1, 1)
     settings_tab_widget_class.settings_tab_widget.addTab(settings_tab_class.scroll_area, "piv")
-    settings_tab_widget_class.settings_tab_widget.addTab(post_processing_tab_class.post_processing_tab, "post")
+    settings_tab_widget_class.settings_tab_widget.addTab(post_processing_tab_class.scroll_area, "post")
     settings_tab_widget_class.settings_tab_widget.setStyleSheet("background-color: rgb(240, 240, 240);")
 
     # adjusting minimum to the resolution

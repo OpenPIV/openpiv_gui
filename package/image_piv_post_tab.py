@@ -10,6 +10,7 @@ FONT.setBold(False)
 
 class PostProcessingTabClass(object):
     def __init__(self):
+        self.scroll_area = QtWidgets.QScrollArea()
         self.post_processing_tab = QtWidgets.QTabWidget()
         self.post_layout = QtWidgets.QGridLayout(self.post_processing_tab)
         self.filter_group_box = QtWidgets.QGroupBox(self.post_processing_tab)
@@ -38,8 +39,14 @@ class PostProcessingTabClass(object):
         self.activate_button = QtWidgets.QPushButton(self.interpolation_group_box)
 
     def post_processing_tab_setup(self):
+        self.scroll_area.setWidget(self.post_processing_tab)
+        self.scroll_area.setWidgetResizable(True)
+        self.scroll_area.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
+        self.scroll_area.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAsNeeded)
+        self.scroll_area.adjustSize()
+
         self.post_processing_tab.setObjectName("post_processing_tab")
-        self.post_processing_tab.resize(318, 527)
+        self.post_processing_tab.setMinimumSize(QtCore.QSize(340, 800))
         self.post_processing_tab.setStyleSheet(
             "QGroupBox.title{background-color: transparent}"
             "border: 1px rgb(240, 240, 240); border-radius: 3px; background-color:"

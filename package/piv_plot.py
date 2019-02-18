@@ -288,12 +288,14 @@ class PIVStartClass(QtCore.QThread):
                 self.u, self.v = replace_outliers(self.u, self.v, method='localmean', max_iter=10, kernel_size=2)
                 # self.x, self.y, self.u, self.v = uniform(self.x, self.y, self.u, self.v, scaling_factor=5)
 
+                # self.u *= -1.0 # alex: this wasn't correct
+                self.y = np.max(self.y) - self.y
+                
                 if self.piv.xy_zoom[0][0]:
                     self.x += int(self.piv.xy_zoom[0][0])
                     self.y += int(self.piv.xy_zoom[1][0])
 
-                # self.u *= -1.0 # alex: this wasn't correct
-                self.y = np.max(self.y) - self.y
+
                 # self.v = -self.v 
 
             except ValueError:

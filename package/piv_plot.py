@@ -299,12 +299,12 @@ class PIVStartClass(QtCore.QThread):
                 break
             self.piv.piv_results_list.append([self.x, self.y, self.u, self.v, self.mask])
             self.piv.piv_images_list[i][3] = self.piv.piv_results_list[i // abs(self.jump)]
-            data = np.zeros((len(np.ravel(self.u)), 5))
-            res_list = [np.ravel(self.x), np.ravel(self.y), np.ravel(self.u), np.ravel(self.v), np.ravel(self.mask)]
-            for j in range(0, 4):
-                for k in range(len(res_list[j])):
-                    data[k][j] = res_list[j][k]
-            self.piv.piv_images_list[i][4] = data
+            # data = np.zeros((len(np.ravel(self.u)), 5))
+            # res_list = [np.ravel(self.x), np.ravel(self.y), np.ravel(self.u), np.ravel(self.v), np.ravel(self.mask)]
+            # for j in range(0, 4):
+            #    for k in range(len(res_list[j])):
+            #        data[k][j] = res_list[j][k]
+            # self.piv.piv_images_list[i][4] = data
             # save_openpiv_vec(self.piv.piv_images_list[i][1].split('.')[0], data, 'pix', 'dt',
             #                  len(data[0]), len(data))
             self.piv.show_plot(i, self.piv.bit, True)
@@ -312,7 +312,7 @@ class PIVStartClass(QtCore.QThread):
             if i == len(self.frames_list) - 2 and self.jump == 1:
                 self.piv.piv_results_list.append([self.x, self.y, self.u, self.v, self.mask])
                 self.piv.piv_images_list[i + 1][3] = self.piv.piv_results_list[i + 1]
-                self.piv.piv_images_list[i + 1][4] = data
+                # self.piv.piv_images_list[i + 1][4] = data
                 self.piv.show_plot(i + 1, self.piv.bit, True)
 
             if self.is_to_stop:

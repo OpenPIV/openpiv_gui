@@ -241,13 +241,13 @@ class PIVStartClass(QtCore.QThread):
         for i in range(0, len(self.frames_list) - 1, abs(self.jump)):
             if self.piv.xy_zoom[0][0]:
                 """try:"""
-                frame_a = self.frames_list[i][2][int(self.frames_list[i][2].shape[1] - self.piv.xy_zoom[1][1]): int(
+                frame_a = self.frames_list[i][2][int(self.frames_list[i][2].shape[0] - self.piv.xy_zoom[1][1]): int(
                     self.frames_list[i][2].shape[1] - self.piv.xy_zoom[1][0]),
                           int(self.piv.xy_zoom[0][0]): int(
                               self.piv.xy_zoom[0][1])]
 
                 frame_b = self.frames_list[i + 1][2][
-                          int(self.frames_list[i + 1][2].shape[1] - self.piv.xy_zoom[1][1]): int(
+                          int(self.frames_list[i + 1][2].shape[0] - self.piv.xy_zoom[1][1]): int(
                               self.frames_list[i + 1][2].shape[1] - self.piv.xy_zoom[1][0]),
                           int(self.piv.xy_zoom[0][0]): int(
                               self.piv.xy_zoom[0][1])]
@@ -285,16 +285,19 @@ class PIVStartClass(QtCore.QThread):
 
                 if self.piv.xy_zoom[0][0]:
                     self.x += int(self.piv.xy_zoom[0][0])
-                    self.y += int(self.piv.xy_zoom[1][0])
+                self.y += int(self.piv.xy_zoom[1][0])
 
                 self.u *= -1.0
 
             except ValueError:
                 if self.searchsize < self.winsize:
+                    print("0")
                     self.error_message.setText("the search size cannot be smaller than the window size")
                 elif self.overlap > self.winsize:
+                    print("1")
                     self.error_message.setText("Overlap has to be smaller than the window_size")
                 else:
+                    print("2")
                     self.error_message.setText("ROI window to small")
                 self.error_message.exec()
                 break

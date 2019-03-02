@@ -105,7 +105,7 @@ def run_main_window():
     piv_start_class = PIVStartClass()
     settings_tab_class.start_button.clicked.connect(
         lambda: start(piv_plot_class, settings_tab_class, piv_start_class, interactive_analysis_window_class,
-                      error_massage))
+                      main_window_class, error_massage))
 
     settings_tab_class.stop_button.clicked.connect(lambda: stop(piv_start_class))
 
@@ -282,7 +282,8 @@ def stop(piv_start_class):
     piv_start_class.is_to_stop = True
 
 
-def start(piv_plot_class, settings_tab_class, piv_start_class, interactive_analysis_window_class, error_message):
+def start(piv_plot_class, settings_tab_class, piv_start_class, interactive_analysis_window_class, main_window_class,
+          error_message):
     try:
         piv_start_class.set_args_start(piv_plot_class.piv_images_list,
                                        int(settings_tab_class.width_combo_box_a.currentText()),
@@ -305,6 +306,9 @@ def start(piv_plot_class, settings_tab_class, piv_start_class, interactive_analy
         error_message.exec()
     if settings_tab_class.interactive_check_box.isChecked():
         interactive_analysis_window_class.interactive_analysis_window.show()
+
+    main_window_class.right_button.setDisabled(True)
+    main_window_class.left_button.setDisabled(False)
 
 
 def main():

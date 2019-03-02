@@ -204,10 +204,10 @@ def change_image_number_right(piv_plot_class, main_window_class, settings_tab_wi
     main_window_class.current_image_number.setText(str(int(main_window_class.current_image_number.text()) + 1))
 
     if int(main_window_class.current_image_number.text()) == 2:
-        main_window_class.left_button.setVisible(True)
+        main_window_class.left_button.setDisabled(False)
 
     if int(main_window_class.current_image_number.text()) == len(piv_plot_class.piv_images_list):
-        main_window_class.right_button.setVisible(False)
+        main_window_class.right_button.setDisabled(True)
 
 
 # function that moves to the next left image
@@ -226,10 +226,10 @@ def change_image_number_left(piv_plot_class, main_window_class, settings_tab_wid
     main_window_class.current_image_number.setText(str(int(main_window_class.current_image_number.text()) - 1))
 
     if int(main_window_class.current_image_number.text()) == 1:
-        main_window_class.left_button.setVisible(False)
+        main_window_class.left_button.setDisabled(True)
 
     if int(main_window_class.current_image_number.text()) == len(piv_plot_class.piv_images_list) - 1:
-        main_window_class.right_button.setVisible(True)
+        main_window_class.right_button.setDisabled(False)
 
 
 def invert_button(piv_plot_class, settings_tab_widget_class):

@@ -13,6 +13,7 @@ import sys
 
 def run_main_window():
     app = QtWidgets.QApplication(sys.argv)
+    app.setStyle("Plastiqua")
 
     # setup for the file window to add for the image processing tab
     file_window_frame = QtWidgets.QFrame()

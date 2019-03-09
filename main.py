@@ -10,10 +10,11 @@ from _functools import partial
 import numpy as np
 import sys
 
-
 def run_main_window():
     app = QtWidgets.QApplication(sys.argv)
-    app.setStyle("Plastiqua")
+    app.setStyle('Windows')
+    # run QtWidgets.QStyleFactory.keys() to get the options
+    # on Mac it's now ['Windows','Motif','Macintosh']
 
     # setup for the file window to add for the image processing tab
     file_window_frame = QtWidgets.QFrame()
